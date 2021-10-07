@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "client"
+		},
+		{
+			"path": "server"
+		}
+	],
+	"settings": {
+		"search.exclude": {
+			"**/.vitepress/dist": true,
+			"**/docs": true
+		}
+	}
+}

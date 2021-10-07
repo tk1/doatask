@@ -1,0 +1,35 @@
+{
+  "name": "doatask",
+  "version": "1.0.0",
+  "description": "learning tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install": "npm run install:client && npm run install:server",
+    "start:pg": "cd server && npm run docker:pg",
+    "start:dev": "concurrently \"cd server && npm run start:dev\" \"cd client && npm run dev\"",
+    "start:docker": "cd server && npm run docker",
+    "start": "cd server && npm run start:prod",
+    "prebuild": "shx rm -rf server/client",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "build": "npm run build:client && npm run build:server",
+    "postbuild": "shx cp -r client/dist server/client",
+    "docs:dev": "vitepress dev docs-src",
+    "docs:build": "vitepress build docs-src",
+    "docs:serve": "vitepress serve docs-src",
+    "docs:genapi": "widdershins --environment ./docs-src/.widdershins/env.json ./server/swagger-spec.json -o ./docs-src/reference/api.md",
+    "predocs:build": "npm run docs:genapi",
+    "postdocs:build": "shx cp -r docs-src/.vitepress/dist/* docs"
+  },
+  "author": "Thomas Kretschmer",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "shx": "^0.3.3",
+    "vitepress": "^0.19.2",
+    "widdershins": "^4.0.1"
+  }
+}
