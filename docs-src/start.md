@@ -113,6 +113,9 @@ Now you can start the client and the server in dev mode by
 npm run start:dev
 ```
 
+The client is available at http://localhost:3000/doatask and the server at
+http://localhost:8080 (if you didn't change the `NEST_PORT`).
+
 To build the system, run
 
 ```
@@ -127,6 +130,9 @@ Then you can start the system with
 ```
 npm run start:dev
 ```
+
+Then the server for the backend will also serve the files for the client at
+http://localhost:8080/doatask/.
 
 If you want to build the documentation, make sure that the server has been
 started at least once before, because it generates the

@@ -25,6 +25,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   async findOne(@Param('id') id: number): Promise<User> {
     const user = await this.usersService.findOne(id);
     return user;
@@ -37,6 +39,8 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   remove(@Param('id') id: number): Promise<void> {
     return this.usersService.remove(id);
   }

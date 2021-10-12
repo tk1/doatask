@@ -15,5 +15,14 @@
 			"**/.vitepress/dist": true,
 			"**/docs": true
 		}
+	},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"octref.vetur",
+			"ms-azuretools.vscode-docker",
+			"eg2.vscode-npm-script",
+			"stkb.rewrap"
+		]
 	}
 }

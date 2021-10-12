@@ -1,3 +1,4 @@
 node_modules
 /docs-src/.vitepress/dist
 /server/swagger-spec.json
+/server/client
