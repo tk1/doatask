@@ -24,8 +24,9 @@ on Windows 10 and Linux (Centos 6).
 
     `npm run docker`
 
-1. Navigate  to the address [`http://localhost:8080/`](http://localhost:8080/)
-   in your browser.
+1. Navigate  to the address
+   [`http://localhost:8080/doatask`](http://localhost:8080/doatask) in your
+   browser.
 
 ## Quick start 
 
@@ -89,7 +90,8 @@ The name and password of this user are set by the `APP_ADMIN_USER` and
 
 ## Running the system locally (not in Docker)
 
-For your convenience, PostgreSQL is deployed with the required databases via Docker. To start the PostgreSQL instance, use
+For your convenience, PostgreSQL is deployed with the required databases via
+Docker. To start the PostgreSQL instance, use
 
 ```
 npm run start:pg
@@ -98,13 +100,13 @@ npm run start:pg
 Then install the required node modules with
 
 ```
-npm run install:client
-npm run install:server
+npm install
 ```
 
-or both together with just
+You could install the client and server modules seperately by
 ```
-npm run install
+npm run install:client
+npm run install:server
 ```
 
 Now you can start the client and the server in dev mode by

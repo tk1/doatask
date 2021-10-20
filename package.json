@@ -5,18 +5,22 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "npm run docker:clean || npm run node:clean",
+    "docker:clean": "docker-clean.cmd",
+    "node:clean": "node-clean.cmd",
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
     "install": "npm run install:client && npm run install:server",
-    "start:pg": "cd server && npm run docker:pg",
+    "start:pg": "node test-env.js && cd server && npm run docker:pg",
     "start:dev": "concurrently \"cd server && npm run start:dev\" \"cd client && npm run dev\"",
-    "start:docker": "cd server && npm run docker",
+    "start:docker": "node test-env.js && cd server && npm run docker",
+    "docker": "npm install && npm run build:client && npm run start:docker",
     "start": "cd server && npm run start:prod",
-    "prebuild": "shx rm -rf server/client",
+    "prebuild:client": "shx rm -rf server/client",
     "build:client": "cd client && npm run build",
+    "postbuild:client": "shx cp -r client/dist server/client",
     "build:server": "cd server && npm run build",
     "build": "npm run build:client && npm run build:server",
-    "postbuild": "shx cp -r client/dist server/client",
     "docs:dev": "vitepress dev docs-src",
     "docs:build": "vitepress build docs-src",
     "docs:serve": "vitepress serve docs-src",
@@ -31,5 +35,8 @@
     "shx": "^0.3.3",
     "vitepress": "^0.19.2",
     "widdershins": "^4.0.1"
+  },
+  "dependencies": {
+    "shelljs": "^0.8.4"
   }
 }
