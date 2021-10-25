@@ -18,7 +18,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "echo 'No e2e tests implemented yet.'",
     "docker:pg": "docker-compose -p doatask -f ./docker-compose-only-postgres.yml up --build -d",
-    "docker": "docker-compose -p doatask -f ./docker-compose.yml up --build -d"
+    "predocker": "docker-compose -f ./docker-compose.yml -p doatask build --no-cache --pull",
+    "docker": "docker-compose -f ./docker-compose.yml -p doatask up -d"
   },
   "scriptsComments": {
     "docker": "use docker-compose instead of docker compose because of linux"

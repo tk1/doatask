@@ -34,9 +34,7 @@
     "concurrently": "^6.3.0",
     "shx": "^0.3.3",
     "vitepress": "^0.19.2",
-    "widdershins": "^4.0.1"
-  },
-  "dependencies": {
+    "widdershins": "^4.0.1",
     "shelljs": "^0.8.4"
   }
 }
