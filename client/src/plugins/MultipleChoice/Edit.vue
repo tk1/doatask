@@ -6,6 +6,17 @@
 
     <template #details>
       <div class="p-fluid p-grid p-formgrid">
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field-checkbox">
+            <Checkbox
+              id="singleChoice"
+              v-model="task.details.isSingleChoice"
+              :binary="true"
+              @change="singleChoiceChanged()"
+            />
+            <label for="singleChoice">Single Choice Mode</label>
+          </div>
+        </div>
         <template
           v-for="(choice, index) in choices"
           :key="index"
@@ -18,7 +29,7 @@
               id="public"
               v-model="choice.correct"
               :binary="true"
-              @change="changed"
+              @change="changed(index)"
             />
           </div>
           <div class="p-field p-col-11 p-md-11">
@@ -29,7 +40,7 @@
                     :id="getId(index)"
                     v-model="choice.text"
                     type="text"
-                    @change="changed"
+                    @change="changed(index)"
                   />
                 </div>
               </SplitterPanel>
@@ -78,9 +89,28 @@ export default {
     getId (index) {
       return `id${index}`
     },
-    changed () {
-      this.task.details.choices = this.choices.map(v => ({ text: v.text }))
-      this.task.details.private.answers = this.choices.map(v => ({ correct: v.correct }))
+    changed (index) {
+      if (this.task.details.isSingleChoice) {
+        this.choices.filter(choice => choice.index !== index).forEach(choice => { choice.correct = false })
+        this.choices[index].correct = true
+      } else {
+        this.task.details.choices = this.choices.map(v => ({ text: v.text }))
+        this.task.details.private.answers = this.choices.map(v => ({ correct: v.correct }))
+      }
+    },
+    singleChoiceChanged () {
+      if (this.task.details.isSingleChoice) {
+        const correctChoices = this.choices.filter(choice => choice.correct)
+        if (correctChoices.length > 1) {
+          for (let i = 1; i < correctChoices.length; i++) {
+            correctChoices[i].correct = false
+          }
+        } else if (correctChoices.length === 0) {
+          if (this.choices.length > 0) {
+            this.choices[0].correct = true
+          }
+        }
+      }
     },
     addChoice () {
       this.choices.push({ correct: false, text: 'text' })
