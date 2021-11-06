@@ -1,9 +1,5 @@
 <template>
-  <TaskSolveBase
-    :taskId="taskId"
-    :assignmentId="assignmentId"
-    :rated="rated"
-  >
+  <TaskSolveBase :taskId="taskId" :assignmentId="assignmentId" :rated="rated">
     <template #header="slotProps">
       <div v-if="task.details.isSingleChoice">
         <h1>Single Choice: {{ slotProps.task.title }}</h1>
@@ -32,10 +28,7 @@
                   @change="changed(index)"
                 />
               </span>
-              <MarkDown
-                class="p-inputtext"
-                :source="choice.text || ' '"
-              />
+              <MarkDown class="p-inputtext" :source="choice.text || ' '" />
             </div>
           </div>
         </template>
@@ -55,74 +48,73 @@ export default {
   props: {
     taskId: {
       type: Number,
-      required: true
+      required: true,
     },
     assignmentId: {
       type: Number,
-      default: -1
+      default: -1,
     },
     task: {
       type: Object,
-      required: true
+      required: true,
     },
     rated: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  data () {
+  data() {
     return {
-      answers: []
-    }
+      answers: [],
+    };
   },
   watch: {
-    task (newValue) {
-      this.answers = this.task.details.choices.map((v) => false)
-    }
+    task(newValue) {
+      this.answers = this.task.details.choices.map((v) => false);
+    },
   },
-  created () {
-    this.answers = this.task.details.choices.map((v) => false)
+  created() {
+    this.answers = this.task.details.choices.map((v) => false);
   },
   methods: {
     submitSolution: async function (slotProps) {
       const submission = await slotProps.submit({
         value: this.answers,
-        timeNeeded: -1
-      })
-      slotProps.submitReceived(submission)
+        timeNeeded: -1,
+      });
+      slotProps.submitReceived(submission);
     },
-    submitPossible (slotProps) {
+    submitPossible(slotProps) {
       if (this.task.details.isSingleChoice && !slotProps.alreadySubmitted) {
-        return this.isExactlyOneAnswerSelected()
+        return this.isExactlyOneAnswerSelected();
       } else {
-        return !slotProps.alreadySubmitted
+        return !slotProps.alreadySubmitted;
       }
     },
-    buttonText (slotProps) {
+    buttonText(slotProps) {
       if (slotProps.alreadySubmitted) {
-        return 'Already submitted'
+        return "Already submitted";
       } else {
-        return 'Submit solution'
+        return "Submit solution";
       }
     },
-    changed (index) {
+    changed(selectedIndex) {
       if (this.task.details.isSingleChoice) {
-        const correctAnswer = this.answers.filter((answer) => answer === true)
-        if (correctAnswer.length > 1) {
-          for (let i = 0; i < this.answers.length; i++) {
-            if (this.answers[i] !== index) {
-              this.answers[i] = false
-            }
-            this.answers[index] = true
+        this.answers = this.answers.map((answer, index) => {
+          if (selectedIndex != index) {
+            answer = false;
+          } else {
+            answer = true;
           }
-        }
+          return answer;
+        });
       }
     },
-    isExactlyOneAnswerSelected () {
-      return this.answers.filter(answer => answer).length === 1
-    }
-  }
-}
+    isExactlyOneAnswerSelected() {
+      return this.answers.filter((answer) => answer).length === 1;
+    },
+  },
+};
 </script>
 
 <style scoped>
