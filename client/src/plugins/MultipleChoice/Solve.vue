@@ -92,7 +92,11 @@ export default {
       slotProps.submitReceived(submission)
     },
     submitPossible (slotProps) {
-      return !slotProps.alreadySubmitted
+      if (this.task.details.isSingleChoice && !slotProps.alreadySubmitted) {
+        return this.isExactlyOneAnswerSelected()
+      } else {
+        return !slotProps.alreadySubmitted
+      }
     },
     buttonText (slotProps) {
       if (slotProps.alreadySubmitted) {
@@ -113,6 +117,9 @@ export default {
           }
         }
       }
+    },
+    isExactlyOneAnswerSelected () {
+      return this.answers.filter(answer => answer).length === 1
     }
   }
 }
