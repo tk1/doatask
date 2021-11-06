@@ -20,6 +20,10 @@ import MultipleChoiceEdit from './MultipleChoice/Edit.vue'
 import MultipleChoiceSolve from './MultipleChoice/Solve.vue'
 import * as helpersMultipleChoice from './MultipleChoice/helpers.js'
 
+import CodeEdit from './Code/Edit.vue'
+import CodeSolve from './Code/Solve.vue'
+import * as helpersCode from './Code/helpers.js'
+
 const plugins = []
 
 function registerOne (app, plugin, helpers, components) {
@@ -81,6 +85,16 @@ function register (app) {
     {
       type: 'Solve',
       component: MultipleChoiceSolve
+    }
+  ])
+  registerOne(app, 'Code', helpersCode, [
+    {
+      type: 'Edit',
+      component: CodeEdit
+    },
+    {
+      type: 'Solve',
+      component: CodeSolve
     }
   ])
 
