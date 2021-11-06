@@ -22,7 +22,7 @@
           :key="index"
         >
           <h4 class="p-col-12">
-            Choice {{ index+1 }}
+            Choice {{ index + 1 }}
           </h4>
           <div class="p-field-checkbox p-col-1">
             <Checkbox
@@ -81,9 +81,12 @@ export default {
         { correct: false, text: 'third' }
       ]
     } else {
-      this.choices = this.task.details.choices.map((v, i) =>
-        ({ text: v.text, correct: this.task.details.private.answers[i].correct }))
+      this.choices = this.task.details.choices.map((v, i) => ({
+        text: v.text,
+        correct: this.task.details.private.answers[i].correct
+      }))
     }
+    this.saveChoicesAndAnswersInTask()
   },
   methods: {
     getId (index) {
@@ -91,16 +94,18 @@ export default {
     },
     changed (index) {
       if (this.task.details.isSingleChoice) {
-        this.choices.filter(choice => choice.index !== index).forEach(choice => { choice.correct = false })
+        this.choices
+          .filter((choice) => choice.index !== index)
+          .forEach((choice) => {
+            choice.correct = false
+          })
         this.choices[index].correct = true
-      } else {
-        this.task.details.choices = this.choices.map(v => ({ text: v.text }))
-        this.task.details.private.answers = this.choices.map(v => ({ correct: v.correct }))
       }
+      this.saveChoicesAndAnswersInTask()
     },
     singleChoiceChanged () {
       if (this.task.details.isSingleChoice) {
-        const correctChoices = this.choices.filter(choice => choice.correct)
+        const correctChoices = this.choices.filter((choice) => choice.correct)
         if (correctChoices.length > 1) {
           for (let i = 1; i < correctChoices.length; i++) {
             correctChoices[i].correct = false
@@ -114,6 +119,12 @@ export default {
     },
     addChoice () {
       this.choices.push({ correct: false, text: 'text' })
+    },
+    saveChoicesAndAnswersInTask () {
+      this.task.details.choices = this.choices.map((v) => ({ text: v.text }))
+      this.task.details.private.answers = this.choices.map((v) => ({
+        correct: v.correct
+      }))
     }
   }
 }
