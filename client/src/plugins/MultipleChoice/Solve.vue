@@ -5,8 +5,14 @@
     :rated="rated"
   >
     <template #header="slotProps">
-      <h1>Multiple Choice: {{ slotProps.task.title }}</h1>
-      <p>Check all correct answers.</p>
+      <div v-if="task.details.isSingleChoice">
+        <h1>Single Choice: {{ slotProps.task.title }}</h1>
+        <p>Check the correct answer.</p>
+      </div>
+      <div v-else>
+        <h1>Multiple Choice: {{ slotProps.task.title }}</h1>
+        <p>Check all correct answers.</p>
+      </div>
       <MarkDown :source="slotProps.task.description || ' '" />
     </template>
     <template #details />
@@ -23,6 +29,7 @@
                   id="public"
                   v-model="answers[index]"
                   :binary="true"
+                  @change="changed(index)"
                 />
               </span>
               <MarkDown
@@ -70,20 +77,18 @@ export default {
   },
   watch: {
     task (newValue) {
-      this.answers = this.task.details.choices.map(v => false)
+      this.answers = this.task.details.choices.map((v) => false)
     }
   },
   created () {
-    this.answers = this.task.details.choices.map(v => false)
+    this.answers = this.task.details.choices.map((v) => false)
   },
   methods: {
     submitSolution: async function (slotProps) {
-      const submission = await slotProps.submit(
-        {
-          value: this.answers,
-          timeNeeded: -1
-        }
-      )
+      const submission = await slotProps.submit({
+        value: this.answers,
+        timeNeeded: -1
+      })
       slotProps.submitReceived(submission)
     },
     submitPossible (slotProps) {
@@ -95,13 +100,26 @@ export default {
       } else {
         return 'Submit solution'
       }
+    },
+    changed (index) {
+      if (this.task.details.isSingleChoice) {
+        const correctAnswer = this.answers.filter((answer) => answer === true)
+        if (correctAnswer.length > 1) {
+          for (let i = 0; i < this.answers.length; i++) {
+            if (this.answers[i] !== index) {
+              this.answers[i] = false
+            }
+            this.answers[index] = true
+          }
+        }
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  span {
+span {
   margin: 5px;
-  }
+}
 </style>
