@@ -116,6 +116,7 @@ export default {
           }
         }
       }
+      this.saveChoicesAndAnswersInTask()
     },
     addChoice () {
       this.choices.push({ correct: false, text: 'text' })
