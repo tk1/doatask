@@ -14,7 +14,11 @@
 		"search.exclude": {
 			"**/.vitepress/dist": true,
 			"**/docs": true
-		}
+		},
+		"vetur.validation.interpolation": false,
+		"vetur.validation.template": false,
+		"vetur.format.enable": false,
+		"vetur.format.defaultFormatter.js": "none"
 	},
 	"extensions": {
 		"recommendations": [
