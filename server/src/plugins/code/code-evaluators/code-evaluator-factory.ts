@@ -1,4 +1,5 @@
 import { CodeTestSuite } from "../code-tests/code-test-suite";
+import { CodeDto } from "../code.dto";
 import { MethodStub } from "../method-stub";
 import { CodeEvaluator } from "./code-evaluator";
 import { JavaScriptEvaluator } from "./java-script-evaluator";
@@ -11,12 +12,14 @@ export class CodeEvaluatorFactory {
     
     constructor() { }
 
-    static getCodeEvaluator(language:string, code:string, methodStub: MethodStub, testSuite:CodeTestSuite):CodeEvaluator {
-        switch (language.toLocaleLowerCase()) {
+    static getCodeEvaluator(codeDto: CodeDto, code: string):CodeEvaluator {
+        console.log(codeDto + '\n' + code)
+
+        switch (codeDto.language.toLowerCase()) {
             case this.JAVA_SCRIPT_LANUGAGE_NAME:
-                return new JavaScriptEvaluator(code, methodStub, testSuite)
+                return new JavaScriptEvaluator(code, codeDto.methodStub, codeDto.testSuite)
             case this.PYTHON_LANUGAGE_NAME:
-                return new PythonEvaluator(code, methodStub, testSuite)
+                return new PythonEvaluator(code, codeDto.methodStub, codeDto.testSuite)
             default:
                 break
         }

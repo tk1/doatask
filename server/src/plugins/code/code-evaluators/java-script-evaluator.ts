@@ -11,7 +11,7 @@ export class JavaScriptEvaluator implements CodeEvaluator {
     }
     
     runPublicTests() {
-        throw new Error("Method not implemented.")
+        console.log("running public tests")
     }
     runSecrectTests() {
         throw new Error("Method not implemented.")

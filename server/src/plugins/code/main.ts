@@ -4,13 +4,18 @@ import { CodeEvaluator } from './code-evaluators/code-evaluator';
 import { CodeEvaluatorFactory } from './code-evaluators/code-evaluator-factory'
 import { JavaScriptEvaluator } from './code-evaluators/java-script-evaluator'
 import { CodeTestResults } from './code-tests/code-test-results';
+import { CodeDto } from './code.dto';
 
 function evaluate(submission: Submission, task: Task): any {
 
   let solution: any = submission.solution
-  let details: any = task.details
+  task.details = JSON.parse('{"language":"JavaScript","methodStub":{"functionName":"quadrat","parameter":[{"name":"n","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0"],"expectedOutput":"0"},{"testParameter":["2"],"expectedOutput":"4"}],"secretTests":[{"testParameter":["-3"],"expectedOutput":"9"}]}}');
 
-  const codeEvaluator: CodeEvaluator = CodeEvaluatorFactory.getCodeEvaluator(details.language, solution.code, details.methodStub, details.testSuite);
+  const details:CodeDto = new CodeDto()
+  Object.assign(details, task.details)
+  solution = "function(n) {return n*n}"
+
+  const codeEvaluator: CodeEvaluator = CodeEvaluatorFactory.getCodeEvaluator(details, solution)
   codeEvaluator.runPublicTests();
   codeEvaluator.runSecrectTests;
   const testResults: CodeTestResults = codeEvaluator.getTestResults();
