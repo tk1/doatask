@@ -1,21 +1,22 @@
 import { Task } from 'src/tasks/task.entity'
 import { Submission } from '../../submissions/submission.entity'
-import { JavaScriptEvaluator } from './Evaluators/java-script-evaluator'
+import { CodeEvaluator } from './code-evaluators/code-evaluator';
+import { CodeEvaluatorFactory } from './code-evaluators/code-evaluator-factory'
+import { JavaScriptEvaluator } from './code-evaluators/java-script-evaluator'
+import { CodeTestResults } from './code-tests/code-test-results';
 
 function evaluate(submission: Submission, task: Task): any {
-
-  // Factory returns class for language
-  //const jse = new JavaScriptEvaluator()
-  //const testResults: TestResult[] = jse.runTests(submission, task)
 
   let solution: any = submission.solution
   let details: any = task.details
 
-  let correct = Number(details.number1) / Number(details.number2)
-  let solutionValue = Number(solution.value.text)
-  let diff = Math.abs(correct - solutionValue) / correct
+  const codeEvaluator: CodeEvaluator = CodeEvaluatorFactory.getCodeEvaluator(details.language, solution.code, details.methodStub, details.testSuite);
+  codeEvaluator.runPublicTests();
+  codeEvaluator.runSecrectTests;
+  const testResults: CodeTestResults = codeEvaluator.getTestResults();
 
-  let grade = Math.max(0, 1 - diff / 100)
+  let correct = null
+  let grade = null
 
   return {
     grade,
