@@ -13,7 +13,6 @@ export class CodeEvaluatorFactory {
     constructor() { }
 
     static getCodeEvaluator(codeDto: CodeDto, code: string):CodeEvaluator {
-        console.log(codeDto + '\n' + code)
 
         switch (codeDto.language.toLowerCase()) {
             case this.JAVA_SCRIPT_LANUGAGE_NAME:

@@ -13,7 +13,8 @@ function evaluate(submission: Submission, task: Task): any {
 
   const details:CodeDto = new CodeDto()
   Object.assign(details, task.details)
-  solution = "function(n) {return n*n}"
+
+  solution = "function quadrat(n) {return n*n}"
 
   const codeEvaluator: CodeEvaluator = CodeEvaluatorFactory.getCodeEvaluator(details, solution)
   codeEvaluator.runPublicTests();
