@@ -1,0 +1,666 @@
+{
+  "tasks": [
+    {
+      "id": 3,
+      "title": "Beckingen",
+      "description": "d",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "lat": 49.386127537979306,
+        "lng": 6.696853637695313
+      },
+      "createdAt": "2021-08-30T17:15:17.674Z",
+      "updatedAt": "2021-08-30T17:15:17.674Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 4,
+      "title": "Dillingen",
+      "description": "d",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "lat": 49.35312953307012,
+        "lng": 6.725177764892579
+      },
+      "createdAt": "2021-08-30T17:15:17.792Z",
+      "updatedAt": "2021-08-30T17:15:17.792Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 5,
+      "title": "Saarbrücken",
+      "description": "d",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "lat": 49.23625154323133,
+        "lng": 6.9964027404785165
+      },
+      "createdAt": "2021-08-30T17:15:17.889Z",
+      "updatedAt": "2021-08-30T17:15:17.889Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 6,
+      "title": "Merzig",
+      "description": "dx",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "lat": 49.44120894699504,
+        "lng": 6.6391754150390625
+      },
+      "createdAt": "2021-08-30T17:15:17.984Z",
+      "updatedAt": "2021-08-30T17:15:17.984Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 7,
+      "title": "Bietzen",
+      "description": "d",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "lat": 49.413213187668056,
+        "lng": 6.660097718304316
+      },
+      "createdAt": "2021-08-30T17:15:18.079Z",
+      "updatedAt": "2021-08-30T17:15:18.079Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 8,
+      "title": "fractions",
+      "description": "Choose all fractions with a value of $0.5$.",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "$\\frac{1}{2}$"
+          },
+          {
+            "text": "$\\frac{1}{3}$"
+          },
+          {
+            "text": "$\\frac{3}{6}$"
+          },
+          {
+            "text": "$\\frac{22}{46}$"
+          },
+          {
+            "text": "$\\frac{46}{92}$"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.176Z",
+      "updatedAt": "2021-08-30T17:15:18.176Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 9,
+      "title": "Slope",
+      "description": "Which of these functions has a slope of 1 hat $x=0$?",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": false
+            },
+            {
+              "correct": true
+            },
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "$f(x) = 2x$"
+          },
+          {
+            "text": "$f(x) = e^x$"
+          },
+          {
+            "text": "$f(x) = \\sin(x)$"
+          },
+          {
+            "text": "$f(x) = x^2 + 1$"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.283Z",
+      "updatedAt": "2021-08-30T17:15:18.283Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 10,
+      "title": "parabel",
+      "description": "Choose the parabel.",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "$f(x) = (x+1)^2$"
+          },
+          {
+            "text": "$f(x) = 1/x$"
+          },
+          {
+            "text": "$f(x) = (x+1)*2$"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.427Z",
+      "updatedAt": "2021-08-30T17:15:18.427Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 12,
+      "title": "Addition2",
+      "description": "Calculate $33+55$",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "88"
+          },
+          {
+            "text": "77"
+          },
+          {
+            "text": "66"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.626Z",
+      "updatedAt": "2021-08-30T17:15:18.626Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 13,
+      "title": "Addition3",
+      "description": "Calculate $55+55$",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "110"
+          },
+          {
+            "text": "100"
+          },
+          {
+            "text": "111"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.703Z",
+      "updatedAt": "2021-08-30T17:15:18.703Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 11,
+      "title": "Addition1",
+      "description": "Calculate $3+5$",
+      "public": false,
+      "rating": 1500,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "8"
+          },
+          {
+            "text": "7"
+          },
+          {
+            "text": "6"
+          }
+        ]
+      },
+      "createdAt": "2021-08-30T17:15:18.527Z",
+      "updatedAt": "2021-08-30T17:16:04.880Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 29,
+      "title": null,
+      "description": "Was ist der Wert für $n=7$? $f(x) = \\sum_{i=0}^n n^2$ ",
+      "public": false,
+      "rating": null,
+      "tags": [],
+      "plugin": "MultipleChoice",
+      "details": {
+        "private": {
+          "answers": [
+            {
+              "correct": true
+            },
+            {
+              "correct": false
+            },
+            {
+              "correct": false
+            }
+          ]
+        },
+        "choices": [
+          {
+            "text": "$20$"
+          },
+          {
+            "text": "second"
+          },
+          {
+            "text": "third"
+          }
+        ]
+      },
+      "createdAt": "2021-10-12T09:45:59.059Z",
+      "updatedAt": "2021-10-12T09:45:59.059Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 1,
+      "title": "add",
+      "description": null,
+      "public": true,
+      "rating": 1500,
+      "tags": [],
+      "plugin": "PluginA",
+      "details": {
+        "private": {},
+        "number1": "2",
+        "number2": "3"
+      },
+      "createdAt": "2021-08-30T17:15:17.331Z",
+      "updatedAt": "2021-10-11T14:40:21.011Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 2,
+      "title": "square",
+      "description": null,
+      "public": true,
+      "rating": 1500,
+      "tags": [],
+      "plugin": "PluginB",
+      "details": {
+        "private": {},
+        "number1": "2",
+        "number2": "3",
+        "number": "12"
+      },
+      "createdAt": "2021-08-30T17:15:17.491Z",
+      "updatedAt": "2021-10-11T14:40:33.513Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 27,
+      "title": "Test1",
+      "description": "This is a test.",
+      "public": false,
+      "rating": 1500,
+      "tags": [
+        "arithmetic",
+        "basic"
+      ],
+      "plugin": "Division",
+      "details": {
+        "private": {},
+        "number1": "100",
+        "number2": "5"
+      },
+      "createdAt": "2021-10-12T09:19:44.742Z",
+      "updatedAt": "2021-10-12T09:23:07.386Z",
+      "domain": {
+        "id": 1,
+        "name": "math",
+        "description": "arithmetic",
+        "createdAt": "2021-08-30T17:15:17.200Z",
+        "updatedAt": "2021-08-30T17:15:17.200Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    },
+    {
+      "id": 28,
+      "title": "Kassel",
+      "description": "",
+      "public": false,
+      "rating": 1500,
+      "tags": [],
+      "plugin": "Map",
+      "details": {
+        "private": {},
+        "number1": "100",
+        "number2": "5",
+        "lat": 51.29979664907147,
+        "lng": 9.49942016042769
+      },
+      "createdAt": "2021-10-12T09:20:39.627Z",
+      "updatedAt": "2021-10-12T09:24:05.310Z",
+      "domain": {
+        "id": 2,
+        "name": "geography",
+        "description": "locations",
+        "createdAt": "2021-08-30T17:15:17.590Z",
+        "updatedAt": "2021-08-30T17:15:17.590Z"
+      },
+      "owner": {
+        "id": 2,
+        "ltiid": null,
+        "name": "t1",
+        "role": "teacher",
+        "origin": "local",
+        "isActive": true
+      }
+    }
+  ]
+}

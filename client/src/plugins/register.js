@@ -24,6 +24,10 @@ import CodeEdit from './Code/Edit.vue'
 import CodeSolve from './Code/Solve.vue'
 import * as helpersCode from './Code/helpers.js'
 
+import TcsEdit from './Tcs/Edit.vue'
+import TcsSolve from './Tcs/Solve.vue'
+import * as helpersTcs from './Tcs/helpers.js'
+
 const plugins = []
 
 function registerOne (app, plugin, helpers, components) {
@@ -95,6 +99,16 @@ function register (app) {
     {
       type: 'Solve',
       component: CodeSolve
+    }
+  ])
+  registerOne(app, 'Tcs', helpersTcs, [
+    {
+      type: 'Edit',
+      component: TcsEdit
+    },
+    {
+      type: 'Solve',
+      component: TcsSolve
     }
   ])
 
