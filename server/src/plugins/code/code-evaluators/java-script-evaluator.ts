@@ -1,30 +1,53 @@
-import { CodeTestResults } from "../code-tests/code-test-results";
+import { CodeTest } from "../code-tests/code-test";
+import { CodeTestResult } from "../code-tests/code-test-result";
 import { CodeTestSuite } from "../code-tests/code-test-suite";
 import { MethodStub } from "../method-stub";
-import { CodeEvaluator } from "./code-evaluator";
+import { AbstractCodeEvaluator } from "./abstract-code-evaluator";
 
-export class JavaScriptEvaluator implements CodeEvaluator {
+export class JavaScriptEvaluator extends AbstractCodeEvaluator {
 
     private code:string
     private methodStub:MethodStub
     private testSuite:CodeTestSuite
+    private codeTestResults: CodeTestResult[]
 
     constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) {
+        super();
         this.code = code
         this.methodStub = methodStub
         this.testSuite = testSuite
+        this.codeTestResults = new Array<CodeTestResult>()
      }
 
-    getTestResults(): CodeTestResults {
-        return null
+    getTestResults(): CodeTestResult[] {
+        return this.codeTestResults
     }
     
     runPublicTests() {
-        console.log("running public tests")
-        console.log(eval(this.code + " " + this.methodStub.functionName + "(" + this.testSuite.publicTests[0].testParameter + ")"));
-        console.log("Expected:" + this.testSuite.publicTests[0].expectedOutput)
+        this.runTests(this.testSuite.publicTests, true)
     }
-    runSecrectTests() {
-        throw new Error("Method not implemented.")
+    
+    runSecretTests() {
+        this.runTests(this.testSuite.secretTests, false)
+    }
+
+    runTests(codeTests: CodeTest[], isPublicTest: boolean) {
+        for(let test of codeTests) {
+            // TODO switch the eval for a more secure option (e.g. vm2)
+            const output = eval(this.buildTestCall(test))
+            const testPassed = this.checkTestOutput(test.expectedOutput, output);
+            const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
+            this.codeTestResults.push(codeTestResult)
+        }
+    }
+
+    private buildTestCall(test:CodeTest): string {
+        //console.log(this.code + " " + this.methodStub.functionName + "(" + test.testParameter.join(",") + ")")
+        return this.code + " " + this.methodStub.functionName + "(" + test.testParameter.join(",") + ")"
+    }
+
+    private checkTestOutput(expectedOutput: string, output: any) : boolean {
+        //console.log(`${output}`)
+        return expectedOutput === `${output}`
     }
 }

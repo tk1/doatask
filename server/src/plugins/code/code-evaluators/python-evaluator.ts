@@ -1,19 +1,21 @@
-import { CodeTestResults } from "../code-tests/code-test-results";
+import { CodeTestResult } from "../code-tests/code-test-result";
 import { CodeTestSuite } from "../code-tests/code-test-suite";
 import { MethodStub } from "../method-stub";
-import { CodeEvaluator } from "./code-evaluator";
+import { AbstractCodeEvaluator } from "./abstract-code-evaluator";
 
-export class PythonEvaluator implements CodeEvaluator {
-    constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) { }
+export class PythonEvaluator extends AbstractCodeEvaluator {
+    constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) {
+        super();
+    }
     
-    getTestResults(): CodeTestResults {
+    getTestResults(): CodeTestResult[] {
         throw new Error("Method not implemented.");
     }
     
     runPublicTests() {
         throw new Error("Method not implemented.");
     }
-    runSecrectTests() {
+    runSecretTests() {
         throw new Error("Method not implemented.");
     }
 }

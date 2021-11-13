@@ -1,7 +1,8 @@
-import { CodeTestResults } from "../code-tests/code-test-results";
+import { CodeTestResult } from "../code-tests/code-test-result";
 
 export interface CodeEvaluator {
     runPublicTests(): void
-    runSecrectTests(): void
-    getTestResults(): CodeTestResults
+    runSecretTests(): void
+    runAllTests(): void
+    getTestResults(): CodeTestResult[]
 }
