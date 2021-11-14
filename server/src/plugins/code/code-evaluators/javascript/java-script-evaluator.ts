@@ -1,8 +1,8 @@
-import { CodeTest } from "../code-tests/code-test";
-import { CodeTestResult } from "../code-tests/code-test-result";
-import { CodeTestSuite } from "../code-tests/code-test-suite";
-import { MethodStub } from "../method-stub";
-import { AbstractCodeEvaluator } from "./abstract-code-evaluator";
+import { CodeTest } from "../../code-tests/code-test";
+import { CodeTestResult } from "../../code-tests/code-test-result";
+import { CodeTestSuite } from "../../code-tests/code-test-suite";
+import { MethodStub } from "../../method-stub";
+import { AbstractCodeEvaluator } from "../abstract-code-evaluator";
 
 export class JavaScriptEvaluator extends AbstractCodeEvaluator {
 
@@ -44,10 +44,5 @@ export class JavaScriptEvaluator extends AbstractCodeEvaluator {
     private buildTestCall(test:CodeTest): string {
         //console.log(this.code + " " + this.methodStub.functionName + "(" + test.testParameter.join(",") + ")")
         return this.code + " " + this.methodStub.functionName + "(" + test.testParameter.join(",") + ")"
-    }
-
-    private checkTestOutput(expectedOutput: string, output: any) : boolean {
-        //console.log(`${output}`)
-        return expectedOutput === `${output}`
     }
 }
