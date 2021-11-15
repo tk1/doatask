@@ -2,13 +2,13 @@ import { CodeTestSuite } from "../code-tests/code-test-suite";
 import { CodeDto } from "../code.dto";
 import { MethodStub } from "../method-stub";
 import { CodeEvaluator } from "./code-evaluator";
-import { JavaScriptEvaluator } from "./java-script-evaluator";
-import { PythonEvaluator } from "./python-evaluator";
+import { JavaScriptEvaluator } from "./javascript/java-script-evaluator";
+import { PythonEvaluator } from "./python/python-evaluator";
 
 export class CodeEvaluatorFactory {
     
     static JAVA_SCRIPT_LANUGAGE_NAME = 'javascript'
-    static PYTHON_LANUGAGE_NAME = 'pyhton'
+    static PYTHON_LANUGAGE_NAME = 'python'
     
     constructor() { }
 
@@ -20,7 +20,7 @@ export class CodeEvaluatorFactory {
             case this.PYTHON_LANUGAGE_NAME:
                 return new PythonEvaluator(code, codeDto.methodStub, codeDto.testSuite)
             default:
-                break
+                throw new Error('Language ' + codeDto.language + ' not supported')
         }
     }
 }
