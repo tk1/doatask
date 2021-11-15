@@ -6,7 +6,7 @@ export abstract class AbstractCodeEvaluator implements CodeEvaluator {
     abstract runSecretTests(): void
     abstract getTestResults(): CodeTestResult[]
     
-    runAllTests(): void {
+    runAllTests():void {
         this.runPublicTests()
         this.runSecretTests()
     }
