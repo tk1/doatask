@@ -1,15 +1,18 @@
 <template>
-  <h3>Ratings chart</h3>
-  <DomainSelect
-    v-model="selectedDomain"
-  />
-  <RatingsTop
-    :domainId="selectedDomain.id"
-  />
-  <Chart
-    type="line"
-    :data="ratingData"
-  />
+  <div class="p-component">
+    <h1>Ratings</h1>
+    <b>Choose domain</b>
+    <DomainSelect
+      v-model="selectedDomain"
+    />
+    <RatingsTop
+      :domainId="selectedDomain.id"
+    />
+    <Chart
+      type="line"
+      :data="ratingData"
+    />
+  </div>
 </template>
 
 <script>

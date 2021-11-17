@@ -1,46 +1,48 @@
 <template>
-  <h1>
-    Manage Tasks
-  </h1>
-  <Button @click="showCreateDialog">
-    Create task
-  </Button>
+  <div class="p-component">
+    <h1>
+      Manage Tasks
+    </h1>
+    <Button @click="showCreateDialog">
+      Create task
+    </Button>
 
-  <Dialog
-    v-model:visible="createDialogVisible"
-    :style="{width: '900px'}"
-    header="Create task"
-    :modal="true"
-    :maximizable="true"
-    class="p-fluid"
-  >
-    <Dropdown
-      v-model="currentPlugin"
-      :options="plugins"
-      option-label="name"
-      placeholder="Select a plugin"
-      @change="pluginChanged"
-    />
-    <TaskEdit
-      v-if="record.plugin"
-      v-model="record"
-    />
-    <template #footer>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="hideCreateDialog"
+    <Dialog
+      v-model:visible="createDialogVisible"
+      :style="{width: '900px'}"
+      header="Create task"
+      :modal="true"
+      :maximizable="true"
+      class="p-fluid"
+    >
+      <Dropdown
+        v-model="currentPlugin"
+        :options="plugins"
+        option-label="name"
+        placeholder="Select a plugin"
+        @change="pluginChanged"
       />
-      <Button
-        label="Save"
-        icon="pi pi-check"
-        class="p-button-text"
-        @click="save"
+      <TaskEdit
+        v-if="record.plugin"
+        v-model="record"
       />
-    </template>
-  </Dialog>
-  <TasksList />
+      <template #footer>
+        <Button
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="hideCreateDialog"
+        />
+        <Button
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          @click="save"
+        />
+      </template>
+    </Dialog>
+    <TasksList />
+  </div>
 </template>
 
 <script>

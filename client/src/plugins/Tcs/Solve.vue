@@ -1,19 +1,17 @@
 <template>
   <TaskSolveBase>
     <template #details="slotProps">
-      <p>
-        {{ slotProps.task.details.regexp }}
-      </p>
+      <MarkDown :source="toLatex(slotProps.task.details.regexp)" />
     </template>
     <template #solution="slotProps">
-      <span class="p-float-label">
+      <span class="p-field p-col-12 p-md-3">
+        <label for="solution">Word</label>
         <InputText
           id="solution"
           v-model="solution.text"
           :disabled="slotProps.alreadySubmitted"
           type="text"
         />
-        <label for="solution">Result</label>
       </span>
       <Message
         v-if="submission?.feedback"
@@ -35,6 +33,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     task: {
@@ -50,7 +49,6 @@ export default {
   },
   watch: {
     task (newValue) {
-      console.log(`task ${newValue.id}`)
       this.solution = {}
       this.submission = null
     }
@@ -73,6 +71,9 @@ export default {
       } else {
         return 'Enter solution'
       }
+    },
+    toLatex (text) {
+      return '$' + text.replaceAll('*', '^*') + '$'
     }
   }
 }

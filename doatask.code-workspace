@@ -13,7 +13,8 @@
 	"settings": {
 		"search.exclude": {
 			"**/.vitepress/dist": true,
-			"**/docs": true
+			"**/docs": true,
+			"**/client/assets": true
 		},
 		"vetur.validation.interpolation": false,
 		"vetur.validation.template": false,

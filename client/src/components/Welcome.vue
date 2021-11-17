@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-component">
     <h1>Welcome</h1>
 
     <p>

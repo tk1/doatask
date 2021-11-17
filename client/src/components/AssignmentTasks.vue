@@ -1,86 +1,88 @@
 <template>
-  <h2>Choose an assignment</h2>
-  <Dropdown
-    v-model="selectAssignment"
-    :options="assignments"
-    optionLabel="title"
-    placeholder="Select an assignment"
-    @change="assignmentSelected"
-  />
-  <div v-if="assignment">
-    <DataTable
-      :value="assignment?.assignmentTasks"
-      dataKey="id"
-      show-gridlines
-      editMode="cell"
-      class="editable-cells-table"
-      @rowReorder="onRowReorder"
-      @cellEditComplete="onCellEditComplete"
-    >
-      <template #empty>
-        No tasks found.
-      </template>
-      <Column
-        :rowReorder="true"
-        headerStyle="width: 3rem"
-        :reorderableColumn="false"
-      />
-      <Column
-        field="taskId"
-        header="Id"
-      />
-      <Column header="Title">
-        <template #body="slotProps">
-          {{ getTaskTitle(slotProps.data.taskId) }}
-        </template>
-      </Column>
-      <Column
-        field="timeLimit"
-        header="Time limit"
-      >
-        <template #editor="slotProps">
-          <InputText
-            :modelValue="slotProps.data[slotProps.column.props.field]"
-            @update:modelValue="onCellEdit($event, 'timeLimit', slotProps)"
-          />
-        </template>
-      </Column>
-      <Column
-        field="weight"
-        header="Weight"
-      >
-        <template #editor="slotProps">
-          <InputText
-            :modelValue="slotProps.data[slotProps.column.props.field]"
-            @update:modelValue="onCellEdit($event, 'weight', slotProps)"
-          />
-        </template>
-      </Column>
-      <Column header="Percent">
-        <template #body="slotProps">
-          {{ getPercent(slotProps.data) }}
-        </template>
-      </Column>
-      <Column
-        headerStyle="width: 5rem; text-align: center"
-        bodyStyle="text-align: center; overflow: visible"
-        header="Remove"
-      >
-        <template #body="slotProps">
-          <Button
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-warning"
-            @click="removeTaskFromAssignment(slotProps.data.taskId)"
-          />
-        </template>
-      </Column>
-    </DataTable>
-    <h2>Choose tasks</h2>
-    <TasksList
-      :preselected="preselected"
-      @selected="addTask"
-      @unselected="removeTask"
+  <div class="p-component">
+    <h2>Choose an assignment</h2>
+    <Dropdown
+      v-model="selectAssignment"
+      :options="assignments"
+      optionLabel="title"
+      placeholder="Select an assignment"
+      @change="assignmentSelected"
     />
+    <div v-if="assignment">
+      <DataTable
+        :value="assignment?.assignmentTasks"
+        dataKey="id"
+        show-gridlines
+        editMode="cell"
+        class="editable-cells-table"
+        @rowReorder="onRowReorder"
+        @cellEditComplete="onCellEditComplete"
+      >
+        <template #empty>
+          No tasks found.
+        </template>
+        <Column
+          :rowReorder="true"
+          headerStyle="width: 3rem"
+          :reorderableColumn="false"
+        />
+        <Column
+          field="taskId"
+          header="Id"
+        />
+        <Column header="Title">
+          <template #body="slotProps">
+            {{ getTaskTitle(slotProps.data.taskId) }}
+          </template>
+        </Column>
+        <Column
+          field="timeLimit"
+          header="Time limit"
+        >
+          <template #editor="slotProps">
+            <InputText
+              :modelValue="slotProps.data[slotProps.column.props.field]"
+              @update:modelValue="onCellEdit($event, 'timeLimit', slotProps)"
+            />
+          </template>
+        </Column>
+        <Column
+          field="weight"
+          header="Weight"
+        >
+          <template #editor="slotProps">
+            <InputText
+              :modelValue="slotProps.data[slotProps.column.props.field]"
+              @update:modelValue="onCellEdit($event, 'weight', slotProps)"
+            />
+          </template>
+        </Column>
+        <Column header="Percent">
+          <template #body="slotProps">
+            {{ getPercent(slotProps.data) }}
+          </template>
+        </Column>
+        <Column
+          headerStyle="width: 5rem; text-align: center"
+          bodyStyle="text-align: center; overflow: visible"
+          header="Remove"
+        >
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-warning"
+              @click="removeTaskFromAssignment(slotProps.data.taskId)"
+            />
+          </template>
+        </Column>
+      </DataTable>
+      <h2>Choose tasks</h2>
+      <TasksList
+        :preselected="preselected"
+        @selected="addTask"
+        @unselected="removeTask"
+      />
+    </div>
   </div>
 </template>
 

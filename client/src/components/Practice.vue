@@ -1,38 +1,40 @@
 <template>
-  <h1>Practise tasks</h1>
-  <Button @click="getNextTask">
-    Next Task
-  </Button>
-  <div class="p-field-checkbox">
-    <Checkbox
-      id="rated"
-      v-model="rated"
-      :binary="true"
+  <div class="p-component">
+    <h1>Practise tasks</h1>
+    <Button @click="getNextTask">
+      Next Task
+    </Button>
+    <div class="p-field-checkbox">
+      <Checkbox
+        id="rated"
+        v-model="rated"
+        :binary="true"
+      />
+      <label for="rated">practice rated</label>
+    </div>
+    <DomainSelect
+      v-model="selectedDomain"
     />
-    <label for="rated">practice rated</label>
-  </div>
-  <DomainSelect
-    v-model="selectedDomain"
-  />
-  <h5>Range: {{ range }} Your rating: {{ ratingForDomain }}</h5>
-  <div class="p-field">
-    <Slider
-      v-model="range"
-      :range="true"
-      :step="20"
-      :min="ratingForDomain-400"
-      :max="ratingForDomain+400"
-    />
-  </div>
+    <h5>Range: {{ range }} Your rating: {{ ratingForDomain }}</h5>
+    <div class="p-field">
+      <Slider
+        v-model="range"
+        :range="true"
+        :step="20"
+        :min="ratingForDomain-400"
+        :max="ratingForDomain+400"
+      />
+    </div>
 
-  <p>
-    {{ tasks.length }} tasks available
-  </p>
-  <TaskSolve
-    v-if="taskId"
-    :taskId="taskId"
-    :rated="rated"
-  />
+    <p>
+      {{ tasks.length }} tasks available
+    </p>
+    <TaskSolve
+      v-if="taskId"
+      :taskId="taskId"
+      :rated="rated"
+    />
+  </div>
 </template>
 
 <script>

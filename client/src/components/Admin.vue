@@ -1,19 +1,21 @@
 <template>
-  <template v-if="!$production">
-    <Button
-      v-for="user in testUsersWithAdmin"
-      :key="user.name"
-      @click="logintest(user.name)"
-    >
-      Login {{ user.name }}
-    </Button>
-    <Button @click="createTestUsers">
-      Create test users
-    </Button>
-  </template>
-  <DomainsList />
-  <UsersList />
-  <RegisterPlatform />
+  <div class="p-component">
+    <template v-if="!$production">
+      <Button
+        v-for="user in testUsersWithAdmin"
+        :key="user.name"
+        @click="logintest(user.name)"
+      >
+        Login {{ user.name }}
+      </Button>
+      <Button @click="createTestUsers">
+        Create test users
+      </Button>
+    </template>
+    <DomainsList />
+    <UsersList />
+    <RegisterPlatform />
+  </div>
 </template>
 
 <script>

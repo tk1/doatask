@@ -14,6 +14,7 @@
     "leaflet": "^1.7.1",
     "markdown-it": "^12.0.6",
     "markdown-it-katex": "^2.0.3",
+    "monaco-editor": "^0.30.1",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.6.0",

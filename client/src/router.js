@@ -61,7 +61,7 @@ const router = createRouter({
       {
         path: '',
         component: Welcome,
-        props: { text: 'Choose a task from the left menu.' }
+        props: { text: 'Choose a task from the menu or click "Next".' }
       },
       {
         path: 'task/:taskId',

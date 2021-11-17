@@ -80,6 +80,11 @@ export default {
       return this.$store.state.user.id
     }
   },
+  watch: {
+    taskId (newValue) {
+      this.getComments()
+    }
+  },
   created () {
     this.getComments()
   },
