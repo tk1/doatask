@@ -1,6 +1,6 @@
 import { Task } from 'src/tasks/task.entity'
 import { Submission } from '../../submissions/submission.entity'
-import * as Tcs from 'tcs'
+import * as Tcs from 'tcs-engine'
 
 
 function evaluate(submission: Submission, task: Task): any {

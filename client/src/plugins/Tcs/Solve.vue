@@ -28,13 +28,17 @@
       >
         {{ buttonText(slotProps) }}
       </Button>
+      <WordGraph :regexp="slotProps.task.details.regexp" />
     </template>
   </TaskSolveBase>
 </template>
 
 <script>
+import WordGraph from '../../components/WordGraph.vue'
 
 export default {
+  components: { WordGraph },
+
   props: {
     task: {
       type: Object,
