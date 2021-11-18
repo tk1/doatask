@@ -1,6 +1,6 @@
 import { Task } from 'src/tasks/task.entity'
 import { Submission } from '../../submissions/submission.entity'
-import * as RegularExpression from '../../../../../../projects/tcs/engine/regexp.js'
+import * as Tcs from 'tcs'
 
 
 function evaluate(submission: Submission, task: Task): any {
@@ -10,7 +10,7 @@ function evaluate(submission: Submission, task: Task): any {
   let solutionWord = solution.value.text
 
   let grade = 0
-  let r = RegularExpression.parse(details.regexp)
+  let r = Tcs.RegularExpression.parse(details.regexp)
 
   let words = r.acceptedWords(10)
   let firstWords = []
