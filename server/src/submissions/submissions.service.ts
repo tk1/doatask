@@ -11,6 +11,8 @@ import { AssignmentTasksService } from '../assignmenttasks/assignmenttasks.servi
 import { LtiService } from '../lti/lti.service';
 import { plugins } from '../plugins/list'
 import { updateRating } from './rating'
+import { CodeEvaluatorFactory } from 'src/plugins/code/code-evaluators/code-evaluator-factory';
+import { CodeDto } from 'src/plugins/code/code.dto';
 
 @Injectable()
 export class SubmissionsService {
@@ -23,6 +25,30 @@ export class SubmissionsService {
     private readonly assignmentTasksService: AssignmentTasksService,
     private readonly ltiService: LtiService
   ) { }
+
+  async runPublicCodeTests(createSubmissionDto: CreateSubmissionDto): Promise<any> {
+    const submission = new Submission();
+    Object.assign(submission, createSubmissionDto);
+    
+    const task = await this.tasksService.findOne(createSubmissionDto.task)
+    const details:CodeDto = new CodeDto()
+    Object.assign(details, task.details)
+
+    //const details = JSON.parse('{"language":"JavaScript","methodStub":{"functionName":"quadrat","parameter":[{"name":"n","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0"],"expectedOutput":"0"},{"testParameter":["2"],"expectedOutput":"4"}],"secretTests":[{"testParameter":["-3"],"expectedOutput":"9"}]}}');
+
+    const solution = submission.solution["value"]
+    //const solution = "function quadrat(n) {return n*n}"
+
+    if (createSubmissionDto.assignment < 0) {
+      createSubmissionDto.assignment = null
+    }
+    
+    const codeEvaluator = CodeEvaluatorFactory.createCodeEvaluator(details, solution)
+    await codeEvaluator.runPublicTests()
+    const result = codeEvaluator.getTestResults()    
+    submission.feedback = result
+    return submission.feedback
+  }
 
   async create(createSubmissionDto: CreateSubmissionDto, ltiToken: any): Promise<Submission> {
 
