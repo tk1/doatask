@@ -3,43 +3,26 @@ import { CodeTestResult } from "../../code-tests/code-test-result";
 import { CodeTestSuite } from "../../code-tests/code-test-suite";
 import { MethodStub } from "../../method-stub";
 import { AbstractCodeEvaluator } from "../abstract-code-evaluator";
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 export class PythonEvaluator extends AbstractCodeEvaluator {
 
     private code:string
     private methodStub:MethodStub
-    private testSuite:CodeTestSuite
-    private codeTestResults: CodeTestResult[]
 
     constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) {
-        super();
+        super(testSuite);
         this.code = code
         this.methodStub = methodStub
-        this.testSuite = testSuite
-        this.codeTestResults = new Array<CodeTestResult>()
     }
     
-    getTestResults(): CodeTestResult[] {
-        return this.codeTestResults
-    }
-    
-    runPublicTests() {
-        this.runTests(this.testSuite.publicTests, true)
-    }
-
-    runSecretTests() {
-        this.runTests(this.testSuite.secretTests, false)
-    }
-    
-    private async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
+    async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
         for(let test of codeTests) {
             const testCall = this.buildTestCallWithoutFunctionDefinition(test)
-            await this.callPythonCodeRunner(testCall).then(output => {
-                const testPassed = this.checkTestOutput(test.expectedOutput, output);
-                const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
-                this.codeTestResults.push(codeTestResult)
-            })     
+            const output = await this.callPythonCodeRunner(testCall)
+            const testPassed = this.checkTestOutput(test.expectedOutput, output);
+            const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
+            this.codeTestResults.push(codeTestResult)
         }
     }
 
@@ -47,19 +30,18 @@ export class PythonEvaluator extends AbstractCodeEvaluator {
         return this.methodStub.functionName + "(" + test.testParameter.join(",") + ")"
     }
 
-    private callPythonCodeRunner(testCall:string):any {
+    private async callPythonCodeRunner(testCall:string):Promise<string> {
         
         const urlSearchParams = new URLSearchParams()
         urlSearchParams.append("functionDefinition", this.code)
         urlSearchParams.append("functionCall", testCall)
 
-          const instance = axios.create({
+        const instance = axios.create({
             baseURL: 'http://localhost:8081',
             timeout: 1000,
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
-          })
-
-          const response = instance.post('runCode?' + urlSearchParams.toString())
-          return response
+        })
+        const response = await instance.post('runCode?' + urlSearchParams.toString())
+        return response.data
     }
 }

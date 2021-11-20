@@ -1,8 +1,8 @@
 import { CodeTestResult } from "../code-tests/code-test-result";
 
 export interface CodeEvaluator {
-    runPublicTests(): void
-    runSecretTests(): void
-    runAllTests(): void
+    runPublicTests(): Promise<void>
+    runSecretTests(): Promise<void>
+    runAllTests(): Promise<void>
     getTestResults(): CodeTestResult[]
 }

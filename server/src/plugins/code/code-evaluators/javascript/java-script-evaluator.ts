@@ -8,34 +8,18 @@ export class JavaScriptEvaluator extends AbstractCodeEvaluator {
 
     private code:string
     private methodStub:MethodStub
-    private testSuite:CodeTestSuite
-    private codeTestResults: CodeTestResult[]
-
+    
     constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) {
-        super();
+        super(testSuite);
         this.code = code
         this.methodStub = methodStub
-        this.testSuite = testSuite
-        this.codeTestResults = new Array<CodeTestResult>()
      }
 
-    getTestResults(): CodeTestResult[] {
-        return this.codeTestResults
-    }
-    
-    runPublicTests() {
-        this.runTests(this.testSuite.publicTests, true)
-    }
-    
-    runSecretTests() {
-        this.runTests(this.testSuite.secretTests, false)
-    }
-
-    runTests(codeTests: CodeTest[], isPublicTest: boolean) {
+    async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
         for(let test of codeTests) {
             // TODO switch the eval for a more secure option (e.g. vm2)
             const output = eval(this.buildTestCall(test))
-            const testPassed = this.checkTestOutput(test.expectedOutput, output);
+            const testPassed = this.checkTestOutput(test.expectedOutput, output)
             const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
             this.codeTestResults.push(codeTestResult)
         }
