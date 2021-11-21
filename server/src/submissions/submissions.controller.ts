@@ -17,7 +17,7 @@ export class SubmissionsController {
     return this.submissionsService.create(createSubmissionDto, req.res?.locals?.token);
   }
 
-  @Get('runPublicCodeTests')
+  @Post('runPublicCodeTests')
   @Roles('student')
   runPublicCodeTests(@Body() createSubmissionDto: CreateSubmissionDto){
     return this.submissionsService.runPublicCodeTests(createSubmissionDto);

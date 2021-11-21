@@ -36,7 +36,7 @@ export class SubmissionsService {
 
     //const details = JSON.parse('{"language":"JavaScript","methodStub":{"functionName":"quadrat","parameter":[{"name":"n","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0"],"expectedOutput":"0"},{"testParameter":["2"],"expectedOutput":"4"}],"secretTests":[{"testParameter":["-3"],"expectedOutput":"9"}]}}');
 
-    const solution = submission.solution["value"]
+    const solution:string = submission.solution["value"]
     //const solution = "function quadrat(n) {return n*n}"
 
     if (createSubmissionDto.assignment < 0) {

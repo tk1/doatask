@@ -16,4 +16,8 @@ function save (submission) {
   }
 }
 
-export { getAll, getQuery, save }
+function runPublicTests (submission) {
+  return post('submissions/runPublicCodeTests', submission)
+}
+
+export { getAll, getQuery, save, runPublicTests }
