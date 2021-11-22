@@ -14,7 +14,7 @@ export class JavaEvaluator extends AbstractCodeEvaluator {
         super(testSuite);
         this.code = code
         this.methodStub = methodStub
-     }
+    }
 
     async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
         for(let test of codeTests) {
