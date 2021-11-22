@@ -28,7 +28,10 @@
       >
         {{ buttonText(slotProps) }}
       </Button>
-      <WordGraph :regexp="slotProps.task.details.regexp" />
+      <WordGraph
+        v-if="slotProps.alreadySubmitted"
+        :regexp="slotProps.task.details.regexp"
+      />
     </template>
   </TaskSolveBase>
 </template>

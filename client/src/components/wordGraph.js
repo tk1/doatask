@@ -63,8 +63,6 @@ export function init (regexp, maxLength) {
       currResult.push({ word: w, accepted: accepted })
     }
   }
-  //     result = [[{word: '', accepted: true}],
-  // [{word:'a', accepted: false}, {word:'b', accepted: true}]]
 
   // TODO use of currentLength is not elegant
   // find solution without y as in
