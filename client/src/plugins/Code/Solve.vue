@@ -135,10 +135,8 @@ export default {
     buttonText (slotProps) {
       if (slotProps.alreadySubmitted) {
         return 'Already submitted'
-      } else if (this.solution.text) {
-        return 'Submit solution'
       } else {
-        return 'Enter solution'
+        return 'Submit solution'
       }
     },
     generateFunctionBody () {
@@ -148,7 +146,6 @@ export default {
     },
     getPublicTests: async function (slotProps) {
       const createSubmission = {
-        course: 'test',
         plugin: slotProps.task.plugin,
         solution: {
           value: editor.getValue()
