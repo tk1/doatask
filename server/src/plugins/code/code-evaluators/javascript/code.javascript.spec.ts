@@ -25,7 +25,7 @@ describe('JavaScript code evaluator', () => {
   test('Empty code solution', async () => {
 
     const methodStub = new MethodStub("testFunction", [], "boolean")
-    const testSuite = new CodeTestSuite([new CodeTest([], "true")], [])
+    const testSuite = new CodeTestSuite([new CodeTest([], true), new CodeTest([], true)], [])
 
     const jsCodeEvaluator: JavaScriptEvaluator = new JavaScriptEvaluator("", methodStub, testSuite)
     await jsCodeEvaluator.runAllTests()
@@ -37,7 +37,7 @@ describe('JavaScript code evaluator', () => {
   test('Syntax error in code solution', async () => {
 
     const methodStub = new MethodStub("testFunction", [], "boolean")
-    const testSuite = new CodeTestSuite([new CodeTest([], "true")], [])
+    const testSuite = new CodeTestSuite([new CodeTest([], true)], [])
 
     const codeSolution = "function testFunction() { retrun false; }"
 
@@ -51,7 +51,7 @@ describe('JavaScript code evaluator', () => {
   test('Missing return in code solution', async () => {
 
     const methodStub = new MethodStub("testFunction", [], "boolean")
-    const testSuite = new CodeTestSuite([new CodeTest([], "true"),new CodeTest([], "true")], [new CodeTest([], "false")])
+    const testSuite = new CodeTestSuite([new CodeTest([], true),new CodeTest([], true)], [new CodeTest([], false)])
 
     const codeSolution = "function testFunction() { let x = false; }"
 
@@ -65,7 +65,7 @@ describe('JavaScript code evaluator', () => {
   test('boolean input parameter (not function)', async () => {
 
     const methodStub = new MethodStub("not", [booleanParam], "boolean")
-    const testSuite = new CodeTestSuite([new CodeTest(["false"], "true")], [new CodeTest(["true"], "false")])
+    const testSuite = new CodeTestSuite([new CodeTest([false], true)], [new CodeTest([true], false)])
     const codeSolution = "function not(input) { return !input }"
 
     const jsCodeEvaluator: JavaScriptEvaluator = new JavaScriptEvaluator(codeSolution, methodStub, testSuite)
@@ -78,7 +78,7 @@ describe('JavaScript code evaluator', () => {
   test('int input parameter (substract function)', async () => {
 
     const methodStub = new MethodStub("substract", [intParam,intParam2], "int")
-    const testSuite = new CodeTestSuite([new CodeTest(["1","2"], "-1"), new CodeTest(["-1","-3"], "2")], [new CodeTest(["3","1"], "2")])
+    const testSuite = new CodeTestSuite([new CodeTest([1,2], -1), new CodeTest([-1,-3], 2)], [new CodeTest([3,1], 2)])
     const codeSolution = "function substract(x,y) { return x-y; }"
 
     const jsCodeEvaluator: JavaScriptEvaluator = new JavaScriptEvaluator(codeSolution, methodStub, testSuite)
@@ -90,9 +90,9 @@ describe('JavaScript code evaluator', () => {
 
   test('string input parameter (concat function)', async () => {
 
-    const methodStub = new MethodStub("concat", [stringParam1,stringParam2], "string")
+    const methodStub = new MethodStub("stringConcat", [stringParam1,stringParam2], "string")
     const testSuite = new CodeTestSuite([new CodeTest(["1","2"], "12"), new CodeTest(["a","b"], "ab")], [new CodeTest(["","test"], "test")])
-    const codeSolution = "function concat(x,y) { return x.concat(y); }"
+    const codeSolution = "function stringConcat(x,y) { return x + y; }"
 
     const jsCodeEvaluator: JavaScriptEvaluator = new JavaScriptEvaluator(codeSolution, methodStub, testSuite)
     await jsCodeEvaluator.runAllTests()

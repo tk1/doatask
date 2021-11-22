@@ -32,8 +32,8 @@ export abstract class AbstractCodeEvaluator implements CodeEvaluator {
         await this.runTests(this.testSuite.secretTests, false)
     }
 
-    protected checkTestOutput(expectedOutput: string, output: any) : boolean {
+    protected checkTestOutput(expectedOutput: any, output: any) : boolean {
         //console.log(`${output}`)
-        return expectedOutput === `${output}`
+        return expectedOutput === output
     }
 }

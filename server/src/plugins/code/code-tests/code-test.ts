@@ -1,9 +1,9 @@
 export class CodeTest {
 
-    readonly testParameter: Array<string>
-    readonly expectedOutput: string
+    readonly testParameter: Array<any>
+    readonly expectedOutput: any
 
-    constructor(testParameter: Array<string>, expectedOutput: string) {
+    constructor(testParameter: Array<any>, expectedOutput: any) {
         this.testParameter = testParameter
         this.expectedOutput = expectedOutput
      }
