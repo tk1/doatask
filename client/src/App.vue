@@ -9,6 +9,7 @@
     </template>
     <template #right>
       <ToggleButton
+        v-if="isNotStudent"
         v-model="zenmode"
         onLabel="Zen on"
         offLabel="Zen off"
@@ -29,7 +30,7 @@
   </Toolbar>
 
   <TabMenu
-    v-if="!storeZenMode"
+    v-if="!storeZenMode && isNotStudent"
     :model="accessibleItems"
   />
   <div class="router">
@@ -60,6 +61,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user
+    },
+    isNotStudent () {
+      return this.user.role !== 'student'
     },
     accessibleItems () {
       return this.items.filter(v => canUserAccess({ path: v.to }))

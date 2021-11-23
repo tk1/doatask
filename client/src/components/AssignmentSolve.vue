@@ -1,7 +1,7 @@
 <template>
   <div class="p-component">
     <div
-      v-if="!zenmode"
+      v-if="!zenmode && isNotStudent"
     >
       <h2>Choose an assignment</h2>
       <Dropdown
@@ -24,7 +24,7 @@
         {{ buttonText }}
       </Button>
       <h3>Tasks</h3>
-      <div class="p-grid">
+      <div class="p-d-flex">
         <Menu
           :model="items"
           class="p-col-12 p-md-2 p-lg-2"
@@ -34,7 +34,8 @@
           header="Solve Task"
           :modal="false"
           :maximizable="true"
-          class="p-fluid"
+          :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+          :style="{width: '60vw'}"
         >
           <router-view class="p-col-12 p-md-10 p-lg-9" />
           <template #footer>
@@ -98,6 +99,9 @@ export default {
     user () {
       return this.$store.state.user
     },
+    isNotStudent () {
+      return this.user.role !== 'student'
+    },
     items () {
       return this.assignment?.assignmentTasks.map(
         v => ({
@@ -105,8 +109,8 @@ export default {
           label: this.getTaskTitle(v.taskId),
           icon: 'pi pi-fw pi-pencil',
           to: `/assignmentsolve/${this.assignmentId}/task/${v.taskId}`,
-          disabled: this.$store.state.taskInProgress
-          // command: this.taskChanged
+          disabled: this.$store.state.taskInProgress,
+          command: this.taskChanged
         })
       )
     },
