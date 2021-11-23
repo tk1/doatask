@@ -1,9 +1,9 @@
-import { CodeTest } from '../code-tests/code-test';
-import { CodeTestSuite } from '../code-tests/code-test-suite';
-import { MethodStub } from '../method-stub';
-import { JavaScriptEvaluator } from '../code-evaluators/javascript/java-script-evaluator';
-import { CodeTypes } from '../code-types';
-import { Tmp } from './test-method-parameters';
+import { CodeTest } from '../../code-tests/code-test';
+import { CodeTestSuite } from '../../code-tests/code-test-suite';
+import { MethodStub } from '../../method-stub';
+import { JavaScriptEvaluator } from '../../code-evaluators/javascript/java-script-evaluator';
+import { CodeTypes } from '../../code-types';
+import { Tmp } from '../test-method-parameters';
 
 describe('JavaScript code evaluator', () => {
 

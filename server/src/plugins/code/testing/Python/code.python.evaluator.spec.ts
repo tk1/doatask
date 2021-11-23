@@ -1,9 +1,9 @@
-import { CodeTest } from '../code-tests/code-test';
-import { CodeTestSuite } from '../code-tests/code-test-suite';
-import { MethodStub } from '../method-stub';
-import { CodeTypes } from '../code-types';
-import { Tmp } from './test-method-parameters';
-import { PythonEvaluator } from '../code-evaluators/python/python-evaluator';
+import { CodeTest } from '../../code-tests/code-test';
+import { CodeTestSuite } from '../../code-tests/code-test-suite';
+import { MethodStub } from '../../method-stub';
+import { CodeTypes } from '../../code-types';
+import { Tmp } from '../test-method-parameters';
+import { PythonEvaluator } from '../../code-evaluators/python/python-evaluator';
 
 describe('Python code evaluator', () => {
 
@@ -57,7 +57,7 @@ describe('Python code evaluator', () => {
         const pythonCodeEvaluator: PythonEvaluator = new PythonEvaluator(codeSolution, methodStub, testSuite)
         await pythonCodeEvaluator.runAllTests()
         const testResults = pythonCodeEvaluator.getTestResults()
-
+        console.log(testResults)
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 

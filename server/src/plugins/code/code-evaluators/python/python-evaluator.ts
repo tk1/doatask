@@ -4,34 +4,37 @@ import { CodeTestSuite } from "../../code-tests/code-test-suite";
 import { MethodStub } from "../../method-stub";
 import { AbstractCodeEvaluator } from "../abstract-code-evaluator";
 import axios from 'axios'
+import { PythonFunctionCallBuilder } from "./python-function-call-builder";
+import { PythonStringToTypeJavaScriptTransformer } from "./python-string-to-js-transformer";
 
 export class PythonEvaluator extends AbstractCodeEvaluator {
 
-    private code:string
-    private methodStub:MethodStub
+    private code: string
+    private methodStub: MethodStub
+    private pythonFunctionCallBuilder: PythonFunctionCallBuilder
+    private pythonTypeTransformer: PythonStringToTypeJavaScriptTransformer
 
-    constructor(code:string, methodStub: MethodStub, testSuite:CodeTestSuite) {
+    constructor(code: string, methodStub: MethodStub, testSuite: CodeTestSuite) {
         super(testSuite);
         this.code = code
         this.methodStub = methodStub
+        this.pythonFunctionCallBuilder = new PythonFunctionCallBuilder()
+        this.pythonTypeTransformer = new PythonStringToTypeJavaScriptTransformer()
     }
-    
+
     async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
-        for(let test of codeTests) {
-            const testCall = this.buildTestCallWithoutFunctionDefinition(test)
+        for (let test of codeTests) {
+            const testCall = this.pythonFunctionCallBuilder.buildFunctionCall(this.methodStub, test.testParameter)
             const output = await this.callPythonCodeRunner(testCall)
-            const testPassed = this.checkTestOutput(test.expectedOutput, output);
+            const transformedOutput = this.pythonTypeTransformer.transform(output, this.methodStub.returnType)
+            const testPassed = this.checkTestOutput(test.expectedOutput, transformedOutput)
             const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
             this.codeTestResults.push(codeTestResult)
         }
     }
 
-    private buildTestCallWithoutFunctionDefinition(test: CodeTest):string {
-        return this.methodStub.functionName + "(" + test.testParameter.join(",") + ")"
-    }
+    private async callPythonCodeRunner(testCall: string): Promise<string> {
 
-    private async callPythonCodeRunner(testCall:string):Promise<string> {
-        
         const urlSearchParams = new URLSearchParams()
         urlSearchParams.append("functionDefinition", this.code)
         urlSearchParams.append("functionCall", testCall)
