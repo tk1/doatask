@@ -157,6 +157,9 @@ export default {
       this.$router.push(`/assignmentsolve/${this.assignmentId}/task/${taskId}`)
     },
     taskChanged () {
+      if (!this.tasks) {
+        return
+      }
       this.solveDialog = true
       if (this.taskId === -1) {
         this.previousTaskId = null
