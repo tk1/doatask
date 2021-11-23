@@ -19,7 +19,7 @@
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.6.0",
-    "tcs-engine": "^0.2.0",
+    "tcs-engine": "^0.2.1",
     "vue": "^3.2.1",
     "vue-router": "^4.0.10",
     "vuex": "^4.0.2"
