@@ -33,7 +33,6 @@ export abstract class AbstractCodeEvaluator implements CodeEvaluator {
     }
 
     protected checkTestOutput(expectedOutput: any, output: any) : boolean {
-        //console.log(`${output}`)
         return expectedOutput === output
     }
 }
