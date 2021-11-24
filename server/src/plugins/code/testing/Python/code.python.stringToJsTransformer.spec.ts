@@ -29,21 +29,25 @@ describe('Python string to JavaScript transformer', () => {
     test('Int array output', () => {
         const result = pstJSt.transform("[1, 2, 3]", CodeTypes.intArrayType)
         const result2 = pstJSt.transform("[-11, -2, 0]", CodeTypes.intArrayType)
+        const result3 = pstJSt.transform("[]", CodeTypes.intArrayType)
         expect(result).toStrictEqual([1, 2, 3])
         expect(result2).toStrictEqual([-11, -2, 0])
+        expect(result3).toStrictEqual([])
     });
 
     test('String array output', () => {
-        const result = pstJSt.transform("['abc', '', '123']", CodeTypes.stringType)
-        const result2 = pstJSt.transform("[]", CodeTypes.stringType)
+        const result = pstJSt.transform("['abc', '', '123']", CodeTypes.stringArrayType)
+        const result2 = pstJSt.transform("[]", CodeTypes.stringArrayType)
         expect(result).toStrictEqual(['abc', '', '123'])
         expect(result2).toStrictEqual([])
     });
 
     test('Boolean array output', () => {
-        const result = pstJSt.transform("[True, False]", CodeTypes.booleanArrayType)
-        const result2 = pstJSt.transform("[False, True, False, True]", CodeTypes.booleanArrayType)
+        const result = pstJSt.transform('[True, False]', CodeTypes.booleanArrayType)
+        const result2 = pstJSt.transform('[False, True, False, True]', CodeTypes.booleanArrayType)
+        const result3 = pstJSt.transform('[]', CodeTypes.booleanArrayType)
         expect(result).toStrictEqual([true, false])
         expect(result2).toStrictEqual([false, true, false, true])
+        expect(result3).toStrictEqual([])
     });
 });

@@ -26,9 +26,9 @@ export class PythonEvaluator extends AbstractCodeEvaluator {
         for (let test of codeTests) {
             const testCall = this.pythonFunctionCallBuilder.buildFunctionCall(this.methodStub, test.testParameter)
             const output = await this.callPythonCodeRunner(testCall)
-            const transformedOutput = this.pythonTypeTransformer.transform(output, this.methodStub.returnType)
+            const transformedOutput: any = this.pythonTypeTransformer.transform(output, this.methodStub.returnType)
             const testPassed = this.checkTestOutput(test.expectedOutput, transformedOutput)
-            const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, output, testPassed, isPublicTest)
+            const codeTestResult = new CodeTestResult(test.testParameter, test.expectedOutput, transformedOutput, testPassed, isPublicTest)
             this.codeTestResults.push(codeTestResult)
         }
     }
@@ -45,6 +45,6 @@ export class PythonEvaluator extends AbstractCodeEvaluator {
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
         })
         const response = await instance.post('runCode?' + urlSearchParams.toString())
-        return response.data
+        return response.data.toString()
     }
 }

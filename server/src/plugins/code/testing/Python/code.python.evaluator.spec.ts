@@ -43,11 +43,10 @@ describe('Python code evaluator', () => {
         const pythonCodeEvaluator: PythonEvaluator = new PythonEvaluator(codeSolution, methodStub, testSuite)
         await pythonCodeEvaluator.runAllTests()
         const testResults = pythonCodeEvaluator.getTestResults()
-
         testResults.forEach(testResult => expect(testResult.testPassed).toBeFalsy())
     });
 
-    test('boolean input parameter (notF function)', async () => {
+    test('Boolean input parameter (notF function)', async () => {
 
         // HINT: not is a keyword in Python
         const methodStub = new MethodStub("notF", [Tmp.booleanParam], CodeTypes.booleanType)
@@ -57,11 +56,10 @@ describe('Python code evaluator', () => {
         const pythonCodeEvaluator: PythonEvaluator = new PythonEvaluator(codeSolution, methodStub, testSuite)
         await pythonCodeEvaluator.runAllTests()
         const testResults = pythonCodeEvaluator.getTestResults()
-        console.log(testResults)
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('int input parameter (substract function)', async () => {
+    test('Int input parameter (substract function)', async () => {
 
         const methodStub = new MethodStub("substract", [Tmp.intParam, Tmp.intParam2], CodeTypes.intType)
         const testSuite = new CodeTestSuite([new CodeTest([1, 2], -1), new CodeTest([-1, -3], 2)], [new CodeTest([3, 1], 2)])
@@ -74,7 +72,7 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('string input parameter (concat function)', async () => {
+    test('String input parameter (concat function)', async () => {
 
         const methodStub = new MethodStub("stringConcat", [Tmp.stringParam1, Tmp.stringParam2], CodeTypes.stringType)
         const testSuite = new CodeTestSuite([new CodeTest(["1", "2"], "12"), new CodeTest(["a", "b"], "ab")], [new CodeTest(["", "test"], "test")])
@@ -83,10 +81,12 @@ describe('Python code evaluator', () => {
         const pythonCodeEvaluator: PythonEvaluator = new PythonEvaluator(codeSolution, methodStub, testSuite)
         await pythonCodeEvaluator.runAllTests()
         const testResults = pythonCodeEvaluator.getTestResults()
-        testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
+        testResults.forEach(testResult => {
+            expect(testResult.testPassed).toBeTruthy()
+        })
     });
 
-    test('boolean array input parameter (logicalAnd function)', async () => {
+    test('Boolean array input parameter (logicalAnd function)', async () => {
 
         const methodStub = new MethodStub("logicalAnd", [Tmp.booleanArrayParam], CodeTypes.booleanType)
         const testSuite = new CodeTestSuite([new CodeTest([[true, false]], false), new CodeTest([[true, true, false]], false)], [new CodeTest([[true, true]], true)])
@@ -102,7 +102,7 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('int array input parameter (sumOfArray function)', async () => {
+    test('Int array input parameter (sumOfArray function)', async () => {
 
         const methodStub = new MethodStub("sumOfArray", [Tmp.intArrayParam], CodeTypes.intType)
         const testSuite = new CodeTestSuite([new CodeTest([[1, 2]], 3), new CodeTest([[0, 10, 100, 1]], 111)], [new CodeTest([[-1, 2, -3]], -2)])
@@ -118,7 +118,7 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('string array input parameter (concatOfArray function)', async () => {
+    test('String array input parameter (concatOfArray function)', async () => {
 
         const methodStub = new MethodStub("concatOfArray", [Tmp.stringArrayParam], CodeTypes.stringType)
         const testSuite = new CodeTestSuite([new CodeTest([["a", "b", "c"]], "abc"), new CodeTest([["1", "2", "3", "4"]], "1234")], [new CodeTest([["", "", ""]], "")])
@@ -134,7 +134,7 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('boolean array output parameter (isNumberEven function)', async () => {
+    test('Boolean array output parameter (isNumberEven function)', async () => {
 
         const methodStub = new MethodStub("isNumberEven", [Tmp.intArrayParam], CodeTypes.booleanArrayType)
         const testSuite = new CodeTestSuite([new CodeTest([[1, 2, 3]], [false, true, false]), new CodeTest([[4, 5, 6]], [true, false, true])], [new CodeTest([[-2, -4, 5]], [true, true, false])])
@@ -153,11 +153,11 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('string array output parameter (isOddEven function)', async () => {
+    test('String array output parameter (isOddEven function)', async () => {
 
         const methodStub = new MethodStub("isOddEven", [Tmp.intArrayParam], CodeTypes.stringArrayType)
         const testSuite = new CodeTestSuite([new CodeTest([[1, 2, 3]], ['odd', 'even', 'odd']), new CodeTest([[4, 5, 6]], ['even', 'odd', 'even'])], [new CodeTest([[-2, -4, 5]], ['even', 'even', 'odd'])])
-        const codeSolution = "def isNumberEven(input):\n" +
+        const codeSolution = "def isOddEven(input):\n" +
             "\tresult = []\n" +
             "\tfor i in input:\n" +
             "\t\tif(i % 2 > 0):\n" +
@@ -172,7 +172,7 @@ describe('Python code evaluator', () => {
         testResults.forEach(testResult => expect(testResult.testPassed).toBeTruthy())
     });
 
-    test('string array output parameter (addToEachNumber function)', async () => {
+    test('Int array output parameter (addToEachNumber function)', async () => {
 
         const methodStub = new MethodStub("addToEachNumber", [Tmp.intArrayParam, Tmp.intParam], CodeTypes.intArrayType)
         const testSuite = new CodeTestSuite([new CodeTest([[1, 2, 3], 1], [2, 3, 4]), new CodeTest([[4, 5, 6], 0], [4, 5, 6])], [new CodeTest([[-2, -4, 5], -2], [-4, -6, 3])])

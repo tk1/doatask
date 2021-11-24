@@ -33,6 +33,24 @@ export abstract class AbstractCodeEvaluator implements CodeEvaluator {
     }
 
     protected checkTestOutput(expectedOutput: any, output: any) : boolean {
-        return expectedOutput === output
+
+        /*console.log(expectedOutput + "-" + output)
+        console.log(typeof(expectedOutput) + "-" + typeof(output))
+        console.log(expectedOutput === output)*/
+
+        if(Array.isArray(expectedOutput) && Array.isArray(output)) {
+            for(let i = 0; i<expectedOutput.length; i++) {
+                if(output.length < i) {
+                    return false;
+                } else {
+                    if(expectedOutput[i] !== output[i]){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        
+        return expectedOutput === output    
     }
 }
