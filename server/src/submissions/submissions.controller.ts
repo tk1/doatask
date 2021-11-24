@@ -7,20 +7,14 @@ import { Roles } from '../common/decorators/roles.decorators'
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller(['submissions', 'lti/submissions'])
-//@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class SubmissionsController {
   constructor(private readonly submissionsService: SubmissionsService) { }
 
   @Post()
-  //@Roles('student')
+  @Roles('student')
   create(@Body() createSubmissionDto: CreateSubmissionDto, @Request() req) {
     return this.submissionsService.create(createSubmissionDto, req.res?.locals?.token);
-  }
-
-  @Post('runPublicCodeTests')
-  @Roles('student')
-  runPublicCodeTests(@Body() createSubmissionDto: CreateSubmissionDto){
-    return this.submissionsService.runPublicCodeTests(createSubmissionDto);
   }
 
   @Get()
