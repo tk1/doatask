@@ -1,8 +1,6 @@
 <template>
   <TaskSolveBase
     :taskId="taskId"
-    :assignmentId="assignmentId"
-    :rated="rated"
   >
     <template #header="slotProps">
       <h1>{{ slotProps.task.title }}</h1>
@@ -21,7 +19,7 @@
       </Button>
 
       <Button
-        @click="getPublicTests(slotProps)"
+        @click="getPublicTests()"
       >
         run Tests
       </Button>
@@ -48,7 +46,7 @@
 </template>
 
 <script>
-import { runPublicTests } from '../../services/SubmissionService.js'
+import { runPublicTests } from '../../services/CodeService.js'
 
 import * as monaco from 'monaco-editor'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
@@ -144,20 +142,13 @@ export default {
       return 'function ' + this.task.details.methodStub.functionName +
        ' (' + this.task.details.methodStub.parameter.map((x) => x.name) + ')' + ' {\n\n' + '}'
     },
-    getPublicTests: async function (slotProps) {
-      const createSubmission = {
-        plugin: slotProps.task.plugin,
-        solution: {
-          value: editor.getValue()
-        },
-        task: this.taskId,
-        assignment: this.assignmentId,
-        assignmentTask: 13,
-        user: slotProps.task.owner.id,
-        rated: this.rated
+    getPublicTests: async function () {
+      const runCodeDto = {
+        solutionCode: editor.getValue(),
+        task: this.taskId
       }
 
-      this.publicTests = await runPublicTests(createSubmission)
+      this.publicTests = await runPublicTests(runCodeDto)
     }
   }
 }
