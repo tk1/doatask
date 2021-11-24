@@ -12,7 +12,7 @@
         @change="assignmentSelected"
       />
     </div>
-    <div v-if="assignment">
+    <div v-if="assignments.length !== 0">
       <h2>
         {{ assignment.title }}
       </h2>
@@ -121,7 +121,7 @@ export default {
   created () {
     this.$watch(
       () => this.$route.params.assignmentId,
-      (toParams, previousParams) => {
+      (newValue, oldValue) => {
         this.assignmentChanged()
       }
     )
@@ -157,9 +157,6 @@ export default {
       this.$router.push(`/assignmentsolve/${this.assignmentId}/task/${taskId}`)
     },
     taskChanged () {
-      if (!this.tasks) {
-        return
-      }
       this.solveDialog = true
       if (this.taskId === -1) {
         this.previousTaskId = null

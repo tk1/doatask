@@ -58,4 +58,8 @@ export default {
     /* z-index must be large to be on top of the dialog */
     z-index: 10000;
 }
+
+#word-svg {
+  width: 100%;
+}
 </style>

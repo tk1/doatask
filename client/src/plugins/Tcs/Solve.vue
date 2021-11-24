@@ -2,6 +2,10 @@
   <TaskSolveBase>
     <template #details="slotProps">
       <MarkDown :source="toLatex(slotProps.task.details.regexp)" />
+      <!-- minLength is missing in older tasks -->
+      <p>
+        The required minimal length of the word is {{ slotProps.task.details.minLength || 0 }}.
+      </p>
     </template>
     <template #solution="slotProps">
       <span class="p-field p-col-12 p-md-3">
@@ -11,6 +15,7 @@
           :disabled="slotProps.alreadySubmitted"
           type="text"
           placeholder="first word"
+          autocomplete="off"
         />
       </span>
       <Message

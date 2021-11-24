@@ -14,7 +14,7 @@
         dataKey="id"
         show-gridlines
         editMode="cell"
-        class="editable-cells-table"
+        class="p-datatable-sm editable-cells-table"
         @rowReorder="onRowReorder"
         @cellEditComplete="onCellEditComplete"
       >

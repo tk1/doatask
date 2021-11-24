@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import * as Tcs from 'tcs-engine'
 
 export function init (regexp, maxLength) {
-  const maxWidth = 1024
+  const maxWidth = 512
   const minPixel = 4
   const standardSize = 20
 

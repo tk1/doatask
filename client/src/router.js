@@ -80,9 +80,9 @@ router.beforeEach((to, from) => {
   } else {
     store.commit('setZenmode', false)
   }
+
   if (to.query.ltik) {
     let toUrl
-    console.log(to.query)
     if (to.query.assignmentsolve) {
       // custom parameter in moodle e.g. assignmentsolve=9
       toUrl = `/assignmentsolve/${to.query.assignmentsolve}`

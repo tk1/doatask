@@ -1,3 +1,3 @@
 export function describe (details) {
-  return `${details.regexp}`
+  return `${details.regexp}, |w| >= ${details.minLength || 0}`
 }

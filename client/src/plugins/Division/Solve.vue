@@ -13,6 +13,7 @@
           v-model="solution.text"
           :disabled="slotProps.alreadySubmitted"
           type="text"
+          autocomplete="off"
         />
         <label for="solution">Result</label>
       </span>

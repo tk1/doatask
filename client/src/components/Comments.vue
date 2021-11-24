@@ -1,7 +1,4 @@
 <template>
-  <Button @click="showCreateDialog">
-    Create comment
-  </Button>
   <Dialog
     v-model:visible="createDialogVisible"
     :style="{width: '900px'}"
@@ -26,7 +23,7 @@
       />
     </template>
   </Dialog>
-  <h3>Comments for {{ taskId }}</h3>
+  <h3>Comments</h3>
   <template
     v-for="c in comments"
     :key="c.id"
@@ -49,6 +46,9 @@
       </p>
     </div>
   </template>
+  <Button @click="showCreateDialog">
+    Create comment
+  </Button>
 </template>
 
 <script>

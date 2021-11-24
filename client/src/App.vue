@@ -33,8 +33,14 @@
     v-if="!storeZenMode && isNotStudent"
     :model="accessibleItems"
   />
-  <div class="router">
+  <div
+    v-if="!loading"
+    class="router"
+  >
     <router-view />
+  </div>
+  <div v-else>
+    <ProgressSpinner />
   </div>
 </template>
 
@@ -59,6 +65,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.assignments.all.length === 0
+    },
     user () {
       return this.$store.state.user
     },
@@ -80,11 +89,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .p-avatar {
     margin-left: 0.5ex;
   }
-  .router {
-    margin: 10px;
-  }
+  /* scaling of the app, see https://www.primefaces.org/primevue/showcase/#/theming */
+  html {
+    font-size: 15px;
+}
 </style>>
