@@ -14,6 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { LtiModule } from './lti/lti.module';
 import { CommentsModule } from './comments/comments.module';
+import { CodeModule } from './plugins/code/code-controller/code.module';
 
 @Module({
   imports: [
@@ -54,7 +55,8 @@ import { CommentsModule } from './comments/comments.module';
     SubmissionsModule,
     DomainsModule,
     RatingsModule,
-    CommentsModule
+    CommentsModule,
+    CodeModule
   ],
 })
 export class AppModule implements NestModule {

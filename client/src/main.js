@@ -37,6 +37,7 @@ import RadioButton from 'primevue/radiobutton'
 import Slider from 'primevue/slider'
 import Chips from 'primevue/chips'
 import Toolbar from 'primevue/toolbar'
+import Card from 'primevue/card'
 
 import 'primevue/resources/themes/saga-blue/theme.css'
 import 'primevue/resources/primevue.min.css'
@@ -85,6 +86,7 @@ app.component('RadioButton', RadioButton)
 app.component('Slider', Slider)
 app.component('Chips', Chips)
 app.component('Toolbar', Toolbar)
+app.component('Card', Card)
 
 app.component('TaskEditBase', TaskEditBase)
 app.component('TaskSolveBase', TaskSolveBase)
