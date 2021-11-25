@@ -1,0 +1,7 @@
+-- Enter these commands into the query tool to delete all ratings, submissions, comments, assignments and tasks
+DELETE FROM public.rating;
+DELETE FROM public.submission;
+DELETE FROM public."comment";
+DELETE FROM public.assignment_task;
+DELETE FROM public."assignment";
+DELETE FROM public.task;
