@@ -43,7 +43,7 @@ export class SubmissionsService {
       return this.submissionsRepository.save(submission);
     }
     const task = await this.tasksService.findOne(createSubmissionDto.task)
-    const result = plugins.get(submission.plugin.toLowerCase()).evaluate(submission, task)
+    const result = await plugins.get(submission.plugin.toLowerCase()).evaluate(submission, task)
     submission.grade = result.grade
     submission.feedback = result.feedback
     if (submission.rated) {
@@ -55,8 +55,6 @@ export class SubmissionsService {
         result.grade
       )
     }
-
-
     return this.submissionsRepository.save(submission);
   }
 

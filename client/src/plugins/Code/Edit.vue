@@ -1,3 +1,18 @@
 <template>
-  <h2>Code</h2>
+  <Button @click="change">
+    test
+  </Button>
+  <div id="container" />
 </template>
+<script>
+export default {
+  data () {
+    return {
+    }
+  },
+  methods: {
+    change () {
+    }
+  }
+}
+</script>
