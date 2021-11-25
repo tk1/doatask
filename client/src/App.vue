@@ -9,7 +9,7 @@
     </template>
     <template #right>
       <ToggleButton
-        v-if="isStudent"
+        v-if="isStudent && !$production"
         v-model="zenmode"
         onLabel="Zen on"
         offLabel="Zen off"
@@ -21,8 +21,7 @@
       <div>
         <Avatar
           icon="pi pi-user"
-          class="p-mr-1"
-          size="large"
+          class="p-mr-2"
         />
         {{ user.name }}
       </div>
@@ -30,7 +29,7 @@
   </Toolbar>
 
   <TabMenu
-    v-if="!storeZenMode"
+    v-if="!zenmode"
     :model="accessibleItems"
   />
   <div
@@ -76,10 +75,15 @@ export default {
     },
     accessibleItems () {
       return this.items.filter(v => canUserAccess({ path: v.to }))
-    },
-    storeZenMode () {
-      return this.$store.state.zenmode
     }
+  },
+  created () {
+    this.$watch(
+      () => this.$store.state.zenmode,
+      (newValue, oldValue) => {
+        this.zenmode = newValue
+      }
+    )
   },
   methods: {
     zenChanged () {
@@ -92,6 +96,9 @@ export default {
 <style>
   .p-avatar {
     margin-left: 0.5ex;
+  }
+  .p-button-label {
+    font-size: 1rem;
   }
   /* scaling of the app, see https://www.primefaces.org/primevue/showcase/#/theming */
   html {

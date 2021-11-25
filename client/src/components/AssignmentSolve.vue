@@ -99,9 +99,6 @@ export default {
     user () {
       return this.$store.state.user
     },
-    isStudent () {
-      return this.user.role === 'student'
-    },
     items () {
       return this.assignment?.assignmentTasks.map(
         v => ({

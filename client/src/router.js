@@ -75,17 +75,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-  if (to.query.zen) {
-    store.commit('setZenmode', Boolean(to.query.zen))
-  } else {
-    store.commit('setZenmode', false)
-  }
-
   if (to.query.ltik) {
     let toUrl
     if (to.query.assignmentsolve) {
       // custom parameter in moodle e.g. assignmentsolve=9
       toUrl = `/assignmentsolve/${to.query.assignmentsolve}`
+      store.commit('setZenmode', true)
+      console.log('router')
     } else {
       toUrl = '/'
     }

@@ -15,7 +15,7 @@ const moduleAssignment = {
     }
   },
   mutations: {
-    setLoading(state,payload) {
+    setLoading (state, payload) {
       state.isLoading = payload
     },
     setAll (state, payload) {
