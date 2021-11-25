@@ -27,12 +27,13 @@ const store = createStore({
       plugins: [],
       submissions: [],
       zenmode: false,
-      taskInProgress: false
+      taskInProgress: false,
+      isLoading: false
     }
   },
   mutations: {
-    increment (state) {
-      state.count++
+    setLoading(state,payload) {
+      state.isLoading = payload
     },
     setTasks (state, payload) {
       state.tasks = payload
@@ -92,6 +93,7 @@ const store = createStore({
       commit('deleteTask', task)
     },
     async loadTasks ({ commit, dispatch }, user) {
+      commit('setLoading', true)
       dispatch('domains/getAll')
       if (user.role === 'student') {
         commit('setTasks', await getAllForStudent(user.id))
@@ -101,6 +103,7 @@ const store = createStore({
         commit('setTasks', tasks)
         dispatch('assignments/getAllForUser', user.id)
       }
+      commit('setLoading', false)
     },
     async login ({ commit, dispatch }, credentials) {
       let result

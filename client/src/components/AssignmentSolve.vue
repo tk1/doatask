@@ -1,7 +1,7 @@
 <template>
   <div class="p-component">
     <div
-      v-if="!zenmode && isNotStudent"
+      v-if="!zenmode"
     >
       <h2>Choose an assignment</h2>
       <Dropdown
@@ -99,8 +99,8 @@ export default {
     user () {
       return this.$store.state.user
     },
-    isNotStudent () {
-      return this.user.role !== 'student'
+    isStudent () {
+      return this.user.role === 'student'
     },
     items () {
       return this.assignment?.assignmentTasks.map(

@@ -9,7 +9,7 @@
     </template>
     <template #right>
       <ToggleButton
-        v-if="isNotStudent"
+        v-if="isStudent"
         v-model="zenmode"
         onLabel="Zen on"
         offLabel="Zen off"
@@ -30,7 +30,7 @@
   </Toolbar>
 
   <TabMenu
-    v-if="!storeZenMode && isNotStudent"
+    v-if="!storeZenMode"
     :model="accessibleItems"
   />
   <div
@@ -66,13 +66,13 @@ export default {
   },
   computed: {
     loading () {
-      return this.$store.state.assignments.all.length === 0
+      return this.$store.state.isLoading || this.$store.state.assignments.isLoading
     },
     user () {
       return this.$store.state.user
     },
-    isNotStudent () {
-      return this.user.role !== 'student'
+    isStudent () {
+      return this.user.role === 'student'
     },
     accessibleItems () {
       return this.items.filter(v => canUserAccess({ path: v.to }))
