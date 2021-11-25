@@ -10,10 +10,14 @@ const moduleAssignment = {
   state () {
     return {
       all: [],
-      changedRecord: { name: 'x' }
+      changedRecord: { name: 'x' },
+      isLoading: false
     }
   },
   mutations: {
+    setLoading(state,payload) {
+      state.isLoading = payload
+    },
     setAll (state, payload) {
       state.all = payload
     },
@@ -52,12 +56,16 @@ const moduleAssignment = {
   },
   actions: {
     async getAll ({ commit }) {
+      commit('setLoading', true)
       const all = await getAll()
       commit('setAll', all)
+      commit('setLoading', false)
     },
     async getAllForUser ({ commit }, id) {
+      commit('setLoading', true)
       const all = await getAllForUser(id)
       commit('setAll', all)
+      commit('setLoading', false)
     },
     async deleteOne ({ commit }, record) {
       await remove(record)

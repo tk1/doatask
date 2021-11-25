@@ -6,11 +6,18 @@
     <template #details>
       <div class="p-fluid p-grid p-formgrid">
         <div class="p-field p-col-12 p-md-3">
-          <label for="number1">Regular expression</label>
+          <label for="re">Regular expression</label>
           <InputText
-            id="number1"
+            id="re"
             v-model="task.details.regexp"
             type="text"
+          />
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+          <label for="length">Minimal word length</label>
+          <InputNumber
+            id="length"
+            v-model="task.details.minLength"
           />
         </div>
       </div>

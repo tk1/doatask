@@ -9,6 +9,7 @@
     </template>
     <template #right>
       <ToggleButton
+        v-if="isStudent"
         v-model="zenmode"
         onLabel="Zen on"
         offLabel="Zen off"
@@ -32,8 +33,14 @@
     v-if="!storeZenMode"
     :model="accessibleItems"
   />
-  <div class="router">
+  <div
+    v-if="!loading"
+    class="router"
+  >
     <router-view />
+  </div>
+  <div v-else>
+    <ProgressSpinner />
   </div>
 </template>
 
@@ -58,8 +65,14 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.state.isLoading || this.$store.state.assignments.isLoading
+    },
     user () {
       return this.$store.state.user
+    },
+    isStudent () {
+      return this.user.role === 'student'
     },
     accessibleItems () {
       return this.items.filter(v => canUserAccess({ path: v.to }))
@@ -76,11 +89,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .p-avatar {
     margin-left: 0.5ex;
   }
-  .router {
-    margin: 10px;
-  }
+  /* scaling of the app, see https://www.primefaces.org/primevue/showcase/#/theming */
+  html {
+    font-size: 15px;
+}
 </style>>

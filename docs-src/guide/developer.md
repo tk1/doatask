@@ -315,6 +315,9 @@ the new rating of the student.
 `submitReceived` is a function that will display a toast showing the grade the
 student received.
 
+You should use `autocomplete="off"` for input fields in order to prevent the
+browser suggesting solutions from previous tasks.
+
 ## Develop a plugin (server side)
 
 If you wish to add a new type of tasks you have to implement a plugin. The

@@ -5,11 +5,14 @@
     <p>
       {{ text }}
     </p>
+    <WordGraph />
   </div>
 </template>
 
 <script>
+import WordGraph from './WordGraph.vue'
 export default {
+  components: { WordGraph },
   props: {
     text: {
       type: String,

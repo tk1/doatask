@@ -7862,6 +7862,11 @@
     "inherits" "^2.0.3"
     "readable-stream" "^3.1.1"
 
+"tcs-engine@^0.2.1":
+  "integrity" "sha512-cwW2RpcP5PceWrNzrfAQcMy/ersSpt/fbEQM16bfjHPat6ak/+n/OCEAN1OCftYR2mxU4C+eCeeidkeqeJb3og=="
+  "resolved" "https://registry.npmjs.org/tcs-engine/-/tcs-engine-0.2.1.tgz"
+  "version" "0.2.1"
+
 "tedious@^11.0.9":
   "integrity" "sha512-GtFrO694x/7CRiUBt0AI4jrMtrkXV+ywifiOrDy4K0ufJLeKB4rgmPjy5Ws366fCaBaKlqQ9RnJ+sCJ1Jbd1lw=="
   "resolved" "https://registry.npmjs.org/tedious/-/tedious-11.8.0.tgz"

@@ -35,6 +35,7 @@
           v-model="solution.text"
           :disabled="alreadySubmitted"
           type="text"
+          autocomplete="off"
         />
         <label for="solution">Result</label>
       </span>

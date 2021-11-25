@@ -2,15 +2,20 @@
   <TaskSolveBase>
     <template #details="slotProps">
       <MarkDown :source="toLatex(slotProps.task.details.regexp)" />
+      <!-- minLength is missing in older tasks -->
+      <p>
+        The required minimal length of the word is {{ slotProps.task.details.minLength || 0 }}.
+      </p>
     </template>
     <template #solution="slotProps">
       <span class="p-field p-col-12 p-md-3">
-        <label for="solution">Word</label>
         <InputText
           id="solution"
           v-model="solution.text"
           :disabled="slotProps.alreadySubmitted"
           type="text"
+          placeholder="first word"
+          autocomplete="off"
         />
       </span>
       <Message
@@ -28,13 +33,20 @@
       >
         {{ buttonText(slotProps) }}
       </Button>
+      <WordGraph
+        v-if="slotProps.alreadySubmitted"
+        :regexp="slotProps.task.details.regexp"
+      />
     </template>
   </TaskSolveBase>
 </template>
 
 <script>
+import WordGraph from '../../components/WordGraph.vue'
 
 export default {
+  components: { WordGraph },
+
   props: {
     task: {
       type: Object,

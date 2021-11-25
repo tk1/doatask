@@ -2,19 +2,22 @@
   <div class="p-component">
     <template v-if="!$production">
       <Button
-        v-for="user in testUsersWithAdmin"
-        :key="user.name"
-        @click="logintest(user.name)"
+        v-for="testUser in testUsersWithAdmin"
+        :key="testUser.name"
+        @click="logintest(testUser.name)"
       >
-        Login {{ user.name }}
+        Login {{ testUser.name }}
       </Button>
-      <Button @click="createTestUsers">
+      <Button
+        v-if="isAdmin"
+        @click="createTestUsers"
+      >
         Create test users
       </Button>
     </template>
     <DomainsList />
-    <UsersList />
-    <RegisterPlatform />
+    <UsersList v-if="isAdmin" />
+    <RegisterPlatform v-if="isAdmin" />
   </div>
 </template>
 
@@ -57,6 +60,12 @@ export default {
       const list = this.testUsers
       list.unshift({ name: 'admin', role: 'admin' })
       return list
+    },
+    isAdmin () {
+      return this.user.role === 'admin'
+    },
+    user () {
+      return this.$store.state.user
     }
   },
   mounted () {

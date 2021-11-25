@@ -18,6 +18,7 @@
     <DataTable
       v-model:selection="selectedRows"
       v-model:filters="filters"
+      class="p-datatable-sm"
       :value="tasks"
       dataKey="id"
       show-gridlines
@@ -43,6 +44,15 @@
         field="id"
         header="Id"
       />
+      <Column
+        :sortable="true"
+        field="rating"
+        header="Rating"
+      >
+        <template #body="slotProps">
+          {{ slotProps.data.rating?.toFixed(0) }}
+        </template>
+      </Column>
       <Column
         :sortable="true"
         field="title"
@@ -135,16 +145,22 @@
         <template #body="slotProps">
           <Button
             :disabled="!isOwner(slotProps.data)"
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success p-mr-2"
+            class="p-button-success"
             @click="edit(slotProps.data)"
-          />
+          >
+            <i
+              class="pi pi-pencil"
+            />
+          </Button>
           <Button
             :disabled="!isOwner(slotProps.data)"
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-warning"
+            class="p-button-warning"
             @click="confirmDelete(slotProps.data)"
-          />
+          >
+            <i
+              class="pi pi-trash"
+            />
+          </Button>
         </template>
       </Column>
     </DataTable>
@@ -326,5 +342,8 @@ export default {
 }
 .false-icon {
  color:#c63737
+}
+Button i {
+  font-size: 0.5rem;
 }
 </style>
