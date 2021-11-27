@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CodeEvaluatorReturn } from "./code-evaluators/code-evaluator-return"
+import { CodeEvaluatorReturn } from "./code-evaluator/code-evaluator-return"
 
 export class CodeRunnerCaller {
 

@@ -1,7 +1,6 @@
 import { Task } from 'src/tasks/task.entity'
 import { Submission } from '../../submissions/submission.entity'
-import { CodeEvaluator } from './code-evaluators/code-evaluator';
-import { CodeEvaluatorFactory } from './code-evaluators/code-evaluator-factory'
+import { CodeEvaluator } from './code-evaluator/code-evaluator';
 import { CodeTestResult } from './code-tests/code-test-result';
 import { CodeDto } from './code.dto';
 
@@ -13,7 +12,7 @@ async function evaluate(submission: Submission, task: Task): Promise<any> {
   //task.details = JSON.parse('{"language":"Python","methodStub":{"functionName":"sum","parameter":[{"name":"a","type":"int"},{"name":"b","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0","0"],"expectedOutput":"0"},{"testParameter":["1","1"],"expectedOutput":"2"},{"testParameter":["-2","2"],"expectedOutput":"0"}],"secretTests":[{"testParameter":["-1","-1"],"expectedOutput":"-2"}]}}')
   //task.details = JSON.parse('{"language":"Java","methodStub":{"functionName":"sum","parameter":[{"name":"a","type":"int"},{"name":"b","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0","0"],"expectedOutput":"0"},{"testParameter":["1","1"],"expectedOutput":"2"},{"testParameter":["-2","2"],"expectedOutput":"0"}],"secretTests":[{"testParameter":["-1","-1"],"expectedOutput":"-2"}]}}')
 
-  const details:CodeDto = new CodeDto()
+  const details: CodeDto = new CodeDto()
   Object.assign(details, task.details)
 
   //solution = "function quadrat(n) {return n*n}"
@@ -21,7 +20,7 @@ async function evaluate(submission: Submission, task: Task): Promise<any> {
   //solution = 'def sum(a, b):\n\treturn a+b'
   //solution = 'int add(int a, int b) { return a+b;}'
 
-  const codeEvaluator: CodeEvaluator = CodeEvaluatorFactory.createCodeEvaluator(details, solution)
+  const codeEvaluator: CodeEvaluator = new CodeEvaluator(solution, details)
   await codeEvaluator.runAllTests()
   const testResults: CodeTestResult[] = codeEvaluator.getTestResults()
   //console.log(testResults)
