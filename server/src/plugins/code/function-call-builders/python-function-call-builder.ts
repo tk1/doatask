@@ -1,11 +1,12 @@
-import { CodeTypes } from "../../code-types";
-import { MethodStub } from "../../method-stub";
+import { CodeTypes } from "../code-types";
+import { FunctionCallBuilder } from "./function-call-builder";
+import { MethodStub } from "../method-stub";
 
-export class PythonFunctionCallBuilder {
+export class PythonFunctionCallBuilder implements FunctionCallBuilder {
 
     public buildFunctionCall(methodStub: MethodStub, testParameter: Array<any>): string {
 
-        let testParameters:string = ''
+        let testParameters: string = ''
         for (let i = 0; i < testParameter.length; i++) {
 
             testParameters += testParameters === '' ? '' : ', '
@@ -37,59 +38,59 @@ export class PythonFunctionCallBuilder {
         return methodStub.functionName + "(" + testParameters + ")"
     }
 
-    private buildIntTypeParameter(intParameter: number):string {
+    private buildIntTypeParameter(intParameter: number): string {
         return intParameter.toString();
     }
 
-    private buildStringTypeParameter(stringParameter: string):string {
+    private buildStringTypeParameter(stringParameter: string): string {
         return "'" + stringParameter + "'";
     }
 
-    private buildBooleanTypeParameter(booleanParameter: boolean):string {
+    private buildBooleanTypeParameter(booleanParameter: boolean): string {
         return booleanParameter ? 'True' : 'False';
     }
 
-    private buildIntArrayTypeParameter(intArrayParameter: Array<number>):string {
+    private buildIntArrayTypeParameter(intArrayParameter: Array<number>): string {
 
-        let result:string = undefined
+        let result: string = undefined
 
-        for(let currentNumberInArray of intArrayParameter) {
-            if(result === undefined) {
+        for (let currentNumberInArray of intArrayParameter) {
+            if (result === undefined) {
                 result = '' + currentNumberInArray
             } else {
                 result += ', ' + currentNumberInArray
             }
         }
 
-        return '[' + result +']'
+        return '[' + result + ']'
     }
 
-    private buildStringArrayTypeParameter(stringArrayParameter: Array<string>):string {
+    private buildStringArrayTypeParameter(stringArrayParameter: Array<string>): string {
 
-        let result:string = undefined
+        let result: string = undefined
 
-        for(let currentStringInArray of stringArrayParameter) {
-            if(result === undefined) {
+        for (let currentStringInArray of stringArrayParameter) {
+            if (result === undefined) {
                 result = this.buildStringTypeParameter(currentStringInArray)
             } else {
                 result += ', ' + this.buildStringTypeParameter(currentStringInArray)
             }
         }
 
-        return '[' + result +']'
+        return '[' + result + ']'
     }
 
-    private buildBooleanArrayTypeParameter(booleanArrayParameter: Array<boolean>):string {
-        let result:string = undefined
+    private buildBooleanArrayTypeParameter(booleanArrayParameter: Array<boolean>): string {
+        let result: string = undefined
 
-        for(let currentBooleanInArray of booleanArrayParameter) {
-            if(result === undefined) {
+        for (let currentBooleanInArray of booleanArrayParameter) {
+            if (result === undefined) {
                 result = this.buildBooleanTypeParameter(currentBooleanInArray)
             } else {
                 result += ', ' + this.buildBooleanTypeParameter(currentBooleanInArray)
             }
         }
 
-        return '[' + result +']'
+        return '[' + result + ']'
     }
 }

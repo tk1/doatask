@@ -2,6 +2,13 @@ import axios from "axios"
 import { CodeEvaluatorReturn } from "./code-evaluators/code-evaluator-return"
 
 export class CodeRunnerCaller {
+
+    private codeRunnerPort: number
+
+    constructor(codeRunnerPort: number) {
+        this.codeRunnerPort = codeRunnerPort
+    }
+
     public async callCodeRunner(testCall: string, testFunction: string): Promise<CodeEvaluatorReturn> {
 
         const urlSearchParams = new URLSearchParams()
@@ -9,7 +16,7 @@ export class CodeRunnerCaller {
         urlSearchParams.append("functionCall", testCall)
 
         const instance = axios.create({
-            baseURL: 'http://localhost:8081',
+            baseURL: 'http://localhost:' + this.codeRunnerPort,
             timeout: 1000,
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
         })

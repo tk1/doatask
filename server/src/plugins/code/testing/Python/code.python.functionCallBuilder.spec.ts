@@ -1,6 +1,6 @@
 import { MethodStub } from '../../method-stub';
 import { CodeTypes } from '../../code-types';
-import { PythonFunctionCallBuilder } from '../../code-evaluators/python/python-function-call-builder';
+import { PythonFunctionCallBuilder } from '../../function-call-builders/python-function-call-builder';
 import { Tmp } from '../test-method-parameters';
 
 describe('Python function call builder', () => {

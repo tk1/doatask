@@ -2,11 +2,11 @@ const http = require('http');
 const url = require('url');
 
 const hostname = '127.0.0.1';
-const port = 8002;
+const port = 10000;
 
 const server = http.createServer((req, res) => {
 
-    let responseBody = { returnValue: null, errorOutput: null }
+    let responseBody = { returnValue: '', errorOutput: '' }
     res.setHeader('Content-Type', 'application/json');
 
     if (req.method === 'POST') {
@@ -18,7 +18,8 @@ const server = http.createServer((req, res) => {
             responseBody.returnValue = eval(functionDefinition + '\n' + functionCall);
             res.statusCode = 200;
         } catch (error) {
-            responseBody.errorOutput = error;
+            responseBody.returnValue = undefined
+            responseBody.errorOutput = error === '' ? 'Could not execute code' : error;
             res.statusCode = 400;
         }
     } else {

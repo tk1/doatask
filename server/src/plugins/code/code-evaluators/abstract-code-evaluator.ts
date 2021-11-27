@@ -33,29 +33,12 @@ export abstract class AbstractCodeEvaluator implements CodeEvaluator {
         await this.runTests(this.testSuite.secretTests, false)
     }
 
-    protected checkTestOutput(expectedOutput: any, output: any): boolean {
-
+    // TODO use this as the checkTestOutput function in the abstract code evaluator
+    protected checkTestOutput(expectedOutput: any, output: CodeEvaluatorReturn): boolean {
         /*console.log(expectedOutput + "-" + output)
         console.log(typeof(expectedOutput) + "-" + typeof(output))
         console.log(expectedOutput === output)*/
 
-        if (Array.isArray(expectedOutput) && Array.isArray(output)) {
-            for (let i = 0; i < expectedOutput.length; i++) {
-                if (output.length < i) {
-                    return false;
-                } else {
-                    if (expectedOutput[i] !== output[i]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        return expectedOutput === output
-    }
-
-    // TODO use this as the checkTestOutput function in the abstract code evaluator
-    protected checkTestOutput2(expectedOutput: any, output: CodeEvaluatorReturn): boolean {
         if (Array.isArray(expectedOutput) && Array.isArray(output.returnValue)) {
             return this.checkTestArrayOutput(expectedOutput, output.returnValue)
         }
