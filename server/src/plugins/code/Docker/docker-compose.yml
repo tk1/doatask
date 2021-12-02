@@ -3,16 +3,14 @@ services:
   javascript-code-runner:
     container_name: doatask_javascript_code_runner
     build:
-      context: ./
-      dockerfile: ./Docker/JavaScript/Dockerfile
+      dockerfile: ./JavaScript/Dockerfile
     ports:
       - "10000:10000"
     restart: unless-stopped
   python-code-runner:
     container_name: doatask_python_code_runner
     build:
-      context: ./
-      dockerfile: ./Docker/Python/Dockerfile
+      dockerfile: ./Python/Dockerfile
     ports:
       - "10001:10001"
     restart: unless-stopped
