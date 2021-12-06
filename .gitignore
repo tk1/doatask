@@ -3,3 +3,4 @@ node_modules
 /server/swagger-spec.json
 /server/client
 /server/.env
+/.vscode/settings.json

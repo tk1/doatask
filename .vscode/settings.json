@@ -1,6 +1,0 @@
-{
-  "files.exclude": {
-    "client": true,
-    "server": true
-  }
-}
