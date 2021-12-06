@@ -54,10 +54,10 @@ export class LtiService {
         contextLabel: token.platformContext.context.label,
         contextTitle: token.platformContext.context.title
       }
-      if (token.platformContext.custom.assignmentsolve) {
+      if (token.platformContext.custom?.assignmentsolve) {
         query.assignmentsolve = token.platformContext.custom.assignmentsolve
       }
-      if (token.platformContext.custom.as) {
+      if (token.platformContext.custom?.as) {
         query.assignmentsolve = token.platformContext.custom.as
       }
       return this.lti.redirect(
