@@ -26,7 +26,7 @@ export class DockerContainerManager {
     }
 
     public static readDockerComposeFile(): void {
-        this.dockerComposeFile = yaml.load(readFileSync(join(__dirname, this.pathToDockerComposeFile), 'utf8'),) as Record<string, any>
+        this.dockerComposeFile = yaml.load(readFileSync(this.pathToDockerComposeFile, 'utf8'),) as Record<string, any>
     }
 
     public static saveDockerContainerInformation(): void {

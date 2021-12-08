@@ -13,8 +13,8 @@ export class CodeEvaluator {
     protected codeTestResults: CodeTestResult[]
     protected testSuite: CodeTestSuite
     private functionCallBuilder: FunctionCallBuilder
-    private code: string
     private methodStub: MethodStub
+    private code: string
     private language: string
 
     constructor(code: string, codeDto: CodeDto) {
@@ -24,8 +24,6 @@ export class CodeEvaluator {
         this.codeTestResults = new Array<CodeTestResult>()
         this.testSuite = codeDto.testSuite
         this.functionCallBuilder = FunctionCallBuilderFactory.createFunctionCallBuilder(codeDto.language)
-        //DockerContainerManager.init('..\\..\\code\\Docker\\docker-compose.yml')
-        DockerContainerManager.init('..\\..\\..\\..\\src\\plugins\\code\\Docker\\docker-compose.yml')
     }
 
     public async runTests(codeTests: CodeTest[], isPublicTest: boolean) {
