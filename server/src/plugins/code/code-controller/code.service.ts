@@ -16,9 +16,6 @@ export class CodeService {
     const details: CodeDto = new CodeDto()
     Object.assign(details, task.details)
 
-    //const details = JSON.parse('{"language":"JavaScript","methodStub":{"functionName":"quadrat","parameter":[{"name":"n","type":"int"}],"returnType":"int"},"testSuite":{"publicTests":[{"testParameter":["0"],"expectedOutput":"0"},{"testParameter":["2"],"expectedOutput":"4"}],"secretTests":[{"testParameter":["-3"],"expectedOutput":"9"}]}}');
-    //const solution = "function quadrat(n) {return n*n}"
-
     const codeEvaluator = new CodeEvaluator(runCodeDto.solutionCode, details)
     await codeEvaluator.runPublicTests()
     const result = codeEvaluator.getTestResults()

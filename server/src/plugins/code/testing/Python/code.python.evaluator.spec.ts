@@ -9,7 +9,7 @@ import { CodeDto } from '../../code.dto';
 describe('Python code evaluator', () => {
 
     const codeDto = new CodeDto()
-    codeDto.language = 'python'
+    codeDto.language = 'Python'
 
     beforeEach(() => {
         codeDto.methodStub = undefined
