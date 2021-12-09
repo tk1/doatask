@@ -1,35 +1,38 @@
 version: '3.7'
 services:
-  javascript-code-runner:
-    container_name: doatask_javascript_code_runner
+  javascript-code-runner-01:
+    container_name: doatask_javascript_code_runner_01
     build:
       dockerfile: ./JavaScript/Dockerfile
     ports:
       - "10000:10000"
     restart: unless-stopped
-  python-code-runner:
-    container_name: doatask_python_code_runner
+    environment:
+      - language=JavaScript
+  javascript-code-runner-02:
+    container_name: doatask_javascript_code_runner_02
+    build:
+      dockerfile: ./JavaScript/Dockerfile
+    ports:
+      - "10002:10000"
+    restart: unless-stopped
+    environment:
+      - language=JavaScript
+  python-code-runner-01:
+    container_name: doatask_python_code_runner_01
     build:
       dockerfile: ./Python/Dockerfile
     ports:
       - "10001:10001"
     restart: unless-stopped
-
-#version: '3.7'
-#services:
-#  doatask-code-runner-1:
-#    container_name: doatask-code-runner-1
-#    build:
-#      dockerfile: ./Dockerfile
-#    ports:
-#      - "10000:10000"
-#      - "1010:10001"
-#    restart: unless-stopped
-#  doatask-code-runner-2:
-#    container_name: doatask-code-runner-2
-#    build:
-#      dockerfile: ./Dockerfile
-#    ports:
-#      - "10001:10000"
-#      - "10011:10001"
-#    restart: unless-stopped
+    environment:
+      - language=Python
+  python-code-runner-02:
+    container_name: doatask_python_code_runner_02
+    build:
+      dockerfile: ./Python/Dockerfile
+    ports:
+      - "10003:10001"
+    restart: unless-stopped
+    environment:
+      - language=Python

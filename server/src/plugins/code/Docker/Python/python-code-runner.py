@@ -35,4 +35,8 @@ def runCode():
     return output
 
 
+@route("/checkHealth", method="GET")
+def checkHealth():
+    return
+
 run(host="0.0.0.0", port=10001, debug=True)

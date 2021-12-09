@@ -5,11 +5,13 @@ import { CodeTypes } from '../../code-types';
 import { Tmp } from '../test-method-parameters';
 import { CodeEvaluator } from '../../code-evaluator/code-evaluator';
 import { CodeDto } from '../../code.dto';
+import { DockerContainerManager } from '../../Docker/docker-container-manager';
 
 describe('Python code evaluator', () => {
 
+    DockerContainerManager.init('src\\plugins\\code\\Docker\\docker-compose.yml')
     const codeDto = new CodeDto()
-    codeDto.language = 'python'
+    codeDto.language = 'Python'
 
     beforeEach(() => {
         codeDto.methodStub = undefined

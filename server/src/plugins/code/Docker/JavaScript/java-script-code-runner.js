@@ -22,6 +22,8 @@ const server = http.createServer((req, res) => {
             responseBody.errorOutput = error === '' ? 'Could not execute code' : error;
             res.statusCode = 400;
         }
+    } else if (req.method === 'GET' && req.url === '/checkHealth') {
+        res.statusCode = 200;
     } else {
         responseBody.errorOutput = 'Only POST methods are allowed';
         res.statusCode = 405;
