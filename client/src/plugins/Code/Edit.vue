@@ -73,32 +73,42 @@
       <Button @click="addParameter">
         Add Parameter
       </Button>
-      <div class="p-fluid p-grid p-formgrid">
-        <div class="p-field-checkbox p-col-4 p-md-2">
-          <Checkbox
-            id="secretTest"
-            v-model="task.details.testSuite"
-            :binary="true"
-          />
-          <label for="secretTest">Secret Test</label>
+      <template
+        v-for="(test, index) in tests"
+        :key="index"
+      >
+        <div class="p-fluid p-grid p-formgrid">
+          <div class="p-field-checkbox p-col-4 p-md-2">
+            <Checkbox
+              id="isSecretTest"
+              v-model="test.isSecretTest"
+              :binary="true"
+              @change="saveTestsInTask"
+            />
+            <label for="secretTest">Secret Test</label>
+          </div>
+          <div class="p-field p-col-12 p-md-3">
+            <label>Test Parameter</label>
+            <InputText
+              id="testParameter"
+              v-model="test.testParameter"
+              type="text"
+              autocomplete="off"
+              @change="saveTestsInTask"
+            />
+          </div>
+          <div class="p-field p-col-12 p-md-3">
+            <label>Expected Output</label>
+            <InputText
+              id="expectedOutput"
+              v-model="test.expectedOutput"
+              type="text"
+              autocomplete="off"
+              @change="saveTestsInTask"
+            />
+          </div>
         </div>
-        <div class="p-field p-col-12 p-md-3">
-          <label>Test Parameter</label>
-          <InputText
-            id="testParameter"
-            type="text"
-            autocomplete="off"
-          />
-        </div>
-        <div class="p-field p-col-12 p-md-3">
-          <label>Test Result</label>
-          <InputText
-            id="testResult"
-            type="text"
-            autocomplete="off"
-          />
-        </div>
-      </div>
+      </template>
       <Button @click="addTest">
         Add Test
       </Button>
@@ -118,30 +128,43 @@ export default {
       task: null,
       typesForSelectedLanguage: [],
       languages: [],
-      parameters: []
+      parameters: [],
+      tests: []
     }
   },
   created () {
     this.task = this.modelValue
     this.task.details.methodStub = {
-      functionName: 'InsertFunction',
+      functionName: '',
       parameter: [{ name: '', type: '' }]
     }
     this.languages = [{ language: 'JavaScript' },
       { language: 'Python' }]
 
-    this.parameters = this.task.details.methodStub.parameter.map((v, i) => ({
+    this.parameters = this.task.details.methodStub.parameter.map((v) => ({
       name: v.text,
       type: v.type
     }))
+
+    this.tests = [{
+      isSecretTest: false,
+      testParameter: [],
+      expectedOutput: ''
+    }]
+
+    this.tests = this.tests.map((v) => ({
+      isSecretTest: v.isSecretTest,
+      testParameter: v.testParameter,
+      expectedOutput: v.expectedOutput
+    }))
+
+    this.saveTestsInTask()
 
     this.saveParameterInTask()
   },
   methods: {
     setTypeForParameter (e) {
       const language = e.value.language
-      console.log(e)
-      console.log(e.value.language)
       if (language === 'JavaScript') {
         this.typesForSelectedLanguage = [{ type: 'boolean' },
           { type: 'string' },
@@ -159,17 +182,52 @@ export default {
       }
 
       this.task.details.methodStub = {
-        functionName: 'InsertFunction'
+        functionName: ''
       }
+
+      this.tests = [{
+        isSecretTest: false,
+        testParameter: [],
+        expectedOutput: ''
+      }]
 
       return this.typesForSelectedLanguage
     },
     addParameter () {
       this.parameters.push({ name: '', type: '' })
     },
+    addTest () {
+      this.tests.push({ isSecretTest: false, testParameter: [], testResult: '' })
+    },
     saveParameterInTask () {
       this.task.details.methodStub.parameter = this.parameters.map((v) => ({ name: v.name, type: v.type.type }))
-      console.log(this.task.details.methodStub)
+    },
+    saveTestsInTask () {
+      const secretTests = []
+      const publicTests = []
+      const testSuite = []
+
+      testSuite.push(this.tests.map((v, i) => {
+        if (v.isSecretTest === true) {
+          secretTests.push({
+            testParameter: v.testParameter,
+            expectedOutput: v.expectedOutput
+          })
+          return secretTests
+        } else if (v.isSecretTest === false) {
+          publicTests.push({
+            testParameter: v.testParameter,
+            expectedOutput: v.expectedOutput
+          })
+          return publicTests
+        }
+        return 'undefined'
+      }))
+
+      this.task.details.testSuite = {
+        publicTests: publicTests,
+        secretTests: secretTests
+      }
     }
   }
 }
