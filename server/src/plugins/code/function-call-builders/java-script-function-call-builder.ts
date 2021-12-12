@@ -12,11 +12,11 @@ export class JavaScriptFunctionCallBuilder implements FunctionCallBuilder {
     }
 
     public buildFunctionCall(methodStub: MethodStub, testParameter: Array<any>): string {
-        let testParameters: string = ''
+        let testParameters: string = ""
 
         for (let i = 0; i < testParameter.length; i++) {
 
-            testParameters += testParameters === '' ? '' : ', '
+            testParameters += testParameters === "" ? "" : ", "
 
             switch (methodStub.parameter[i].type) {
                 case CodeTypes.intType:
@@ -42,6 +42,6 @@ export class JavaScriptFunctionCallBuilder implements FunctionCallBuilder {
             }
         }
 
-        return methodStub.functionName + "(" + testParameter.join(",") + ");"
+        return methodStub.functionName + "(" + testParameters + ");"
     }
 }

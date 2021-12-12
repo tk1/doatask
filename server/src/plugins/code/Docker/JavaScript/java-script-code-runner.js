@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
         } catch (error) {
             responseBody.returnValue = undefined
             responseBody.errorOutput = error === '' ? 'Could not execute code' : error;
-            res.statusCode = 400;
+            res.statusCode = 200;
         }
     } else if (req.method === 'GET' && req.url === '/checkHealth') {
         res.statusCode = 200;
