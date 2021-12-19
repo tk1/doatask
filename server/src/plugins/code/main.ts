@@ -26,4 +26,15 @@ async function evaluate(submission: Submission, task: Task): Promise<any> {
   };
 }
 
-export { evaluate }
+async function test(code: string, task: Task): Promise<any> {
+  const details: CodeDto = new CodeDto()
+  Object.assign(details, task.details)
+
+  const codeEvaluator: CodeEvaluator = new CodeEvaluator(code, details)
+  await codeEvaluator.runAllTests()
+  const testResults: CodeTestResult[] = codeEvaluator.getTestResults()
+  return testResults
+}
+
+export { evaluate, test }
+
