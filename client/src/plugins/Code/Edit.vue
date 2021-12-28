@@ -9,15 +9,14 @@
           <label>Language</label>
           <Dropdown
             id="language"
-            v-model="task.details"
+            v-model="currentLanguage"
             :options="languages"
             option-label="language"
             placeholder="Select a language"
-            @change="setTypeForParameter"
+            @change="languageChanged"
           />
         </div>
         <div
-          v-if="task.details.methodStub !== undefined"
           class="p-field p-col-12 p-md-3"
         >
           <label>Function</label>
@@ -32,10 +31,11 @@
           <label>Return Type</label>
           <Dropdown
             id="returnType"
-            v-model="task.details.methodStub.returnType"
-            :options="typesForSelectedLanguage"
-            option-label="type"
+            v-model="currentReturnType"
+            :options="returnTypesForSelectedLanguage"
+            option-label="returnType"
             placeholder="Select a return Type"
+            @change="returnTypeChanged"
           />
         </div>
       </div>
@@ -67,6 +67,16 @@
               autocomplete="off"
               @change="saveParameterInTask"
             />
+          </div>
+          <div class="p-field p-col-12 p-md-1 p-mt-5">
+            <Button
+              class="p-button-warning"
+              @click="removeParameter(index)"
+            >
+              <i
+                class="pi pi-trash"
+              />
+            </Button>
           </div>
         </div>
       </template>
@@ -107,6 +117,16 @@
               @change="saveTestsInTask"
             />
           </div>
+          <div class="p-field p-col-12 p-md-1 p-mt-5">
+            <Button
+              class="p-button-warning"
+              @click="removeTest(index)"
+            >
+              <i
+                class="pi pi-trash"
+              />
+            </Button>
+          </div>
         </div>
       </template>
       <Button @click="addTest">
@@ -125,32 +145,82 @@ export default {
   },
   data () {
     return {
-      task: null,
+      task: {
+        details: {}
+      },
       typesForSelectedLanguage: [],
-      languages: [],
+      returnTypesForSelectedLanguage: [],
+      languages: [{ language: 'JavaScript' },
+        { language: 'Python' }],
       parameters: [],
-      tests: []
+      tests: [],
+      currentLanguage: null,
+      currentReturnType: null
     }
   },
   created () {
     this.task = this.modelValue
-    this.task.details.methodStub = {
-      functionName: '',
-      parameter: [{ name: '', type: '' }]
+    if (!this.task.id) {
+      console.log('created')
+      this.task.details.methodStub = {
+        functionName: '',
+        returnType: '',
+        parameter: [{ name: '', type: '' }]
+      }
+
+      this.parameters = [{
+        name: '',
+        type: ''
+      }]
+
+      this.tests = [{
+        isSecretTest: false,
+        testParameter: [],
+        expectedOutput: ''
+      }]
+    } else {
+      for (let i = 0; i < this.$store.state.tasks.length; i++) {
+        if (this.$store.state.tasks[i].id === this.modelValue.id) {
+          this.task = this.$store.state.tasks[i]
+          this.parameters = this.task.details.methodStub.parameter.map((v, i) => ({
+            name: v.name,
+            type: {
+              type: v.type
+            }
+          }))
+          this.setTypeForParameter(this.task.details)
+          this.setTypeForReturnType(this.task.details)
+
+          this.currentLanguage = { language: this.task.details.language }
+          this.currentReturnType = { returnType: this.task.details.methodStub.returnType }
+
+          let publicTest = []
+          let secretTest = []
+          if (this.task.details.testSuite.publicTests.length !== 0) {
+            publicTest = this.task.details.testSuite.publicTests.map((v, i) => ({
+              isSecretTest: false,
+              testParameter: v.testParameter,
+              expectedOutput: v.expectedOutput
+            }))
+            for (let i = 0; i < publicTest.length; i++) {
+              this.tests.push(publicTest[i])
+            }
+          }
+
+          if (this.task.details.testSuite.secretTests.length !== 0) {
+            secretTest = this.task.details.testSuite.secretTests.map((v, i) => ({
+              isSecretTest: true,
+              testParameter: v.testParameter,
+              expectedOutput: v.expectedOutput
+            }))
+            for (let i = 0; i < secretTest.length; i++) {
+              this.tests.push(secretTest[i])
+            }
+          }
+        }
+      }
     }
-    this.languages = [{ language: 'JavaScript' },
-      { language: 'Python' }]
-
-    this.parameters = this.task.details.methodStub.parameter.map((v) => ({
-      name: v.text,
-      type: v.type
-    }))
-
-    this.tests = [{
-      isSecretTest: false,
-      testParameter: [],
-      expectedOutput: ''
-    }]
+    console.log(this.task)
 
     this.tests = this.tests.map((v) => ({
       isSecretTest: v.isSecretTest,
@@ -164,34 +234,66 @@ export default {
   },
   methods: {
     setTypeForParameter (e) {
-      const language = e.value.language
+      const language = e.language
       if (language === 'JavaScript') {
-        this.typesForSelectedLanguage = [{ type: 'boolean' },
+        this.typesForSelectedLanguage = [
+          { type: 'boolean' },
           { type: 'string' },
           { type: 'int' },
           { type: 'booleanArray' },
           { type: 'stringArray' },
-          { type: 'intArray' }]
+          { type: 'intArray' }
+        ]
       } else if (language === 'Python') {
-        this.typesForSelectedLanguage = [{ type: 'boolean' },
+        this.typesForSelectedLanguage = [
+          { type: 'boolean' },
           { type: 'string' },
           { type: 'int' },
           { type: 'booleanArray' },
           { type: 'stringArray' },
-          { type: 'intArray' }]
+          { type: 'intArray' }
+        ]
       }
-
-      this.task.details.methodStub = {
-        functionName: ''
-      }
-
-      this.tests = [{
-        isSecretTest: false,
-        testParameter: [],
-        expectedOutput: ''
-      }]
 
       return this.typesForSelectedLanguage
+    },
+    setTypeForReturnType (e) {
+      const language = e.language
+      if (language === 'JavaScript') {
+        this.returnTypesForSelectedLanguage = [
+          { returnType: 'boolean' },
+          { returnType: 'string' },
+          { returnType: 'int' },
+          { returnType: 'booleanArray' },
+          { returnType: 'stringArray' },
+          { returnType: 'intArray' }
+        ]
+      } else if (language === 'Python') {
+        this.returnTypesForSelectedLanguage = [
+          { returnType: 'boolean' },
+          { returnType: 'string' },
+          { returnType: 'int' },
+          { returnType: 'booleanArray' },
+          { returnType: 'stringArray' },
+          { returnType: 'intArray' }
+        ]
+      }
+
+      return this.returnTypesForSelectedLanguage
+    },
+    languageChanged (e) {
+      this.task.details = e.value
+      this.setTypeForParameter(e.value)
+      this.setTypeForReturnType(e.value)
+      this.task.details.methodStub = {
+        functionName: '',
+        returnType: '',
+        parameter: [{ name: '', type: '' }]
+      }
+    },
+    returnTypeChanged (e) {
+      this.returnType = e.value
+      this.task.details.methodStub = e.value
     },
     addParameter () {
       this.parameters.push({ name: '', type: '' })
@@ -210,24 +312,63 @@ export default {
       testSuite.push(this.tests.map((v, i) => {
         if (v.isSecretTest === true) {
           secretTests.push({
-            testParameter: v.testParameter,
-            expectedOutput: v.expectedOutput
+            testParameter: this.stringToArray(v.testParameter),
+            expectedOutput: this.checkType(v.expectedOutput)
           })
           return secretTests
         } else if (v.isSecretTest === false) {
           publicTests.push({
-            testParameter: v.testParameter,
-            expectedOutput: v.expectedOutput
+            testParameter: this.stringToArray(v.testParameter),
+            expectedOutput: this.checkType(v.expectedOutput)
           })
+
           return publicTests
         }
-        return 'undefined'
+        return undefined
       }))
 
       this.task.details.testSuite = {
         publicTests: publicTests,
         secretTests: secretTests
       }
+    },
+    stringToArray (str) {
+      if (str.includes(',')) {
+        const arr = this.splitTestParameter(str)
+        const result = arr.map((x) => {
+          if (!isNaN(x) === true) {
+            return parseInt(x)
+          } else {
+            return x
+          }
+        })
+        str = result
+      }
+
+      return str
+    },
+    splitTestParameter (str) {
+      const arr = str.split(',')
+      return arr
+    },
+    checkType (str) {
+      if (!isNaN(str) === true) {
+        return parseInt(str)
+      } else if (str === 'true') {
+        return true
+      } else if (str === 'false') {
+        return false
+      } else {
+        return str
+      }
+    },
+    removeParameter (index) {
+      this.parameters.splice(index, 1)
+      this.saveParameterInTask()
+    },
+    removeTest (index) {
+      this.tests.splice(index, 1)
+      this.saveTestsInTask()
     }
   }
 }
