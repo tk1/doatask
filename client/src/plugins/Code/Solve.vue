@@ -23,14 +23,59 @@
           <div
             v-for="(test, index) in publicTests"
             :key="index"
+            class="tests"
+            :style="[test.testPassed ? {'background-color': '#bfebb7'} : {'background-color': '#f7a3a3'}]"
           >
-            Test: {{ index + 1 }} <br>
-            Eingabe: {{ test.testParameter }}<br>
-            Ausgabe: {{ test.output }} <br>
-            Erwartete Ausgabe: {{ test.expectedOutput }} <br>
-            Test: {{ test.testPassed ? "erfolgreich" : "fehlgeschlagen" }}
-            <br>
-            <br>
+            <h3>
+              Test:
+              {{ index + 1 }}
+
+              <i
+                v-if="test.testPassed"
+                class="pi pi-check checkPassed"
+              />
+              <i
+                v-else
+                class="pi pi-times checkFalse"
+              />
+            </h3>
+            <div style="margin-left: 25px;">
+              <div class="testInfos text-xs-right">
+                <i
+                  class="pi pi-arrow-right"
+                  style="font-size: 0.9rem"
+                />
+                Eingabe:
+                {{ test.testParameter }}
+              </div>
+              <br>
+              <div class="testInfos text-xs-right">
+                <i
+                  class="pi pi-arrow-left"
+                  style="font-size: 0.9rem"
+                />
+                Ausgabe:
+                {{ test.output }}
+              </div>
+              <br>
+              <div class="testInfos text-xs-right">
+                <i
+                  class="pi pi-exclamation-circle"
+                  style="font-size: 0.9rem"
+                />
+                Erwartete Ausgabe:
+                {{ test.expectedOutput }}
+              </div>
+              <br>
+              <div class="testInfos text-xs-right">
+                <i
+                  class="pi pi-book"
+                  style="font-size: 0.9rem"
+                />
+                Ergebnis:
+                {{ test.testPassed ? "erfolgreich" : "fehlgeschlagen" }}
+              </div>
+            </div>
           </div>
         </template>
       </Card>
@@ -156,3 +201,31 @@ export default {
   }
 }
 </script>
+<style>
+    .tests{
+        width: 1000px;
+        margin: auto;
+        padding:10px;
+        border-style: inset;
+        border-width: 3px;
+
+    }
+    .checkPassed{
+        font-size: 1.6rem; color:green;
+    }
+        .checkFalse{
+        font-size: 1.6rem; color:red;
+    }
+    .testInfos{
+      font-weight: bold;
+      white-space:pre-wrap;
+    }
+    .text-xs-right {
+white-space: nowrap;
+  padding-left: 20px;
+  width: auto;
+}
+.ergebnis{
+  background-color: red;
+}
+</style>
