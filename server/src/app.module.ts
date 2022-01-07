@@ -15,6 +15,7 @@ import { join } from 'path';
 import { LtiModule } from './lti/lti.module';
 import { CommentsModule } from './comments/comments.module';
 import { TestsModule } from './tests/tests.module';
+import { SolutionsModule } from './solutions/solutions.module';
 
 @Module({
   imports: [
@@ -56,7 +57,8 @@ import { TestsModule } from './tests/tests.module';
     DomainsModule,
     RatingsModule,
     CommentsModule,
-    TestsModule
+    TestsModule,
+    SolutionsModule
   ],
 })
 export class AppModule implements NestModule {
