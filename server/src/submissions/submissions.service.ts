@@ -87,9 +87,4 @@ export class SubmissionsService {
   remove(id: number) {
     return this.submissionsRepository.delete(id)
   }
-
-
 }
-
-
-
