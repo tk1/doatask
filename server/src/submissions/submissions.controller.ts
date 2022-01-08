@@ -5,16 +5,21 @@ import { UpdateSubmissionDto } from './dto/update-submission.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorators'
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { SolutionsService } from 'src/solutions/solutions.service';
 
 @Controller(['submissions', 'lti/submissions'])
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SubmissionsController {
-  constructor(private readonly submissionsService: SubmissionsService) { }
+  constructor(
+    private readonly submissionsService: SubmissionsService,
+    private readonly solutionsService: SolutionsService) { }
 
   @Post()
   @Roles('student')
-  create(@Body() createSubmissionDto: CreateSubmissionDto, @Request() req) {
-    return this.submissionsService.create(createSubmissionDto, req.res?.locals?.token);
+  async create(@Body() createSubmissionDto: CreateSubmissionDto, @Request() req) {
+    let submission = await this.submissionsService.create(createSubmissionDto, req.res?.locals?.token);
+    this.solutionsService.delete(createSubmissionDto.user, createSubmissionDto.assignmentTask);
+    return submission;
   }
 
   @Get()

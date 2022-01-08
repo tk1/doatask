@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Put } from '@nestjs/common';
+import { AssignmentTasksService } from 'src/assignmenttasks/assignmenttasks.service';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { SolutionDto } from './dto/solution.dto';
 import { Solution } from './solution.entity';
@@ -6,7 +7,8 @@ import { SolutionsService } from './solutions.service';
 
 @Controller('solutions')
 export class SolutionsController {
-    constructor(private readonly solutionsService: SolutionsService) { }
+    constructor(private readonly solutionsService: SolutionsService,
+        private readonly assignmentTasksService: AssignmentTasksService) { }
 
     @Get(':userId/:assignmentTaskId')
     @Roles('student')
@@ -16,8 +18,27 @@ export class SolutionsController {
 
     @Put()
     @Roles('student')
-    create(@Body() createSolutionDto: SolutionDto): Promise<Solution> {
+    async create(@Body() createSolutionDto: SolutionDto): Promise<Solution> {
+        await this.checkIfTimeLimitIsSet(createSolutionDto.assignmentTaskId);
+        await this.checkIfTaskIsSavable(createSolutionDto.assignmentTaskId);
         return this.solutionsService.create(createSolutionDto);
+    }
+
+    private async checkIfTimeLimitIsSet(assignmentTaskId: number) {
+        if ((await this.assignmentTasksService.findOne(assignmentTaskId)).timeLimit != null) {
+            throw new ForbiddenException("You cannot create a intermediate solution for a assignment task with a time limit");
+        }
+    }
+
+    private async checkIfTaskIsSavable(assignmentTaskId: number) {
+        const assignmentTask = await this.assignmentTasksService.findOne(assignmentTaskId);
+        if (assignmentTask != null) {
+            if (!assignmentTask.task.savable) {
+                throw new ForbiddenException("A task with the savable flag set to false cannot have intermediate solutions");
+            }
+        } else {
+            throw new NotFoundException(`Assignment task with id ${assignmentTaskId} not found`, assignmentTaskId.toString());
+        }
     }
 
     @Delete(':userId/:assignmentTaskId')
