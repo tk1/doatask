@@ -4,6 +4,7 @@ export class CreateTaskDto {
   public: boolean;
   plugin: string;
   details: any;
+  saveable: boolean;
   domain: number;
   tags?: string[];
   rating?: number;

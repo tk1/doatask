@@ -35,6 +35,9 @@ export class Task {
   @Column({ nullable: true, type: "json" })
   details: object;
 
+  @Column({ nullable: false, default: false })
+  savable: boolean;
+
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 

@@ -12,6 +12,8 @@ import { RatingsService } from '../ratings/ratings.service'
 import { AssignmentsService } from '../assignments/assignments.service';
 import { AssignmentTasksService } from '../assignmenttasks/assignmenttasks.service';
 import { LtiModule } from '../lti/lti.module';
+import { SolutionsService } from 'src/solutions/solutions.service';
+import { Solution } from 'src/solutions/solution.entity';
 
 @Module({
   imports: [
@@ -20,9 +22,10 @@ import { LtiModule } from '../lti/lti.module';
     TypeOrmModule.forFeature([Task]),
     TypeOrmModule.forFeature([Rating]),
     TypeOrmModule.forFeature([Assignment]),
-    TypeOrmModule.forFeature([AssignmentTask])
+    TypeOrmModule.forFeature([AssignmentTask]),
+    TypeOrmModule.forFeature([Solution])
   ],
   controllers: [SubmissionsController],
-  providers: [SubmissionsService, TasksService, RatingsService, AssignmentsService, AssignmentTasksService]
+  providers: [SubmissionsService, TasksService, RatingsService, AssignmentsService, AssignmentTasksService, SolutionsService]
 })
 export class SubmissionsModule { }
