@@ -10,17 +10,28 @@
     </template>
     <template #details />
     <template #solution="slotProps">
-      <div id="container" />
-      <Button
-        :disabled="!submitPossible(slotProps)"
-        @click="submitSolution(slotProps)"
-      >
-        {{ buttonText(slotProps) }}
-      </Button>
-
-      <Button @click="getPublicTests()">
-        Run tests
-      </Button>
+      <MonacoEditor
+        :key="componentKey"
+        v-model="data"
+        @getCode="getCode"
+      />
+      <div class="p-fluid p-grid p-formgrid">
+        <div class="p-field p-col-12 p-md-2">
+          <Button
+            :disabled="!submitPossible(slotProps)"
+            @click="submitSolution(slotProps)"
+          >
+            {{ buttonText(slotProps) }}
+          </Button>
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+          <Button
+            @click="getPublicTests()"
+          >
+            Run tests
+          </Button>
+        </div>
+      </div>
 
       <Card v-if="publicTests !== null">
         <template #content>
@@ -73,10 +84,7 @@
                 {{ test.output }}
               </div>
               <br>
-              <div
-                v-if="!test.testPassed"
-                class="testInfos text-xs-right"
-              >
+              <div class="testInfos text-xs-right">
                 <i
                   class="pi pi-exclamation-circle"
                   style="font-size: 0.9rem"
@@ -96,13 +104,6 @@
 <script>
 import { runPublicTests } from '../../services/TestsService.js'
 
-import * as monaco from 'monaco-editor'
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
-import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
-import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-let editor
 export default {
   props: {
     taskId: {
@@ -128,59 +129,39 @@ export default {
   },
   data () {
     return {
-      solution: this.generateFunctionBody(),
+      solution: {},
       publicTests: null,
-      switcherChecked: this.defaultSwitcherChecked
+      switcherChecked: this.defaultSwitcherChecked,
+      data: {
+        code: '',
+        language: ''
+      },
+      componentKey: 0
     }
   },
   watch: {
     task (newValue) {
       console.log(`task ${newValue.id}`)
+      this.data.code = this.generateFunction(newValue)
+      this.data.language = newValue.details.language
       this.solution = {}
-      editor.getModel().setValue(this.generateFunctionBody())
     }
   },
-  mounted () {
-    self.MonacoEnvironment = {
-      getWorker (_, label) {
-        if (label === 'json') {
-          return new jsonWorker()
-        }
-        if (label === 'css' || label === 'scss' || label === 'less') {
-          return new cssWorker()
-        }
-        if (label === 'html' || label === 'handlebars' || label === 'razor') {
-          return new htmlWorker()
-        }
-        if (label === 'typescript' || label === 'javascript') {
-          return new tsWorker()
-        }
-        return new editorWorker()
-      }
-    }
-
-    editor = monaco.editor.create(document.getElementById('container'), {
-      value: this.solution,
-      language: 'javascript',
-      readOnly: false,
-      theme: 'vs-light',
-      roundedSelection: false,
-      scrollBeyondLastLine: false,
-      minimap: false,
-      tabSize: 2,
-      dimension: { width: 600, height: 300 }
-    })
+  created () {
+    this.data.code = this.generateFunction(this.task)
+    this.data.language = this.task.details.language
+  },
+  updated () {
+    console.log('test')
+    this.componentKey += 1
   },
   methods: {
     submitSolution: async function (slotProps) {
       const submission = await slotProps.submit({
-        value: editor.getValue(),
+        value: this.solution,
         timeNeeded: -1
       })
       slotProps.submitReceived(submission)
-    },
-    refresh (slotProps) {
-      slotProps.submissions()
     },
     submitPossible (slotProps) {
       console.log(slotProps)
@@ -193,23 +174,33 @@ export default {
         return 'Submit solution'
       }
     },
-    generateFunctionBody () {
-      this.publicTests = null
-      return (
-        'function ' +
-        this.task.details.methodStub.functionName +
+    generateFunction (task) {
+      console.log(task)
+      if (task.details.language === 'JavaScript') {
+        return (
+          'function ' +
+        task.details.methodStub.functionName +
         ' (' +
-        this.task.details.methodStub.parameter.map((x) => x.name) +
+        task.details.methodStub.parameter.map((x) => x.name) +
         ')' +
         ' {\n\n' +
-        '}'
-      )
+        '}')
+      } else if (task.details.language === 'Python') {
+        return (
+          'def ' +
+        task.details.methodStub.functionName +
+        ' (' +
+        task.details.methodStub.parameter.map((x) => x.name) +
+        ') :' +
+        '\n\n' +
+        '')
+      }
     },
     getPublicTests: async function () {
       const testsDto = {
         plugin: 'code',
         task: this.taskId,
-        details: editor.getValue()
+        details: this.solution
       }
 
       this.publicTests = await runPublicTests(testsDto)
@@ -220,6 +211,10 @@ export default {
       } else {
         this.publicTests = this.publicTests.filter(test => !test.testPassed)
       }
+    },
+    getCode: function (e) {
+      console.log(e)
+      this.solution = e
     }
   }
 }
@@ -231,7 +226,6 @@ export default {
         padding:10px;
         border-style: inset;
         border-width: 3px;
-
     }
     .checkPassed{
         font-size: 1.6rem; color:green;
