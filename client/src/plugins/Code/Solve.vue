@@ -1,5 +1,9 @@
 <template>
-  <TaskSolveBase :taskId="taskId">
+  <TaskSolveBase
+    :taskId="taskId"
+    :assignmentId="assignmentId"
+    :rated="rated"
+  >
     <template #header="slotProps">
       <h1>{{ slotProps.task.title }}</h1>
       <MarkDown :source="slotProps.task.description || ' '" />
@@ -20,6 +24,17 @@
 
       <Card v-if="publicTests !== null">
         <template #content>
+          <div class="testInfos text-xs-right">
+            <p class="child">
+              Nur fehlgeschlagene Tests
+            </p>
+            <InputSwitch
+              v-model="switcherChecked"
+              class="switcher child"
+              @change="onToggleChanged"
+            />
+          </div>
+
           <div
             v-for="(test, index) in publicTests"
             :key="index"
@@ -58,7 +73,10 @@
                 {{ test.output }}
               </div>
               <br>
-              <div class="testInfos text-xs-right">
+              <div
+                v-if="!test.testPassed"
+                class="testInfos text-xs-right"
+              >
                 <i
                   class="pi pi-exclamation-circle"
                   style="font-size: 0.9rem"
@@ -67,14 +85,6 @@
                 {{ test.expectedOutput }}
               </div>
               <br>
-              <div class="testInfos text-xs-right">
-                <i
-                  class="pi pi-book"
-                  style="font-size: 0.9rem"
-                />
-                Ergebnis:
-                {{ test.testPassed ? "erfolgreich" : "fehlgeschlagen" }}
-              </div>
             </div>
           </div>
         </template>
@@ -110,21 +120,23 @@ export default {
     rated: {
       type: Boolean,
       default: true
+    },
+    defaultSwitcherChecked: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       solution: this.generateFunctionBody(),
-      submission: null,
-      publicTests: null
+      publicTests: null,
+      switcherChecked: this.defaultSwitcherChecked
     }
   },
   watch: {
     task (newValue) {
       console.log(`task ${newValue.id}`)
       this.solution = {}
-      this.submission = null
-
       editor.getModel().setValue(this.generateFunctionBody())
     }
   },
@@ -161,13 +173,17 @@ export default {
   },
   methods: {
     submitSolution: async function (slotProps) {
-      this.submission = await slotProps.submit({
+      const submission = await slotProps.submit({
         value: editor.getValue(),
         timeNeeded: -1
       })
-      slotProps.submitReceived(this.submission)
+      slotProps.submitReceived(submission)
+    },
+    refresh (slotProps) {
+      slotProps.submissions()
     },
     submitPossible (slotProps) {
+      console.log(slotProps)
       return !slotProps.alreadySubmitted
     },
     buttonText (slotProps) {
@@ -197,12 +213,19 @@ export default {
       }
 
       this.publicTests = await runPublicTests(testsDto)
+    },
+    onToggleChanged () {
+      if (!this.switcherChecked) {
+        this.publicTests = this.getPublicTests()
+      } else {
+        this.publicTests = this.publicTests.filter(test => !test.testPassed)
+      }
     }
   }
 }
 </script>
 <style>
-    .tests{
+   .tests{
         width: 1000px;
         margin: auto;
         padding:10px;
@@ -217,15 +240,23 @@ export default {
         font-size: 1.6rem; color:red;
     }
     .testInfos{
-      font-weight: bold;
-      white-space:pre-wrap;
+        font-weight: bold;
     }
     .text-xs-right {
-white-space: nowrap;
-  padding-left: 20px;
-  width: auto;
-}
-.ergebnis{
-  background-color: red;
-}
+        white-space: nowrap;
+        padding-left: 20px;
+        width: auto;
+        height: auto;
+        display:inline-block;
+      }
+    .child{
+        display: inline-block;
+        margin-left: 5px;
+      }
+    .switcher{
+              top: 7px;
+      }
+    .ergebnis{
+        background-color: red;
+      }
 </style>

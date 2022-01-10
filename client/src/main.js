@@ -20,6 +20,7 @@ import Dialog from 'primevue/dialog'
 import Dropdown from 'primevue/dropdown'
 import FileUpload from 'primevue/fileupload'
 import InputNumber from 'primevue/inputnumber'
+import InputSwitch from 'primevue/inputswitch'
 import InputText from 'primevue/inputtext'
 import Menu from 'primevue/menu'
 import Message from 'primevue/message'
@@ -72,6 +73,7 @@ app.component('Dialog', Dialog)
 app.component('Dropdown', Dropdown)
 app.component('FileUpload', FileUpload)
 app.component('InputNumber', InputNumber)
+app.component('InputSwitch', InputSwitch)
 app.component('InputText', InputText)
 app.component('Menu', Menu)
 app.component('Message', Message)
