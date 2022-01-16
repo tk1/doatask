@@ -39,6 +39,16 @@
             </div>
           </div>
         </template>
+        <div
+          v-if="slotProps.grade != null"
+          class="grade"
+        >
+          <i
+            class="pi pi-bookmark"
+            style="font-size: 0.9rem;"
+          />
+          Ergebnis : {{ grade(slotProps) }}
+        </div>
         <Button
           :disabled="!submitPossible(slotProps)"
           @click="submitSolution(slotProps)"
@@ -105,6 +115,9 @@ export default {
         return 'Submit solution'
       }
     },
+    grade (slotProps) {
+      return Math.floor(100 * slotProps.grade) + ' %'
+    },
     changed (selectedIndex) {
       if (this.task.details.isSingleChoice) {
         this.answers = this.answers.map((answer, index) => {
@@ -128,4 +141,10 @@ export default {
 span {
   margin: 5px;
 }
+ .grade{
+        font-size: 1rem; color:green;
+        font-weight: bold;
+        width: auto;
+        height: auto;
+      }
 </style>

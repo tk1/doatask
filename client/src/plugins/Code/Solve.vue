@@ -11,6 +11,17 @@
     <template #details />
     <template #solution="slotProps">
       <div id="container" />
+      <div
+        v-if="slotProps.grade != null"
+        class="grade"
+      >
+        <i
+          class="pi pi-bookmark"
+          style="font-size: 0.9rem;"
+        />
+        Ergebnis : {{ grade(slotProps) }}
+      </div>
+      <br>
       <Button
         :disabled="!submitPossible(slotProps)"
         @click="submitSolution(slotProps)"
@@ -179,12 +190,11 @@ export default {
       })
       slotProps.submitReceived(submission)
     },
-    refresh (slotProps) {
-      slotProps.submissions()
-    },
     submitPossible (slotProps) {
-      console.log(slotProps)
       return !slotProps.alreadySubmitted
+    },
+    grade (slotProps) {
+      return Math.floor(100 * slotProps.grade) + ' %'
     },
     buttonText (slotProps) {
       if (slotProps.alreadySubmitted) {
@@ -258,5 +268,11 @@ export default {
       }
     .ergebnis{
         background-color: red;
+      }
+      .grade{
+        font-size: 1rem; color:green;
+        font-weight: bold;
+        width: auto;
+        height: auto;
       }
 </style>

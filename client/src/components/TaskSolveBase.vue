@@ -28,6 +28,7 @@
       :submit="getSubmit()"
       :submitReceived="submitReceived"
       :alreadySubmitted="alreadySubmitted"
+      :grade="grade"
     >
       <span class="p-float-label">
         <InputText
@@ -85,7 +86,8 @@ export default {
       },
       submission: null,
       alreadySubmitted: false,
-      elapsedSeconds: 0
+      elapsedSeconds: 0,
+      grade: null
     }
   },
   computed: {
@@ -196,6 +198,7 @@ export default {
     },
     submitReceived (submission) {
       this.alreadySubmitted = true
+      this.grade = submission.grade
       this.$toast.add({
         severity: 'success',
         summary: 'Submitted',
@@ -212,9 +215,13 @@ export default {
       if (submissionsForTask.length === 0) {
         this.submission = null
         this.alreadySubmitted = false
+        this.grade = null
+        this.solution = null
       } else {
         this.submission = submissionsForTask[0]
         this.alreadySubmitted = true
+        this.grade = submissionsForTask[0].grade
+        this.solution.text = submissionsForTask[0].solution.value
       }
     },
     restartTimer () {
