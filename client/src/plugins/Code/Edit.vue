@@ -155,7 +155,9 @@ export default {
       parameters: [],
       tests: [],
       currentLanguage: null,
-      currentReturnType: null
+      currentReturnType: null,
+      secretTests: [],
+      publicTests: []
     }
   },
   created () {
@@ -220,7 +222,6 @@ export default {
         }
       }
     }
-    console.log(this.task)
 
     this.tests = this.tests.map((v) => ({
       isSecretTest: v.isSecretTest,
@@ -293,7 +294,7 @@ export default {
     },
     returnTypeChanged (e) {
       this.returnType = e.value
-      this.task.details.methodStub = e.value
+      this.task.details.methodStub.returnType = this.returnType.returnType
     },
     addParameter () {
       this.parameters.push({ name: '', type: '' })
@@ -305,32 +306,28 @@ export default {
       this.task.details.methodStub.parameter = this.parameters.map((v) => ({ name: v.name, type: v.type.type }))
     },
     saveTestsInTask () {
-      const secretTests = []
-      const publicTests = []
-      const testSuite = []
+      this.secretTests = []
+      this.publicTests = []
 
-      testSuite.push(this.tests.map((v, i) => {
+      this.tests.map((v, i) => {
         if (v.isSecretTest === true) {
-          secretTests.push({
+          this.secretTests.push({
             testParameter: this.stringToArray(v.testParameter),
             expectedOutput: this.checkType(v.expectedOutput)
           })
-          return secretTests
+          return this.secretTests
         } else if (v.isSecretTest === false) {
-          publicTests.push({
+          this.publicTests.push({
             testParameter: this.stringToArray(v.testParameter),
             expectedOutput: this.checkType(v.expectedOutput)
           })
-
-          return publicTests
+          return this.publicTests
         }
-        return undefined
-      }))
+        return []
+      })
 
-      this.task.details.testSuite = {
-        publicTests: publicTests,
-        secretTests: secretTests
-      }
+      this.task.details.testSuite.publicTests = this.publicTests.map((v) => ({ testParameter: v.testParameter, expectedOutput: v.expectedOutput }))
+      this.task.details.testSuite.secretTests = this.secretTests.map((v) => ({ testParameter: v.testParameter, expectedOutput: v.expectedOutput }))
     },
     stringToArray (str) {
       if (str.includes(',')) {
