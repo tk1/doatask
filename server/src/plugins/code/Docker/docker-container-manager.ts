@@ -1,7 +1,6 @@
 const { spawn } = require("child_process");
 import { readFileSync } from 'fs';
 import * as yaml from 'js-yaml';
-import { join } from 'path';
 import axios from "axios"
 import { CodeRunnerReturn } from '../code-evaluator/code-runner-return';
 import { CodeRunnerCaller } from '../code-runner-caller';
@@ -101,8 +100,8 @@ export class DockerContainerManager {
     private static restartContainer(containerInformation: DockerContainerInformation): void {
         if (this.dockerContainerRestartMap.has(containerInformation.containerName)) {
             const lastRestart = this.dockerContainerRestartMap.get(containerInformation.containerName)
-            if (this.isOlderThanThreeSeconds(lastRestart)) {
-                spawn('docker', ['restart', containerInformation.containerName]);
+            if (this.isOlderThanXSeconds(lastRestart, 3)) {
+                spawn('docker', ['restart', containerInformation.containerName])
             }
         } else {
             spawn('docker', ['restart', containerInformation.containerName]);
@@ -110,7 +109,7 @@ export class DockerContainerManager {
         }
     }
 
-    private static isOlderThanThreeSeconds(timestamp: number): boolean {
-        return (Date.now() - timestamp) > 3000
+    private static isOlderThanXSeconds(timestamp: number, x: number): boolean {
+        return (Date.now() - timestamp) > (x * 1000)
     }
 }
