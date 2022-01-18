@@ -166,6 +166,7 @@ export default {
     async taskChanged () {
       this.endProgress()
       await this.getSubmissions()
+      console.log('taskChanged')
       if (this.isTimed && !this.alreadySubmitted) {
         this.restartTimer()
       }
@@ -221,6 +222,7 @@ export default {
         this.submission = submissionsForTask[0]
         this.alreadySubmitted = true
         this.grade = submissionsForTask[0].grade
+        this.solution = submissionsForTask[0].solution
         this.solution.text = submissionsForTask[0].solution.value
       }
     },

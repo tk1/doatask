@@ -95,6 +95,10 @@ export default {
       } else if (this.checked === false) {
         editor = monaco.editor.setTheme('vs-light')
       }
+    },
+    updateCode (code) {
+      console.log(code)
+      editor.getModel().setValue(code)
     }
   }
 }

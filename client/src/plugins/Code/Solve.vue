@@ -15,6 +15,7 @@
         v-model="data"
         @getCode="getCode"
       />
+      <!-- <div>{{ submittedSolution(slotProps) }}</div> -->
       <div
         v-if="slotProps.grade != null"
         class="grade"
@@ -153,6 +154,7 @@ export default {
   watch: {
     task (newValue) {
       console.log(`task ${newValue.id}`)
+      this.componentKey = 0
       this.data.code = this.generateFunction(newValue)
       this.data.language = newValue.details.language
       this.solution = {}
@@ -161,6 +163,7 @@ export default {
   created () {
     this.data.code = this.generateFunction(this.task)
     this.data.language = this.task.details.language
+    this.componentKey++
   },
   updated () {
     console.log('test')
@@ -186,6 +189,9 @@ export default {
       } else {
         return 'Submit solution'
       }
+    },
+    submittedSolution (slotProps) {
+      console.log(slotProps.solution.text)
     },
     generateFunction (task) {
       console.log(task)
