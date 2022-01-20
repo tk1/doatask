@@ -217,12 +217,11 @@ export default {
         this.submission = null
         this.alreadySubmitted = false
         this.grade = null
-        this.solution = null
+        this.solution.text = null
       } else {
         this.submission = submissionsForTask[0]
         this.alreadySubmitted = true
         this.grade = submissionsForTask[0].grade
-        this.solution = submissionsForTask[0].solution
         this.solution.text = submissionsForTask[0].solution.value
       }
     },

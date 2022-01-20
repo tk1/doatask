@@ -11,11 +11,14 @@
     <template #details />
     <template #solution="slotProps">
       <MonacoEditor
+        ref="MonacoEditor"
         :key="componentKey"
         v-model="data"
         @getCode="getCode"
       />
-      <!-- <div>{{ submittedSolution(slotProps) }}</div> -->
+      <div v-show="false">
+        {{ getSolution(slotProps) }}
+      </div>
       <div
         v-if="slotProps.grade != null"
         class="grade"
@@ -154,7 +157,6 @@ export default {
   watch: {
     task (newValue) {
       console.log(`task ${newValue.id}`)
-      this.componentKey = 0
       this.data.code = this.generateFunction(newValue)
       this.data.language = newValue.details.language
       this.solution = {}
@@ -163,11 +165,6 @@ export default {
   created () {
     this.data.code = this.generateFunction(this.task)
     this.data.language = this.task.details.language
-    this.componentKey++
-  },
-  updated () {
-    console.log('test')
-    this.componentKey += 1
   },
   methods: {
     submitSolution: async function (slotProps) {
@@ -176,6 +173,12 @@ export default {
         timeNeeded: -1
       })
       slotProps.submitReceived(submission)
+    },
+    setEditorCode (code) {
+      this.$refs.MonacoEditor?.updateCode(code)
+    },
+    setEditorReadOnly (readOnly) {
+      this.$refs.MonacoEditor?.setReadOnly(readOnly)
     },
     submitPossible (slotProps) {
       return !slotProps.alreadySubmitted
@@ -190,8 +193,14 @@ export default {
         return 'Submit solution'
       }
     },
-    submittedSolution (slotProps) {
-      console.log(slotProps.solution.text)
+    getSolution: async function (slotProps) {
+      if (slotProps.alreadySubmitted) {
+        this.setEditorCode(slotProps.solution?.text)
+        this.setEditorReadOnly(true)
+      } else {
+        this.$refs.MonacoEditor?.updateCode(this.generateFunction(this.task))
+        this.setEditorReadOnly(false)
+      }
     },
     generateFunction (task) {
       console.log(task)

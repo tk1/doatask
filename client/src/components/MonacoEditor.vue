@@ -97,8 +97,10 @@ export default {
       }
     },
     updateCode (code) {
-      console.log(code)
       editor.getModel().setValue(code)
+    },
+    setReadOnly (readOnly) {
+      editor.updateOptions({ readOnly: readOnly })
     }
   }
 }
