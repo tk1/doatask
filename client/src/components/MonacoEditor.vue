@@ -1,13 +1,5 @@
 <template>
   <div>
-    <label>Dark </label>
-    <div>
-      <InputSwitch
-        v-model="checked"
-        @value="checked"
-        @change="changeTheme"
-      />
-    </div>
     <div
       id="container"
     />
@@ -37,7 +29,6 @@ export default {
   data () {
     return {
       language: null,
-      checked: true,
       enteredData: null
     }
   },
@@ -77,10 +68,10 @@ export default {
       language: this.language.toLowerCase(),
       theme: 'vs-dark',
       roundedSelection: false,
-      scrollBeyondLastLine: false,
+      scrollBeyondLastLine: true,
       minimap: false,
       tabSize: 2,
-      dimension: { width: 1000, height: 600 }
+      dimension: { width: 1000, height: 400 }
     })
 
     const mouseTarget = document.getElementById('container')
@@ -89,11 +80,11 @@ export default {
     })
   },
   methods: {
-    changeTheme () {
-      if (this.checked === true) {
-        editor = monaco.editor.setTheme('vs-dark')
-      } else if (this.checked === false) {
-        editor = monaco.editor.setTheme('vs-light')
+    updateTheme (isDark) {
+      if (isDark === true) {
+        monaco.editor.setTheme('vs-dark')
+      } else if (isDark === false) {
+        monaco.editor.setTheme('vs-light')
       }
     },
     updateCode (code) {

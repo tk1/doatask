@@ -10,6 +10,15 @@
     </template>
     <template #details />
     <template #solution="slotProps">
+      <div>
+        <label>Dark </label>
+        <InputSwitch
+          v-model="isDark"
+          class="switcher child"
+          @change="changeTheme"
+        />
+      </div>
+      <br>
       <MonacoEditor
         ref="MonacoEditor"
         :key="componentKey"
@@ -146,6 +155,7 @@ export default {
     return {
       solution: {},
       publicTests: null,
+      isDark: true,
       switcherChecked: this.defaultSwitcherChecked,
       data: {
         code: '',
@@ -192,6 +202,9 @@ export default {
       } else {
         return 'Submit solution'
       }
+    },
+    changeTheme: async function () {
+      this.$refs.MonacoEditor?.updateTheme(this.isDark)
     },
     getSolution: async function (slotProps) {
       if (slotProps.alreadySubmitted) {
