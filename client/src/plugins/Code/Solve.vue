@@ -64,9 +64,9 @@
               Nur fehlgeschlagene Tests
             </p>
             <InputSwitch
-              v-model="switcherChecked"
+              v-model="isJustFailedTests"
               class="switcher child"
-              @change="onToggleChanged"
+              @change="justFailedTests"
             />
           </div>
 
@@ -145,10 +145,6 @@ export default {
     rated: {
       type: Boolean,
       default: true
-    },
-    defaultSwitcherChecked: {
-      type: Boolean,
-      default: false
     }
   },
   data () {
@@ -156,7 +152,7 @@ export default {
       solution: {},
       publicTests: null,
       isDark: true,
-      switcherChecked: this.defaultSwitcherChecked,
+      isJustFailedTests: false,
       data: {
         code: '',
         language: ''
@@ -170,6 +166,7 @@ export default {
       this.data.code = this.generateFunction(newValue)
       this.data.language = newValue.details.language
       this.solution = {}
+      this.publicTests = null
     }
   },
   created () {
@@ -243,11 +240,13 @@ export default {
         task: this.taskId,
         details: this.solution
       }
-
       this.publicTests = await runPublicTests(testsDto)
+      if (this.isJustFailedTests) {
+        this.publicTests = this.publicTests.filter(test => !test.testPassed)
+      }
     },
-    onToggleChanged () {
-      if (!this.switcherChecked) {
+    justFailedTests () {
+      if (!this.isJustFailedTests) {
         this.publicTests = this.getPublicTests()
       } else {
         this.publicTests = this.publicTests.filter(test => !test.testPassed)
