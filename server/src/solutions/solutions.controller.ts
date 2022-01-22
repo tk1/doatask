@@ -26,7 +26,7 @@ export class SolutionsController {
 
     private async checkIfTimeLimitIsSet(assignmentTaskId: number) {
         if ((await this.assignmentTasksService.findOne(assignmentTaskId)).timeLimit != null) {
-            throw new ForbiddenException("You cannot create a intermediate solution for a assignment task with a time limit");
+            throw new ForbiddenException("You cannot create an intermediate solution for an assignment task with a time limit");
         }
     }
 
