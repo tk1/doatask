@@ -17,6 +17,11 @@
     </template>
     <template #details />
     <template #solution="slotProps">
+      <div
+        v-show="false"
+      >
+        {{ getSolution(slotProps) }}
+      </div>
       <div class="p-fluid p-grid p-formgrid">
         <template
           v-for="(choice, index) in slotProps.task.details.choices"
@@ -29,6 +34,7 @@
                   id="public"
                   v-model="answers[index]"
                   :binary="true"
+                  :disabled="slotProps.alreadySubmitted"
                   @change="changed(index)"
                 />
               </span>
@@ -82,16 +88,19 @@ export default {
   },
   data () {
     return {
-      answers: []
+      answers: [],
+      elementSelected: false
     }
   },
   watch: {
     task (newValue) {
       this.answers = this.task.details.choices.map((v) => false)
+      this.elementSelected = false
     }
   },
   created () {
     this.answers = this.task.details.choices.map((v) => false)
+    this.elementSelected = false
   },
   methods: {
     submitSolution: async function (slotProps) {
@@ -101,9 +110,23 @@ export default {
       })
       slotProps.submitReceived(submission)
     },
+    getSolution: async function (slotProps) {
+      console.log(this.taskId)
+      if (!this.elementSelected) {
+        if (slotProps.alreadySubmitted) {
+          this.answers = slotProps.solution?.text
+        } else {
+          this.answers = this.task.details.choices.map((v) => false)
+        }
+      }
+    },
     submitPossible (slotProps) {
-      if (this.task.details.isSingleChoice && !slotProps.alreadySubmitted) {
-        return this.isExactlyOneAnswerSelected()
+      if (!slotProps.alreadySubmitted) {
+        if (this.task.details.isSingleChoice) {
+          return this.isExactlyOneAnswerSelected()
+        } else {
+          return this.isAnswersSelected()
+        }
       } else {
         return !slotProps.alreadySubmitted
       }
@@ -119,6 +142,7 @@ export default {
       return Math.floor(100 * slotProps.grade) + ' %'
     },
     changed (selectedIndex) {
+      this.elementSelected = true
       if (this.task.details.isSingleChoice) {
         this.answers = this.answers.map((answer, index) => {
           if (selectedIndex !== index) {
@@ -132,6 +156,9 @@ export default {
     },
     isExactlyOneAnswerSelected () {
       return this.answers.filter((answer) => answer).length === 1
+    },
+    isAnswersSelected () {
+      return this.answers.filter((answer) => answer).length >= 1
     }
   }
 }
