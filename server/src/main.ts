@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
-import { DockerContainerManager } from './plugins/code/Docker/docker-container-manager';
+import { DockerContainerManager } from './plugins/code/code-runner/docker-container-manager';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -28,7 +28,7 @@ async function bootstrap() {
   SwaggerModule.setup('apidoc', app, document);
 
   // TODO Load path from config
-  DockerContainerManager.init('src\\plugins\\code\\Docker\\docker-compose.yml')
+  DockerContainerManager.init('docker-compose.yml')
 
   await app.listen(port)
   console.log(`Application is running on: ${await app.getUrl()}`)

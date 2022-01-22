@@ -7,7 +7,6 @@ describe('Docker Container Manager', () => {
     });
 
     test('Read Docker compose file', async () => {
-        DockerContainerManager.readDockerComposeFile()
         expect(() => DockerContainerManager.readDockerComposeFile()).not.toThrowError()
     });
 

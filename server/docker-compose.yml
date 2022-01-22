@@ -5,7 +5,7 @@ services:
   postgres:
     build:
       context: ./
-      dockerfile:  ./docker/postgres/Dockerfile
+      dockerfile: ./docker/postgres/Dockerfile
     hostname: ${POSTGRES_HOST}
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
@@ -31,11 +31,52 @@ services:
   server:
     build:
       context: ./
-      dockerfile:  ./docker/nest/Dockerfile
+      dockerfile: ./docker/code-plugin/Dockerfile-JavaScript
     depends_on:
       - postgres
     ports:
       - ${NEST_PORT}:${NEST_PORT}
+
+  javascript-code-runner-01:
+    container_name: doatask_javascript_code_runner_01
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-JavaScript
+    ports:
+      - "10000:10000"
+    restart: unless-stopped
+    environment:
+      language: JavaScript
+  javascript-code-runner-02:
+    container_name: doatask_javascript_code_runner_02
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-JavaScript
+    ports:
+      - "10002:10000"
+    restart: unless-stopped
+    environment:
+      language: JavaScript
+  python-code-runner-01:
+    container_name: doatask_python_code_runner_01
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-Python
+    ports:
+      - "10001:10001"
+    restart: unless-stopped
+    environment:
+      language: Python
+  python-code-runner-02:
+    container_name: doatask_python_code_runner_02
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-Python
+    ports:
+      - "10003:10001"
+    restart: unless-stopped
+    environment:
+      language: Python
 
 volumes:
   pg-data:

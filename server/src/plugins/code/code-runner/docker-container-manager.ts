@@ -31,15 +31,26 @@ export class DockerContainerManager {
 
     public static saveDockerContainerInformation(): void {
         for (let key in this.dockerComposeFile.services) {
-            const language = this.getLanguageFromContainerInformation(this.dockerComposeFile.services[key]['environment'])
-            const port = this.getPortFromContainerInformation(this.dockerComposeFile.services[key]['ports'])
-            const containerName = this.dockerComposeFile.services[key]['container_name']
-            this.addToDockerContainerMap(new DockerContainerInformation(port, containerName, language))
+            if (this.checkIfServiceHasLanguageKey(this.dockerComposeFile.services[key]['environment'])) {
+                const language = this.getLanguageFromContainerInformation(this.dockerComposeFile.services[key]['environment'])
+                const port = this.getPortFromContainerInformation(this.dockerComposeFile.services[key]['ports'])
+                const containerName = this.dockerComposeFile.services[key]['container_name']
+                this.addToDockerContainerMap(new DockerContainerInformation(port, containerName, language))
+            }
         }
     }
 
-    private static getLanguageFromContainerInformation(languageArray: Array<string>): string {
-        return languageArray[0].split("=")[1]
+    private static checkIfServiceHasLanguageKey(environment: any): boolean {
+        if (environment) {
+            if (environment['language']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static getLanguageFromContainerInformation(environment: any): string {
+        return environment['language']
     }
 
     private static getPortFromContainerInformation(portsArray: Array<string>): number {

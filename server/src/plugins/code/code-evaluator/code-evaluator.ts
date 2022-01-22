@@ -2,7 +2,7 @@ import { CodeTest } from "../code-tests/code-test";
 import { CodeTestResult } from "../code-tests/code-test-result";
 import { CodeTestSuite } from "../code-tests/code-test-suite";
 import { CodeDto } from "../code.dto";
-import { DockerContainerManager } from "../Docker/docker-container-manager";
+import { DockerContainerManager } from "../code-runner/docker-container-manager";
 import { FunctionCallBuilder } from "../function-call-builders/function-call-builder";
 import { FunctionCallBuilderFactory } from "../function-call-builders/function-call-builder.factory";
 import { MethodStub } from "../method-stub";

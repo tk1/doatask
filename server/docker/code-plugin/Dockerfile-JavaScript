@@ -1,0 +1,3 @@
+FROM node
+COPY ./src/plugins/code/code-runner/JavaScript/java-script-code-runner.js /home/
+CMD node /home/java-script-code-runner.js
