@@ -21,7 +21,6 @@
       <br>
       <MonacoEditor
         ref="MonacoEditor"
-        :key="componentKey"
         v-model="data"
         @getCode="getCode"
       />
@@ -149,15 +148,14 @@ export default {
   },
   data () {
     return {
-      solution: {},
+      solution: null,
       publicTests: null,
       isDark: true,
       isJustFailedTests: false,
       data: {
         code: '',
         language: ''
-      },
-      componentKey: 0
+      }
     }
   },
   watch: {
@@ -165,7 +163,7 @@ export default {
       console.log(`task ${newValue.id}`)
       this.data.code = this.generateFunction(newValue)
       this.data.language = newValue.details.language
-      this.solution = {}
+      this.solution = null
       this.publicTests = null
     }
   },
@@ -208,12 +206,15 @@ export default {
         this.setEditorCode(slotProps.solution?.text)
         this.setEditorReadOnly(true)
       } else {
-        this.$refs.MonacoEditor?.updateCode(this.generateFunction(this.task))
-        this.setEditorReadOnly(false)
+        if (this.solution != null) {
+          this.$refs.MonacoEditor?.updateCode(this.solution)
+        } else {
+          this.$refs.MonacoEditor?.updateCode(this.generateFunction(this.task))
+          this.setEditorReadOnly(false)
+        }
       }
     },
     generateFunction (task) {
-      console.log(task)
       if (task.details.language === 'JavaScript') {
         return (
           'function ' +
@@ -253,7 +254,6 @@ export default {
       }
     },
     getCode: function (e) {
-      console.log(e)
       this.solution = e
     }
   }
