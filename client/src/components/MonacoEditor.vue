@@ -7,6 +7,7 @@
 </template>
 
 <script>
+/* eslint-disable new-cap */
 import * as monaco from 'monaco-editor'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'

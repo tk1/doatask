@@ -156,14 +156,13 @@ export default {
       tests: [],
       currentLanguage: null,
       currentReturnType: null,
-      secretTests: [],
-      publicTests: []
+      secTests: [],
+      pubTests: []
     }
   },
   created () {
     this.task = this.modelValue
     if (!this.task.id) {
-      console.log('created')
       this.task.details.methodStub = {
         functionName: '',
         returnType: '',
@@ -229,9 +228,8 @@ export default {
       expectedOutput: v.expectedOutput
     }))
 
-    this.saveTestsInTask()
-
-    this.saveParameterInTask()
+    // this.saveTestsInTask()
+    // this.saveParameterInTask()
   },
   methods: {
     setTypeForParameter (e) {
@@ -298,65 +296,112 @@ export default {
     },
     addParameter () {
       this.parameters.push({ name: '', type: '' })
+      this.saveParameterInTask()
     },
     addTest () {
       this.tests.push({ isSecretTest: false, testParameter: [], testResult: '' })
+      this.saveTestsInTask()
     },
     saveParameterInTask () {
       this.task.details.methodStub.parameter = this.parameters.map((v) => ({ name: v.name, type: v.type.type }))
     },
     saveTestsInTask () {
-      this.secretTests = []
-      this.publicTests = []
+      this.secTests = []
+      this.pubTests = []
 
       this.tests.map((v, i) => {
         if (v.isSecretTest === true) {
-          this.secretTests.push({
+          this.secTests.push({
             testParameter: this.stringToArray(v.testParameter),
-            expectedOutput: this.checkType(v.expectedOutput)
+            expectedOutput: this.stringToArray(v.expectedOutput)
           })
-          return this.secretTests
+          return this.secTests
         } else if (v.isSecretTest === false) {
-          this.publicTests.push({
+          this.pubTests.push({
             testParameter: this.stringToArray(v.testParameter),
-            expectedOutput: this.checkType(v.expectedOutput)
+            expectedOutput: this.stringToArray(v.expectedOutput)
           })
-          return this.publicTests
+          return this.pubTests
         }
         return []
       })
 
-      this.task.details.testSuite.publicTests = this.publicTests.map((v) => ({ testParameter: v.testParameter, expectedOutput: v.expectedOutput }))
-      this.task.details.testSuite.secretTests = this.secretTests.map((v) => ({ testParameter: v.testParameter, expectedOutput: v.expectedOutput }))
+      this.task.details.testSuite = { publicTests: this.pubTests, secretTests: this.secTests }
+
+      console.log(this.task.details.testSuite)
     },
     stringToArray (str) {
-      if (str.includes(',')) {
-        const arr = this.splitTestParameter(str)
-        const result = arr.map((x) => {
-          if (!isNaN(x) === true) {
-            return parseInt(x)
+      if (str !== undefined) {
+        let arrayEnd = []
+        let counter = 0
+        let test = []
+        if (str.includes(',')) {
+          const arr = this.splitTestParameter(str, ',')
+          if (str.includes('[')) {
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i].includes('[') && arr[i].includes(']')) {
+                const z = arr[i].split(']')
+                const r = z[0].split('[')
+                test.push(
+                  this.checkType(r[1]))
+                arrayEnd[counter] = test
+                counter++
+                test = []
+              } else if (arr[i].includes(']')) {
+                const z = arr[i].split(']')
+                test.push(this.checkType(z[0]))
+                arrayEnd[counter] = test
+                counter++
+                test = []
+              } else if (arr[i].includes('[')) {
+                const str = arr[i]
+                const z = str.split('[')
+                test.push(
+                  this.checkType(z[1]))
+              } else {
+                test.push(this.checkType(arr[i]))
+              }
+            }
           } else {
-            return x
+            arr.map((x) => {
+              test.push(this.checkType(x))
+            })
+            arrayEnd = test
           }
-        })
-        str = result
+        } else {
+          if (str.includes('[') && str.includes(']')) {
+            const z = str.split(']')
+            const r = z[0].split('[')
+            arrayEnd[counter] = this.checkType(r[1])
+            counter++
+          } else {
+            arrayEnd = this.checkType(str)
+          }
+        }
+        return arrayEnd
       }
-
-      return str
     },
-    splitTestParameter (str) {
-      const arr = str.split(',')
+    splitTestParameter (str, splitChar) {
+      const arr = str.split(splitChar)
       return arr
     },
     checkType (str) {
-      if (!isNaN(str) === true) {
-        return parseInt(str)
-      } else if (str === 'true') {
-        return true
-      } else if (str === 'false') {
-        return false
-      } else {
-        return str
+      if (str !== undefined) {
+        if (str.includes('"')) {
+          const spl = str.split('"')
+          str = spl[1]
+        }
+        if (str === '') {
+          return str
+        } else if (!isNaN(str) === true) {
+          return parseInt(str)
+        } else if (str === 'true') {
+          return true
+        } else if (str === 'false') {
+          return false
+        } else {
+          return str
+        }
       }
     },
     removeParameter (index) {
