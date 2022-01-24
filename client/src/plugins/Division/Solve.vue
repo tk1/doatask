@@ -7,6 +7,9 @@
       </p>
     </template>
     <template #solution="slotProps">
+      <div v-show="false">
+        {{ getSolution(slotProps) }}
+      </div>
       <span class="p-float-label">
         <InputText
           id="solution"
@@ -26,6 +29,16 @@
         Your points: {{ Math.round(100* submission.grade) }} of 100 |
         Your rating: {{ Math.round(submission.rating) }}
       </Message>
+      <div
+        v-if="slotProps.grade != null"
+        class="grade"
+      >
+        <i
+          class="pi pi-bookmark"
+          style="font-size: 0.9rem;"
+        />
+        Ergebnis : {{ grade(slotProps) }}
+      </div>
       <Button
         :disabled="!solution.text || slotProps.alreadySubmitted"
         @click="submitSolution(slotProps)"
@@ -66,6 +79,15 @@ export default {
         }
       )
       slotProps.submitReceived(this.submission)
+    },
+    getSolution: async function (slotProps) {
+      if (slotProps.alreadySubmitted) {
+        console.log(slotProps.solution?.text.text)
+        this.solution.text = slotProps.solution?.text.text
+      }
+    },
+    grade (slotProps) {
+      return Math.floor(100 * slotProps.grade) + ' %'
     },
     buttonText (slotProps) {
       if (slotProps.alreadySubmitted) {

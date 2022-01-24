@@ -111,7 +111,6 @@ export default {
       slotProps.submitReceived(submission)
     },
     getSolution: async function (slotProps) {
-      console.log(this.taskId)
       if (!this.elementSelected) {
         if (slotProps.alreadySubmitted) {
           this.answers = slotProps.solution?.text
