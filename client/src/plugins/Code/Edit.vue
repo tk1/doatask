@@ -98,17 +98,22 @@
             <label for="secretTest">Secret Test</label>
           </div>
           <div class="p-field p-col-12 p-md-3">
-            <label>Test Parameter</label>
-            <InputText
-              id="testParameter"
-              v-model="test.testParameter"
-              type="text"
-              autocomplete="off"
-              @change="saveTestsInTask"
-            />
+            <template
+              v-for="(para, i) in test.testParameter"
+              :key="i"
+            >
+              <label>Test Parameter: {{ showTypeForSelectedId(i) }}</label>
+              <InputText
+                id="testParameter"
+                v-model="para.parameter"
+                type="text"
+                autocomplete="off"
+                @change="saveTestsInTask"
+              />
+            </template>
           </div>
           <div class="p-field p-col-12 p-md-3">
-            <label>Expected Output</label>
+            <label>Expected Output: {{ currentReturnType?.returnType }}</label>
             <InputText
               id="expectedOutput"
               v-model="test.expectedOutput"
@@ -128,6 +133,7 @@
             </Button>
           </div>
         </div>
+        <br><br>
       </template>
       <Button @click="addTest">
         Add Test
@@ -176,7 +182,9 @@ export default {
 
       this.tests = [{
         isSecretTest: false,
-        testParameter: [],
+        testParameter: [{
+          parameter: ''
+        }],
         expectedOutput: ''
       }]
     } else {
@@ -195,25 +203,32 @@ export default {
           this.currentLanguage = { language: this.task.details.language }
           this.currentReturnType = { returnType: this.task.details.methodStub.returnType }
 
-          let publicTest = []
-          let secretTest = []
-          if (this.task.details.testSuite.publicTests.length !== 0) {
-            publicTest = this.task.details.testSuite.publicTests.map((v, i) => ({
+          const publicTest = []
+          const secretTest = []
+
+          this.task.details.testSuite.publicTests.map((x) => {
+            publicTest.push({
               isSecretTest: false,
-              testParameter: v.testParameter,
-              expectedOutput: v.expectedOutput
-            }))
+              testParameter: this.setTestParameterArray(x.testParameter),
+              expectedOutput: x.expectedOutput
+            })
+          })
+
+          this.task.details.testSuite.secretTests.map((x) => {
+            secretTest.push({
+              isSecretTest: true,
+              testParameter: this.setTestParameterArray(x.testParameter),
+              expectedOutput: x.expectedOutput
+            })
+          })
+
+          if (this.task.details.testSuite.publicTests.length !== 0) {
             for (let i = 0; i < publicTest.length; i++) {
               this.tests.push(publicTest[i])
             }
           }
 
           if (this.task.details.testSuite.secretTests.length !== 0) {
-            secretTest = this.task.details.testSuite.secretTests.map((v, i) => ({
-              isSecretTest: true,
-              testParameter: v.testParameter,
-              expectedOutput: v.expectedOutput
-            }))
             for (let i = 0; i < secretTest.length; i++) {
               this.tests.push(secretTest[i])
             }
@@ -221,15 +236,6 @@ export default {
         }
       }
     }
-
-    this.tests = this.tests.map((v) => ({
-      isSecretTest: v.isSecretTest,
-      testParameter: v.testParameter,
-      expectedOutput: v.expectedOutput
-    }))
-
-    // this.saveTestsInTask()
-    // this.saveParameterInTask()
   },
   methods: {
     setTypeForParameter (e) {
@@ -253,8 +259,6 @@ export default {
           { type: 'intArray' }
         ]
       }
-
-      return this.typesForSelectedLanguage
     },
     setTypeForReturnType (e) {
       const language = e.language
@@ -277,8 +281,6 @@ export default {
           { returnType: 'intArray' }
         ]
       }
-
-      return this.returnTypesForSelectedLanguage
     },
     languageChanged (e) {
       this.task.details = e.value
@@ -296,10 +298,18 @@ export default {
     },
     addParameter () {
       this.parameters.push({ name: '', type: '' })
+      this.tests.map((v, i) => {
+        return v.testParameter.push({ parameter: '' })
+      })
       this.saveParameterInTask()
     },
     addTest () {
-      this.tests.push({ isSecretTest: false, testParameter: [], testResult: '' })
+      const arr = []
+      this.parameters.map((v, i) => {
+        return arr.push({ parameter: '' })
+      })
+
+      this.tests.push({ isSecretTest: false, testParameter: arr, testResult: '' })
       this.saveTestsInTask()
     },
     saveParameterInTask () {
@@ -308,18 +318,28 @@ export default {
     saveTestsInTask () {
       this.secTests = []
       this.pubTests = []
+      let parameterArr = []
 
-      this.tests.map((v, i) => {
+      this.tests.map((v, inde) => {
+        parameterArr = []
+        v.testParameter.map((x, i) => {
+          return this.parameters.map((p, index) => {
+            if (i === index) {
+              parameterArr.push(this.setTestParameterType(p.type.type, x.parameter))
+            }
+            return parameterArr
+          })
+        })
         if (v.isSecretTest === true) {
           this.secTests.push({
-            testParameter: this.stringToArray(v.testParameter),
-            expectedOutput: this.stringToArray(v.expectedOutput)
+            testParameter: parameterArr,
+            expectedOutput: this.setTestParameterType(this.returnType?.returnType, v.expectedOutput)
           })
           return this.secTests
         } else if (v.isSecretTest === false) {
           this.pubTests.push({
-            testParameter: this.stringToArray(v.testParameter),
-            expectedOutput: this.stringToArray(v.expectedOutput)
+            testParameter: parameterArr,
+            expectedOutput: this.setTestParameterType(this.returnType?.returnType, v.expectedOutput)
           })
           return this.pubTests
         }
@@ -327,82 +347,47 @@ export default {
       })
 
       this.task.details.testSuite = { publicTests: this.pubTests, secretTests: this.secTests }
-
-      console.log(this.task.details.testSuite)
     },
-    stringToArray (str) {
-      if (str !== undefined) {
-        let arrayEnd = []
-        let counter = 0
-        let test = []
-        if (str.includes(',')) {
-          const arr = this.splitTestParameter(str, ',')
-          if (str.includes('[')) {
-            for (let i = 0; i < arr.length; i++) {
-              if (arr[i].includes('[') && arr[i].includes(']')) {
-                const z = arr[i].split(']')
-                const r = z[0].split('[')
-                test.push(
-                  this.checkType(r[1]))
-                arrayEnd[counter] = test
-                counter++
-                test = []
-              } else if (arr[i].includes(']')) {
-                const z = arr[i].split(']')
-                test.push(this.checkType(z[0]))
-                arrayEnd[counter] = test
-                counter++
-                test = []
-              } else if (arr[i].includes('[')) {
-                const str = arr[i]
-                const z = str.split('[')
-                test.push(
-                  this.checkType(z[1]))
-              } else {
-                test.push(this.checkType(arr[i]))
-              }
-            }
-          } else {
-            arr.map((x) => {
-              test.push(this.checkType(x))
-            })
-            arrayEnd = test
+    setTestParameterType (type, parameter) {
+      if (type === 'boolean') {
+        return this.setBooleanType(parameter)
+      } else if (type === 'string') {
+        return parameter
+      } else if (type === 'int') {
+        return this.setIntType(parameter)
+      } else if (type === 'booleanArray') {
+        const arr = parameter.split(',')
+        const boolArr = []
+        arr.map((v, i) => {
+          if (this.setBooleanType(v) !== '') {
+            boolArr.push(this.setBooleanType(v))
           }
-        } else {
-          if (str.includes('[') && str.includes(']')) {
-            const z = str.split(']')
-            const r = z[0].split('[')
-            arrayEnd[counter] = this.checkType(r[1])
-            counter++
-          } else {
-            arrayEnd = this.checkType(str)
-          }
-        }
-        return arrayEnd
+          return boolArr
+        })
+        return boolArr
+      } else if (type === 'stringArray') {
+        const arr = parameter.split(',')
+        return arr
+      } else if (type === 'intArray') {
+        const arr = parameter.split(',')
+        const iArr = []
+        arr.map((v, i) => {
+          return iArr.push(this.setIntType(v))
+        })
+        return iArr
       }
     },
-    splitTestParameter (str, splitChar) {
-      const arr = str.split(splitChar)
-      return arr
-    },
-    checkType (str) {
-      if (str !== undefined) {
-        if (str.includes('"')) {
-          const spl = str.split('"')
-          str = spl[1]
-        }
-        if (str === '') {
-          return str
-        } else if (!isNaN(str) === true) {
-          return parseInt(str)
-        } else if (str === 'true') {
-          return true
-        } else if (str === 'false') {
-          return false
-        } else {
-          return str
-        }
+    setBooleanType (str) {
+      if (str === 'true') {
+        return true
+      } else if (str === 'false') {
+        return false
+      } else {
+        return ''
       }
+    },
+    setIntType (para) {
+      return parseInt(para)
     },
     removeParameter (index) {
       this.parameters.splice(index, 1)
@@ -411,6 +396,23 @@ export default {
     removeTest (index) {
       this.tests.splice(index, 1)
       this.saveTestsInTask()
+    },
+    setTestParameterArray (array) {
+      const paraArr = []
+      array.map((v, i) => {
+        return paraArr.push({ parameter: v })
+      })
+      return paraArr
+    },
+    showTypeForSelectedId (index) {
+      let parameter = ''
+      this.parameters.map((v, i) => {
+        if (i === index) {
+          parameter = v.type.type
+        }
+        return parameter
+      })
+      return parameter
     }
   }
 }
