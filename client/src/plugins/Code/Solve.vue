@@ -49,6 +49,14 @@
         </div>
         <div class="p-field p-col-12 p-md-2">
           <Button
+            :disabled="!submitPossible(slotProps)"
+            @click="saveSolution(slotProps)"
+          >
+            Save Solution
+          </Button>
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+          <Button
             @click="getPublicTests()"
           >
             Run tests
@@ -179,6 +187,13 @@ export default {
       })
       slotProps.submitReceived(submission)
     },
+    saveSolution: async function (slotProps) {
+      const currentSolution = await slotProps.saveSolution({
+        value: this.solution,
+        timeNeeded: -1
+      })
+      slotProps.solutionReceived(currentSolution)
+    },
     setEditorCode (code) {
       this.$refs.MonacoEditor?.updateCode(code)
     },
@@ -205,6 +220,9 @@ export default {
       if (slotProps.alreadySubmitted) {
         this.setEditorCode(slotProps.solution?.text)
         this.setEditorReadOnly(true)
+      } else if (slotProps.solutionSaved) {
+        this.setEditorCode(slotProps.solution?.text)
+        this.setEditorReadOnly(false)
       } else {
         if (this.solution != null) {
           this.$refs.MonacoEditor?.updateCode(this.solution)

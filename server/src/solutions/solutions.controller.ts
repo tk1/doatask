@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Put, Post } from '@nestjs/common';
 import { AssignmentTasksService } from 'src/assignmenttasks/assignmenttasks.service';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { SolutionDto } from './dto/solution.dto';
@@ -16,7 +16,7 @@ export class SolutionsController {
         return this.solutionsService.findOne(userId, assignmentTaskId);
     }
 
-    @Put()
+    @Post()
     @Roles('student')
     async create(@Body() createSolutionDto: SolutionDto): Promise<Solution> {
         await this.checkIfTimeLimitIsSet(createSolutionDto.assignmentTaskId);
@@ -33,9 +33,9 @@ export class SolutionsController {
     private async checkIfTaskIsSavable(assignmentTaskId: number) {
         const assignmentTask = await this.assignmentTasksService.findOne(assignmentTaskId);
         if (assignmentTask != null) {
-            if (!assignmentTask.task.savable) {
-                throw new ForbiddenException("A task with the savable flag set to false cannot have intermediate solutions");
-            }
+            //if (!assignmentTask.task.savable) {
+            //    throw new ForbiddenException("A task with the savable flag set to false cannot have intermediate solutions");
+            // }
         } else {
             throw new NotFoundException(`Assignment task with id ${assignmentTaskId} not found`, assignmentTaskId.toString());
         }

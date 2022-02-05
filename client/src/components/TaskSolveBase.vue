@@ -18,6 +18,7 @@
     <slot
       name="details"
       :alreadySubmitted="alreadySubmitted"
+      :solutionSaved="solutionSaved"
       :task="task"
       @submitted="submitReceived"
     />
@@ -27,7 +28,10 @@
       :task="task"
       :submit="getSubmit()"
       :submitReceived="submitReceived"
+      :saveSolution="getSaveSolution()"
+      :solutionReceived="solutionReceived"
       :alreadySubmitted="alreadySubmitted"
+      :solutionSaved="solutionSaved"
       :grade="grade"
     >
       <span class="p-float-label">
@@ -56,6 +60,7 @@
 
 <script>
 import { save, getQuery } from '../services/SubmissionService'
+import { saveCurrentSolution, getCurrentSolutionQuery } from '../services/SolutionService'
 import Comments from './Comments.vue'
 
 const moduleStore = 'assignments'
@@ -86,6 +91,7 @@ export default {
       },
       submission: null,
       alreadySubmitted: false,
+      solutionSaved: false,
       elapsedSeconds: 0,
       grade: null
     }
@@ -166,6 +172,9 @@ export default {
     async taskChanged () {
       this.endProgress()
       await this.getSubmissions()
+      if (!this.alreadySubmitted) {
+        await this.getSolutions()
+      }
       console.log('taskChanged')
       if (this.isTimed && !this.alreadySubmitted) {
         this.restartTimer()
@@ -187,6 +196,17 @@ export default {
         })
       }
     },
+    getSaveSolution () {
+      const that = this
+      return function (solution) {
+        that.endProgress()
+        return saveCurrentSolution({
+          userId: Number(that.user.id),
+          assignmentTaskId: Number(that.assignmentTaskId),
+          solution: solution
+        })
+      }
+    },
     submitSolution: async function () {
       const submit = this.getSubmit()
       const submission = await submit(
@@ -196,6 +216,25 @@ export default {
         }
       )
       this.submitReceived(submission)
+    },
+    saveCurrentSolution: async function () {
+      const saveSolution = this.getSaveSolution()
+      await saveSolution(
+        {
+          value: this.solution.text,
+          timeNeeded: -1
+        }
+      )
+      this.solutionReceived()
+    },
+    solutionReceived (currentSolution) {
+      this.solutionSaved = true
+      this.$toast.add({
+        severity: 'success',
+        summary: 'Saved',
+        detail: 'Your Solution was saved !',
+        life: 5000
+      })
     },
     submitReceived (submission) {
       this.alreadySubmitted = true
@@ -223,6 +262,16 @@ export default {
         this.alreadySubmitted = true
         this.grade = submissionsForTask[0].grade
         this.solution.text = submissionsForTask[0].solution.value
+      }
+    },
+    async getSolutions () {
+      const savedSolution = await getCurrentSolutionQuery(this.assignmentTaskId, this.user.id)
+      if (savedSolution?.assignmentTaskId === this.assignmentTaskId) {
+        this.solutionSaved = true
+        this.solution.text = savedSolution.solution.value
+      } else {
+        this.solutionSaved = false
+        this.solution.text = null
       }
     },
     restartTimer () {
