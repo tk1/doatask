@@ -41,6 +41,14 @@
         />
         <label for="public">public</label>
       </div>
+      <div class="p-field-checkbox p-col-4 p-md-1 p-ml-3">
+        <Checkbox
+          id="savable"
+          v-model="task.savable"
+          :binary="true"
+        />
+        <label for="public">savable</label>
+      </div>
       <slot name="description">
         <Splitter class="p-col-12">
           <SplitterPanel :size="60">

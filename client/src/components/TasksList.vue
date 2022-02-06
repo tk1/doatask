@@ -138,6 +138,23 @@
         </template>
       </Column>
       <Column
+        field="savable"
+        header="savable"
+      >
+        <template #body="{data}">
+          <i
+            class="pi"
+            :class="{'true-icon pi-check-circle': data.savable, 'false-icon pi-times-circle': !data.savable}"
+          />
+        </template>
+        <template #filter="{filterModel,filterCallback}">
+          <TriStateCheckbox
+            v-model="filterModel.value"
+            @change="filterCallback()"
+          />
+        </template>
+      </Column>
+      <Column
         headerStyle="width: 10rem; text-align: center"
         bodyStyle="text-align: center; overflow: visible"
         header="Edit"
@@ -260,7 +277,8 @@ export default {
         plugin: { value: null, matchMode: FilterMatchMode.CONTAINS },
         'owner.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
         'domain.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
-        public: { value: null, matchMode: FilterMatchMode.EQUALS }
+        public: { value: null, matchMode: FilterMatchMode.EQUALS },
+        savable: { value: null, matchMode: FilterMatchMode.EQUALS }
       }
     }
   },

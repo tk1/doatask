@@ -175,6 +175,11 @@ export default {
         parameter: [{ name: '', type: '' }]
       }
 
+      this.task.details.testSuite = {
+        publicTests: [],
+        secretTests: []
+      }
+
       this.parameters = [{
         name: '',
         type: ''
@@ -190,7 +195,6 @@ export default {
     } else {
       for (let i = 0; i < this.$store.state.tasks.length; i++) {
         if (this.$store.state.tasks[i].id === this.modelValue.id) {
-          this.task = this.$store.state.tasks[i]
           this.parameters = this.task.details.methodStub.parameter.map((v, i) => ({
             name: v.name,
             type: {
@@ -206,29 +210,29 @@ export default {
           const publicTest = []
           const secretTest = []
 
-          this.task.details.testSuite.publicTests.map((x) => {
-            publicTest.push({
-              isSecretTest: false,
-              testParameter: this.setTestParameterArray(x.testParameter),
-              expectedOutput: x.expectedOutput
-            })
-          })
-
-          this.task.details.testSuite.secretTests.map((x) => {
-            secretTest.push({
-              isSecretTest: true,
-              testParameter: this.setTestParameterArray(x.testParameter),
-              expectedOutput: x.expectedOutput
-            })
-          })
-
           if (this.task.details.testSuite.publicTests.length !== 0) {
+            this.task.details.testSuite.publicTests.map((x) => {
+              return publicTest.push({
+                isSecretTest: false,
+                testParameter: this.setTestParameterArray(x.testParameter),
+                expectedOutput: x.expectedOutput
+              })
+            })
+
             for (let i = 0; i < publicTest.length; i++) {
               this.tests.push(publicTest[i])
             }
           }
 
           if (this.task.details.testSuite.secretTests.length !== 0) {
+            this.task.details.testSuite.secretTests.map((x) => {
+              return secretTest.push({
+                isSecretTest: true,
+                testParameter: this.setTestParameterArray(x.testParameter),
+                expectedOutput: x.expectedOutput
+              })
+            })
+
             for (let i = 0; i < secretTest.length; i++) {
               this.tests.push(secretTest[i])
             }
@@ -283,14 +287,9 @@ export default {
       }
     },
     languageChanged (e) {
-      this.task.details = e.value
+      this.task.details.language = e.value.language
       this.setTypeForParameter(e.value)
       this.setTypeForReturnType(e.value)
-      this.task.details.methodStub = {
-        functionName: '',
-        returnType: '',
-        parameter: [{ name: '', type: '' }]
-      }
     },
     returnTypeChanged (e) {
       this.returnType = e.value
