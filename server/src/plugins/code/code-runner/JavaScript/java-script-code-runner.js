@@ -1,35 +1,8 @@
-const http = require('http');
-const url = require('url');
+const codeRunner = require('../code-runner-server');
 
-const hostname = '0.0.0.0';
+const codeExecutionCommand = 'node';
+const addOutputTransformationToJSONtoFuntionCall = (functionCall) => { return "let output = {}\noutput['returnValue'] = " + functionCall + ";\nconsole.log(JSON.stringify(output));" };
+const addImports = x => x;
 const port = 10000;
 
-const server = http.createServer((req, res) => {
-
-    let responseBody = { returnValue: '', errorOutput: '' }
-    res.setHeader('Content-Type', 'application/json');
-
-    if (req.method === 'POST') {
-        const queryObject = url.parse(req.url, true).query;
-        const functionDefinition = queryObject['functionDefinition'];
-        const functionCall = queryObject['functionCall'];
-
-        try {
-            responseBody.returnValue = eval(functionDefinition + '\n' + functionCall);
-            res.statusCode = 200;
-        } catch (error) {
-            responseBody.returnValue = undefined
-            responseBody.errorOutput = error === '' ? 'Could not execute code' : error;
-            res.statusCode = 200;
-        }
-    } else if (req.method === 'GET' && req.url === '/checkHealth') {
-        res.statusCode = 200;
-    } else {
-        responseBody.errorOutput = 'Only POST methods are allowed';
-        res.statusCode = 405;
-    }
-    res.write(JSON.stringify(responseBody))
-    res.end();
-});
-
-server.listen(port, hostname);
+codeRunner.startCodeRunnerServer(codeExecutionCommand, addOutputTransformationToJSONtoFuntionCall, addImports, port);

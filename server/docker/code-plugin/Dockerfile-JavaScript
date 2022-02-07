@@ -1,3 +1,7 @@
-FROM node
-COPY ./src/plugins/code/code-runner/JavaScript/java-script-code-runner.js /home/
-CMD node /home/java-script-code-runner.js
+FROM node:16.13.2
+COPY ./src/plugins/code/code-runner/JavaScript/java-script-code-runner.js /home/jsCodeRunner/
+COPY ./src/plugins/code/code-runner/code-runner-server.js /home/
+COPY ./src/plugins/code/code-runner/JavaScript/package.json /home/
+WORKDIR /home/
+RUN npm install
+CMD npm start
