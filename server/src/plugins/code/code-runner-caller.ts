@@ -16,7 +16,7 @@ export class CodeRunnerCaller {
 
         const instance = axios.create({
             baseURL: 'http://localhost:' + this.codeRunnerPort,
-            timeout: 1000,
+            timeout: 6000,
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
         })
         const response = await instance.post('runCode?' + urlSearchParams.toString())
