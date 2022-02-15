@@ -1,6 +1,7 @@
 FROM node:16.13.2
 COPY ./src/plugins/code/code-runner/Python/python-code-runner.js /home/pythonCodeRunner/
 COPY ./src/plugins/code/code-runner/code-runner-server.js /home/
+COPY ./src/plugins/code/code-runner/Python/.env /home/
 COPY ./src/plugins/code/code-runner/Python/package.json /home/
 WORKDIR /home/
 RUN npm install

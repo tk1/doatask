@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "start": "node /home/pythonCodeRunner/python-code-runner.js"
+        "start": "node /home/javaCodeRunner/java-code-runner.js"
     },
     "dependencies": {
         "dotenv": "^16.0.0",

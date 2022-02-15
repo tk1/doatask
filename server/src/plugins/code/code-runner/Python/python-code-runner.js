@@ -19,5 +19,6 @@ const codeExecutionCommand = 'python';
 const addOutputTransformationToJSONtoFuntionCall = (functionCall) => { return "print(PythonCodeRunnerReturn(" + functionCall + ").toJSON())" };
 const addImports = code => JSONImport + PythonToJSONClass + code;
 const port = 10001;
+const languageFileEnding = '.py';
 
-codeRunner.startCodeRunnerServer(codeExecutionCommand, addOutputTransformationToJSONtoFuntionCall, addImports, port);
+codeRunner.startCodeRunnerServer(codeExecutionCommand, addOutputTransformationToJSONtoFuntionCall, addImports, port, languageFileEnding);

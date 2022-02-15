@@ -1,5 +1,3 @@
-# creates PostgreSQL database image and pgadmin4 image and Nest server image
-
 version: '3'
 services:
   javascript-code-runner-01:

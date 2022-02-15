@@ -3,14 +3,15 @@ const url = require('url');
 const fs = require('fs');
 var uuid = require('uuid');
 const { spawn } = require('child_process');
+require('dotenv').config();
 
 const hostname = '0.0.0.0';
-const maxFunctionExecutionTimeInMilliSeconds = 5000;
+const maxFunctionExecutionTimeInMilliSeconds = parseInt(process.env.CODE_EXECUTION_TIMEOUT);
 let codeExecutionCommand = '';
 let addImports = () => { };
 let addOutputTransformationToJSONtoFuntionCall = () => { };
 
-function startCodeRunnerServer(cec, tcotJ, ai, port) {
+function startCodeRunnerServer(cec, tcotJ, ai, port, languageFileEnding) {
     codeExecutionCommand = cec;
     addOutputTransformationToJSONtoFuntionCall = tcotJ;
     addImports = ai;
@@ -24,7 +25,7 @@ function startCodeRunnerServer(cec, tcotJ, ai, port) {
             const queryObject = url.parse(req.url, true).query;
             let functionDefinition = queryObject['functionDefinition'];
             let functionCall = queryObject['functionCall'];
-            const codeFileName = generateUniqueFileName();
+            const codeFileName = generateUniqueFileName() + languageFileEnding;
 
             functionDefinition = addImports(functionDefinition);
             functionCall = addOutputTransformationToJSONtoFuntionCall(functionCall);
@@ -66,7 +67,7 @@ function startCodeRunnerServer(cec, tcotJ, ai, port) {
 }
 
 function generateUniqueFileName() {
-    return uuid.v1();
+    return uuid.v1().replaceAll('-', '');
 }
 
 function deleteFile(codeFileName) {
