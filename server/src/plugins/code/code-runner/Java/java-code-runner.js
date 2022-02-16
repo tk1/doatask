@@ -1,11 +1,28 @@
 const codeRunner = require('../code-runner-server');
 
-const JsonImport = "import org.json.JSONObject;\n";
-
-
+const buildCode = (codeFileNameWithoutExtension, functionDefinition, functionCall) => {
+    const JsonImport = `import com.google.gson.Gson;
+                    public class ${codeFileNameWithoutExtension} {
+                        public static void main(String args[]) {
+                            Gson gson = new Gson();
+                            JsonOutputClass joc = new JsonOutputClass();
+                            ${codeFileNameWithoutExtension} tc = new ${codeFileNameWithoutExtension}();
+                            joc.returnValue = tc.${functionCall}
+                            System.out.println(gson.toJson(joc));
+                        }
+                            
+                        ${functionDefinition}
+                    }
+                    class JsonOutputClass {
+                        public Object returnValue;
+                        JsonOutputClass(){}
+                    }`
+}
+const codeCompilationCommand = 'javac';
+const getCodeCompilationArguments = (codeFileName) => ['-cp', '.;gson-2.9.0.jar', codeFileName];
 const codeExecutionCommand = 'java';
-const addOutputTransformationToJSONtoFuntionCall = (functionCall) => { return "let output = {}\noutput['returnValue'] = " + functionCall + ";\nconsole.log(JSON.stringify(output));" };
-const addImports = x => x;
+const getCodeExecutionArguments = (codeFileNameWithoutExtension) => ['-cp', '.;gson-2.9.0.jar', codeFileNameWithoutExtension];
+const cleanUp = (codeFileNameWithoutExtension) => [codeFileName, codeFileNameWithoutExtension + '.class']
 const port = 10002;
 const languageFileEnding = '.java'
 

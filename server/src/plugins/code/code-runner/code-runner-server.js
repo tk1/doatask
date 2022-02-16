@@ -25,7 +25,8 @@ function startCodeRunnerServer(cec, tcotJ, ai, port, languageFileEnding) {
             const queryObject = url.parse(req.url, true).query;
             let functionDefinition = queryObject['functionDefinition'];
             let functionCall = queryObject['functionCall'];
-            const codeFileName = generateUniqueFileName() + languageFileEnding;
+            const codeFileNameWithoutExtension = generateUniqueFileName();
+            const codeFileName = codeFileNameWithoutExtension + languageFileEnding;
 
             functionDefinition = addImports(functionDefinition);
             functionCall = addOutputTransformationToJSONtoFuntionCall(functionCall);
