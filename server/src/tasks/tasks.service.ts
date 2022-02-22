@@ -38,6 +38,10 @@ export class TasksService {
     return this.tasksRepository.findOne(id, { relations: ["domain", "owner"] });
   }
 
+  findbyIds(ids: Array<number>) {
+    return this.tasksRepository.findByIds(ids);
+  }
+
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     const toUpdate = await this.tasksRepository.findOne(id)
     const updated = Object.assign(toUpdate, updateTaskDto)

@@ -5,12 +5,14 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorators'
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { AssignmentTask } from 'src/assignmenttasks/assignmenttask.entity';
+import { AssignmentTasksService } from 'src/assignmenttasks/assignmenttasks.service';
 
 
 @Controller('tasks')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) { }
+  constructor(private readonly tasksService: TasksService, private readonly assignmentTasksService: AssignmentTasksService) { }
 
   @Post()
   create(@Body() createTaskDto: CreateTaskDto) {
@@ -38,6 +40,12 @@ export class TasksController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tasksService.findOne(+id);
+  }
+
+  @Get('/assignmentTask/:assignmentId')
+  async findAllForAssignment(@Param('assignmentId') id: number) {
+    let assignmentTasks = await this.assignmentTasksService.findAll({ assignmentId: id })
+    return this.tasksService.findbyIds(assignmentTasks.map(assignmentTask => assignmentTask.taskId))
   }
 
   @Patch(':id')

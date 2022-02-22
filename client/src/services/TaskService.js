@@ -14,6 +14,10 @@ function getAllForStudent (id) {
   return get(`${base}/student/${id}`)
 }
 
+function getTasksForAssignment (assignmentId) {
+  return get(`${base}/assignmentTask/${assignmentId}`)
+}
+
 function save (task) {
   return post(base, task)
 }
@@ -26,4 +30,4 @@ function remove (task) {
   return del(`${base}/${task.id}`)
 }
 
-export { getAll, getAllForUser, getAllForStudent, save, update, remove }
+export { getAll, getAllForUser, getAllForStudent, save, update, remove, getTasksForAssignment }
