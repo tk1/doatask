@@ -29,9 +29,11 @@ function startCodeRunnerServer(buildCode, codeCompilationCommand, getCodeCompila
                     } else {
                         const codeCompilation = spawn(codeCompilationCommand, getCodeCompilationArguments(codeFileName), { timeout: maxFunctionExecutionTimeInMilliSeconds });
                         codeCompilation.stdout.on('data', (data) => {
+                            console.error(`Error while compiling: ${data}`);
                             writeBodyAndEndResponse(res, { errorOutput: "Error compiling", returnValue: undefined });
                         });
                         codeCompilation.stderr.on('data', (data) => {
+                            console.error(`Error while compiling: ${data}`);
                             writeBodyAndEndResponse(res, { errorOutput: `Internal error: Could not execute code (Reason unkown)`, returnValue: undefined });
                         });
                         codeCompilation.on('close', (code) => {
@@ -45,6 +47,7 @@ function startCodeRunnerServer(buildCode, codeCompilationCommand, getCodeCompila
                                 writeBodyAndEndResponse(res, { errorOutput: undefined, returnValue: (JSON.parse(data.toString()))['returnValue'] });
                             });
                             codeExecution.stderr.on('data', (data) => {
+                                console.error(`Error while executing: ${data}`);
                                 writeBodyAndEndResponse(res, { errorOutput: `Internal error: Could not execute code (Reason unkown)`, returnValue: undefined });
                             });
                             codeExecution.on('close', (code) => {
