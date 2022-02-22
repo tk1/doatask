@@ -1,8 +1,16 @@
-const codeRunner = require('../code-runner-server');
+const codeRunner = require('./../code-runner-server');
 
+const buildCode = (codeFileNameWithoutExtension, functionDefinition, functionCall) =>
+    `${functionDefinition}
+let output = {}
+output['returnValue'] = ${functionCall};
+console.log(JSON.stringify(output));`;
+const codeCompilationCommand = undefined;
+const getCodeCompilationArguments = (codeFileName) => undefined;
 const codeExecutionCommand = 'node';
-const addOutputTransformationToJSONtoFuntionCall = (functionCall) => { return "let output = {}\noutput['returnValue'] = " + functionCall + ";\nconsole.log(JSON.stringify(output));" };
-const addImports = x => x;
+const getCodeExecutionArguments = (codeFileNameWithoutExtension) => [codeFileNameWithoutExtension + languageFileEnding];
+const cleanUp = (codeFileNameWithoutExtension) => [codeFileNameWithoutExtension + languageFileEnding]
 const port = 10000;
+const languageFileEnding = '.js';
 
-codeRunner.startCodeRunnerServer(codeExecutionCommand, addOutputTransformationToJSONtoFuntionCall, addImports, port);
+codeRunner.startCodeRunnerServer(buildCode, codeCompilationCommand, getCodeCompilationArguments, codeExecutionCommand, getCodeExecutionArguments, cleanUp, port, languageFileEnding);

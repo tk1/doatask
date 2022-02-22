@@ -1,5 +1,3 @@
-# creates PostgreSQL database image and pgadmin4 image and Nest server image
-
 version: '3'
 services:
   javascript-code-runner-01:
@@ -42,3 +40,23 @@ services:
     restart: unless-stopped
     environment:
       language: Python
+  java-code-runner-01:
+    container_name: doatask_java_code_runner_01
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-Java
+    ports:
+      - "10004:10002"
+    restart: unless-stopped
+    environment:
+      language: Java
+  java-code-runner-02:
+    container_name: doatask_java_code_runner_02
+    build:
+      context: ./
+      dockerfile: ./docker/code-plugin/Dockerfile-Java
+    ports:
+      - "10005:10002"
+    restart: unless-stopped
+    environment:
+      language: Java

@@ -29,13 +29,13 @@ export class PythonFunctionCallBuilder implements FunctionCallBuilder {
                     testParameters += this.fcbu.buildBooleanTypeParameterWithCapital(testParameter[i])
                     break;
                 case CodeTypes.intArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildIntTypeParameter)
+                    testParameters += this.fcbu.buildArrayTypeParameterWithSquaredBrackets(testParameter[i], this.fcbu.buildIntTypeParameter)
                     break;
                 case CodeTypes.booleanArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildBooleanTypeParameterWithCapital)
+                    testParameters += this.fcbu.buildArrayTypeParameterWithSquaredBrackets(testParameter[i], this.fcbu.buildBooleanTypeParameterWithCapital)
                     break;
                 case CodeTypes.stringArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildStringTypeParameterWithSingleQuotes)
+                    testParameters += this.fcbu.buildArrayTypeParameterWithSquaredBrackets(testParameter[i], this.fcbu.buildStringTypeParameterWithSingleQuotes)
                     break;
                 default:
                     new Error('Unrecognized type ' + methodStub.parameter[i].type)

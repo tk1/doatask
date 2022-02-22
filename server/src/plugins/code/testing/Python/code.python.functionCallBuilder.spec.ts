@@ -21,6 +21,13 @@ describe('Python function call builder', () => {
         expect(functionCall).toStrictEqual(methodStub.functionName + '(3)')
     });
 
+    test('Negative int parameter', () => {
+        const methodStub = new MethodStub("testFunction", [Tmp.intParam], CodeTypes.booleanType)
+        const testParameter = [-169234]
+        const functionCall = pfcb.buildFunctionCall(methodStub, testParameter)
+        expect(functionCall).toStrictEqual(methodStub.functionName + '(-169234)')
+    });
+
     test('String parameter', () => {
         const methodStub = new MethodStub("testFunction", [Tmp.stringParam1], CodeTypes.booleanType)
         const testParameter = ['stringParameter']

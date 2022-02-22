@@ -3,17 +3,11 @@ const url = require('url');
 const fs = require('fs');
 var uuid = require('uuid');
 const { spawn } = require('child_process');
+require('dotenv').config();
 
-const hostname = '0.0.0.0';
-const maxFunctionExecutionTimeInMilliSeconds = 5000;
-let codeExecutionCommand = '';
-let addImports = () => { };
-let addOutputTransformationToJSONtoFuntionCall = () => { };
+const maxFunctionExecutionTimeInMilliSeconds = parseInt(process.env.CODE_EXECUTION_TIMEOUT);
 
-function startCodeRunnerServer(cec, tcotJ, ai, port) {
-    codeExecutionCommand = cec;
-    addOutputTransformationToJSONtoFuntionCall = tcotJ;
-    addImports = ai;
+function startCodeRunnerServer(buildCode, codeCompilationCommand, getCodeCompilationArguments, codeExecutionCommand, getCodeExecutionArguments, cleanUp, port, languageFileEnding) {
 
     const server = http.createServer((req, res) => {
 
@@ -24,35 +18,73 @@ function startCodeRunnerServer(cec, tcotJ, ai, port) {
             const queryObject = url.parse(req.url, true).query;
             let functionDefinition = queryObject['functionDefinition'];
             let functionCall = queryObject['functionCall'];
-            const codeFileName = generateUniqueFileName();
+            const codeFileNameWithoutExtension = generateUniqueFileName();
+            const codeFileName = codeFileNameWithoutExtension + languageFileEnding;
 
-            functionDefinition = addImports(functionDefinition);
-            functionCall = addOutputTransformationToJSONtoFuntionCall(functionCall);
-            fs.writeFile(codeFileName, functionDefinition + "\n" + functionCall, error => {
-                if (error) {
-                    throw new Error("Error writing code to file");
-                } else {
-                    const codeExecutor = spawn(codeExecutionCommand, [codeFileName], { timeout: maxFunctionExecutionTimeInMilliSeconds });
-                    codeExecutor.stdout.on('data', (data) => {
-                        deleteFile(codeFileName);
-                        responseBody.errorOutput = error;
-                        responseBody.returnValue = (JSON.parse(data.toString()))['returnValue'];
-                        writeBodyAndEndResponse(res, responseBody);
-                    });
-                    codeExecutor.stderr.on('data', (data) => {
-                        deleteFile(codeFileName);
-                        responseBody.returnValue = undefined
-                        responseBody.errorOutput = `Internal error: Could not execute code (Reason unkown)`;
-                        writeBodyAndEndResponse(res, responseBody);
-                    });
-                    codeExecutor.on('close', (code) => {
-                        deleteFile(codeFileName);
-                        responseBody.returnValue = undefined
-                        responseBody.errorOutput = `The code execution took more than ${maxFunctionExecutionTimeInMilliSeconds} milliseconds and was canceled`;
-                        writeBodyAndEndResponse(res, responseBody);
-                    });
-                }
-            });
+            if (codeCompilationCommand) {
+                const code = buildCode(codeFileNameWithoutExtension, functionDefinition, functionCall);
+                fs.writeFile(codeFileName, code, error => {
+                    if (error) {
+                        throw new Error("Error writing code to file");
+                    } else {
+                        const codeCompilation = spawn(codeCompilationCommand, getCodeCompilationArguments(codeFileName), { timeout: maxFunctionExecutionTimeInMilliSeconds });
+                        codeCompilation.stdout.on('data', (data) => {
+                            console.error(`Error while compiling: ${data}`);
+                            writeBodyAndEndResponse(res, { errorOutput: "Error compiling", returnValue: undefined });
+                        });
+                        codeCompilation.stderr.on('data', (data) => {
+                            console.error(`Error while compiling: ${data}`);
+                            writeBodyAndEndResponse(res, { errorOutput: `Internal error: Could not execute code (Reason unkown)`, returnValue: undefined });
+                        });
+                        codeCompilation.on('close', (code) => {
+                            if (code !== 0) {
+                                writeBodyAndEndResponse(res, { errorOutput: `The code execution took more than ${maxFunctionExecutionTimeInMilliSeconds} milliseconds and was canceled`, returnValue: undefined });
+                            }
+                        });
+                        codeCompilation.on('exit', (code) => {
+                            const codeExecution = spawn(codeExecutionCommand, getCodeExecutionArguments(codeFileNameWithoutExtension), { timeout: maxFunctionExecutionTimeInMilliSeconds });
+                            codeExecution.stdout.on('data', (data) => {
+                                writeBodyAndEndResponse(res, { errorOutput: undefined, returnValue: (JSON.parse(data.toString()))['returnValue'] });
+                            });
+                            codeExecution.stderr.on('data', (data) => {
+                                console.error(`Error while executing: ${data}`);
+                                writeBodyAndEndResponse(res, { errorOutput: `Internal error: Could not execute code (Reason unkown)`, returnValue: undefined });
+                            });
+                            codeExecution.on('close', (code) => {
+                                if (code !== 0) {
+                                    writeBodyAndEndResponse(res, { errorOutput: `The code execution took more than ${maxFunctionExecutionTimeInMilliSeconds} milliseconds and was canceled`, returnValue: undefined });
+                                }
+                            });
+                            codeExecution.on('exit', (code) => {
+                                cleanUp(codeFileNameWithoutExtension).forEach(file => deleteFile(file));
+                            });
+                        });
+                    }
+                });
+            } else {
+                const code = buildCode(codeFileNameWithoutExtension, functionDefinition, functionCall);
+                fs.writeFile(codeFileName, code, error => {
+                    if (error) {
+                        throw new Error("Error writing code to file");
+                    } else {
+                        const codeExecution = spawn(codeExecutionCommand, getCodeExecutionArguments(codeFileNameWithoutExtension), { timeout: maxFunctionExecutionTimeInMilliSeconds });
+                        codeExecution.stdout.on('data', (data) => {
+                            writeBodyAndEndResponse(res, { errorOutput: undefined, returnValue: (JSON.parse(data.toString()))['returnValue'] });
+                        });
+                        codeExecution.stderr.on('data', (data) => {
+                            writeBodyAndEndResponse(res, { errorOutput: `Internal error: Could not execute code (Reason ${data})`, returnValue: undefined });
+                        });
+                        codeExecution.on('close', (code) => {
+                            if (code !== 0) {
+                                writeBodyAndEndResponse(res, { errorOutput: `The code execution took more than ${maxFunctionExecutionTimeInMilliSeconds} milliseconds and was canceled`, returnValue: undefined });
+                            }
+                        });
+                        codeExecution.on('exit', (code) => {
+                            cleanUp(codeFileNameWithoutExtension).forEach(file => deleteFile(file));
+                        });
+                    }
+                });
+            }
         } else if (req.method === 'GET' && req.url === '/checkHealth') {
             res.statusCode = 200;
             writeBodyAndEndResponse(res, responseBody);
@@ -62,11 +94,11 @@ function startCodeRunnerServer(cec, tcotJ, ai, port) {
             writeBodyAndEndResponse(res, responseBody);
         }
     });
-    server.listen(port, hostname);
+    server.listen(port, '0.0.0.0');
 }
 
 function generateUniqueFileName() {
-    return uuid.v1();
+    return 'C' + uuid.v1().replaceAll('-', '');
 }
 
 function deleteFile(codeFileName) {

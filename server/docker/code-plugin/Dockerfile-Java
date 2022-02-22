@@ -1,0 +1,12 @@
+FROM node:16.13.2
+COPY ./src/plugins/code/code-runner/Java/java-code-runner.js /home/javaCodeRunner/
+COPY ./src/plugins/code/code-runner/code-runner-server.js /home/
+COPY ./src/plugins/code/code-runner/Java/.env /home/
+COPY ./src/plugins/code/code-runner/Java/gson-2.9.0.jar /home/
+COPY ./src/plugins/code/code-runner/Java/package.json /home/
+WORKDIR /home/
+RUN npm install
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install default-jdk -y
+CMD npm start
