@@ -3,7 +3,7 @@ import { CodeTypes } from '../../code-types';
 import { Tmp } from '../test-method-parameters';
 import { JavaFunctionCallBuilder } from '../../function-call-builders/java-function-call-builder';
 
-describe('JavaScript function call builder', () => {
+describe('Java function call builder', () => {
 
     const jfcb = new JavaFunctionCallBuilder();
 
@@ -46,21 +46,21 @@ describe('JavaScript function call builder', () => {
         const methodStub = new MethodStub("testFunction", [Tmp.intArrayParam], CodeTypes.booleanType)
         const testParameter = [[-1, 0, 1, 2, 3]]
         const functionCall = jfcb.buildFunctionCall(methodStub, testParameter)
-        expect(functionCall).toStrictEqual(methodStub.functionName + '([-1, 0, 1, 2, 3]);')
+        expect(functionCall).toStrictEqual(methodStub.functionName + '(new int[]{-1, 0, 1, 2, 3});')
     });
 
     test('String array parameter', () => {
         const methodStub = new MethodStub("testFunction", [Tmp.stringArrayParam], CodeTypes.booleanType)
         const testParameter = [['first', 'second', 'third']]
         const functionCall = jfcb.buildFunctionCall(methodStub, testParameter)
-        expect(functionCall).toStrictEqual(methodStub.functionName + '(["first", "second", "third"]);')
+        expect(functionCall).toStrictEqual(methodStub.functionName + '(new String[]{"first", "second", "third"});')
     });
 
     test('Boolean array parameter', () => {
         const methodStub = new MethodStub("testFunction", [Tmp.booleanArrayParam], CodeTypes.booleanType)
         const testParameter = [[true, false, true, false]]
         const functionCall = jfcb.buildFunctionCall(methodStub, testParameter)
-        expect(functionCall).toStrictEqual(methodStub.functionName + '([true, false, true, false]);')
+        expect(functionCall).toStrictEqual(methodStub.functionName + '(new boolean[]{true, false, true, false});')
     });
 
     test('All parameter types', () => {
@@ -68,6 +68,6 @@ describe('JavaScript function call builder', () => {
         const methodStub = new MethodStub("testFunction", parameterTypes, CodeTypes.booleanType)
         const testParameter = [1, "abc", true, [1, 2, 3], ["a", "b", "c"], [true, false]]
         const functionCall = jfcb.buildFunctionCall(methodStub, testParameter)
-        expect(functionCall).toStrictEqual(methodStub.functionName + '(1, "abc", true, [1, 2, 3], ["a", "b", "c"], [true, false]);')
+        expect(functionCall).toStrictEqual(methodStub.functionName + '(1, "abc", true, new int[]{1, 2, 3}, new String[]{"a", "b", "c"}, new boolean[]{true, false});')
     });
 });

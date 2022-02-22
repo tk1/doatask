@@ -21,7 +21,7 @@ export class FunctionCallBuilderUtil {
     }
 
 
-    public buildArrayTypeParameter(arrayParameter: Array<any>, elementBuilder: (element: any) => string): string {
+    public buildArrayTypeParameterWithSquaredBrackets(arrayParameter: Array<any>, elementBuilder: (element: any) => string): string {
 
         let result: string = undefined
 
@@ -34,5 +34,20 @@ export class FunctionCallBuilderUtil {
         }
 
         return '[' + result + ']'
+    }
+
+    public buildArrayTypeParameterWithCurlyBrackets(arrayParameter: Array<any>, elementBuilder: (element: any) => string): string {
+
+        let result: string = undefined
+
+        for (let currentElementInArray of arrayParameter) {
+            if (result === undefined) {
+                result = '' + elementBuilder(currentElementInArray)
+            } else {
+                result += ', ' + elementBuilder(currentElementInArray)
+            }
+        }
+
+        return '{' + result + '}'
     }
 }

@@ -29,13 +29,13 @@ export class JavaFunctionCallBuilder implements FunctionCallBuilder {
                     testParameters += this.fcbu.buildBooleanTypeParameterLowerCase(testParameter[i])
                     break;
                 case CodeTypes.intArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildIntTypeParameter)
+                    testParameters += 'new int[]' + this.fcbu.buildArrayTypeParameterWithCurlyBrackets(testParameter[i], this.fcbu.buildIntTypeParameter)
                     break;
                 case CodeTypes.booleanArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildBooleanTypeParameterLowerCase)
+                    testParameters += 'new boolean[]' + this.fcbu.buildArrayTypeParameterWithCurlyBrackets(testParameter[i], this.fcbu.buildBooleanTypeParameterLowerCase)
                     break;
                 case CodeTypes.stringArrayType:
-                    testParameters += this.fcbu.buildArrayTypeParameter(testParameter[i], this.fcbu.buildStringTypeParameterWithDoubleQuotes)
+                    testParameters += 'new String[]' + this.fcbu.buildArrayTypeParameterWithCurlyBrackets(testParameter[i], this.fcbu.buildStringTypeParameterWithDoubleQuotes)
                     break;
                 default:
                     new Error('Unrecognized type ' + methodStub.parameter[i].type)
