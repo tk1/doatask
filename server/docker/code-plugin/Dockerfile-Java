@@ -3,6 +3,7 @@ COPY ./src/plugins/code/code-runner/Java/java-code-runner.js /home/javaCodeRunne
 COPY ./src/plugins/code/code-runner/code-runner-server.js /home/
 COPY ./src/plugins/code/code-runner/Java/.env /home/
 COPY ./src/plugins/code/code-runner/Java/gson-2.9.0.jar /home/
+COPY ./src/plugins/code/code-runner/Java/jsonOutputClass.jar /home/
 COPY ./src/plugins/code/code-runner/Java/package.json /home/
 WORKDIR /home/
 RUN npm install
