@@ -55,6 +55,7 @@ export default {
         { label: 'Assignments', icon: 'pi pi-fw pi-pencil', to: '/assignments' },
         { label: 'AssignmentTasks', icon: 'pi pi-fw pi-pencil', to: '/assignmenttasks' },
         { label: 'Solve', icon: 'pi pi-fw pi-pencil', to: '/assignmentsolve' },
+        { label: 'Solutions', icon: 'pi pi-fw pi-book', to: '/solutions' },
         { label: 'Practice', icon: 'pi pi-fw pi-pencil', to: '/practice' },
         { label: 'Ratings', icon: 'pi pi-fw pi-pencil', to: '/ratings' },
         { label: 'Login', icon: 'pi pi-fw pi-cog', to: '/login' },

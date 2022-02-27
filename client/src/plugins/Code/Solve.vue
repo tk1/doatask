@@ -52,6 +52,10 @@
             :disabled="!submitPossible(slotProps)"
             @click="saveSolution(slotProps)"
           >
+            <i
+              class="pi pi-fw pi-save"
+              style="font-size: 1.1rem; padding-right: 5px;"
+            />
             Save Solution
           </Button>
         </div>

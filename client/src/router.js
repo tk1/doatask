@@ -9,6 +9,7 @@ import TaskSolve from './components/TaskSolve.vue'
 import Admin from './components/Admin.vue'
 import Ratings from './components/Ratings.vue'
 import Practice from './components/Practice.vue'
+import Solutions from './components/Solutions.vue'
 
 import { canUserAccess } from './auth/access.js'
 import store from './store/store'
@@ -29,6 +30,10 @@ const router = createRouter({
   {
     path: '/admin',
     component: Admin
+  },
+  {
+    path: '/solutions',
+    component: Solutions
   },
   {
     path: '/assignments',
