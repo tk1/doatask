@@ -255,6 +255,15 @@ export default {
         ') :' +
         '\n\n' +
         '')
+      } else if (task.details.language === 'Java') {
+        return (
+          'public ' + task.details.methodStub.returnType + ' ' +
+          task.details.methodStub.functionName +
+          ' (' +
+        task.details.methodStub.parameter.map((x) => x.type + ' ' + x.name) +
+        ')') +
+        ' {\n\n' +
+        '}'
       }
     },
     getPublicTests: async function () {
