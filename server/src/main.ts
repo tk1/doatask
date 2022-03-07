@@ -27,8 +27,8 @@ async function bootstrap() {
   // api doc as json at http://example.com/apidoc-json
   SwaggerModule.setup('apidoc', app, document);
 
-  // TODO Load path from config
-  DockerContainerManager.init('docker-compose.yml')
+  // Get information about the docker containers from the docker-compose file
+  DockerContainerManager.init(process.env.PATH_TO_DOCKER_COMPOSE)
 
   await app.listen(port)
   console.log(`Application is running on: ${await app.getUrl()}`)
