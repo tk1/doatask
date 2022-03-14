@@ -31,7 +31,7 @@ services:
   server:
     build:
       context: ./
-      dockerfile: ./docker/code-plugin/Dockerfile-JavaScript
+      dockerfile: ./docker/nest/Dockerfile
     depends_on:
       - postgres
     ports:
