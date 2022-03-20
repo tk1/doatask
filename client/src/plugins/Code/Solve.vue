@@ -257,10 +257,10 @@ export default {
         '')
       } else if (task.details.language === 'Java') {
         return (
-          'public ' + task.details.methodStub.returnType + ' ' +
+          'public ' + this.getCorrectJavaType(task.details.methodStub.returnType) + ' ' +
           task.details.methodStub.functionName +
           ' (' +
-        task.details.methodStub.parameter.map((x) => x.type + ' ' + x.name) +
+        task.details.methodStub.parameter.map((x) => this.getCorrectJavaType(x.type) + ' ' + x.name) +
         ')') +
         ' {\n\n' +
         '}'
@@ -286,6 +286,19 @@ export default {
     },
     getCode: function (e) {
       this.solution = e
+    },
+    getCorrectJavaType (type) {
+      if (type === 'string') {
+        return 'String'
+      } else if (type === 'booleanArray') {
+        return 'boolean[]'
+      } else if (type === 'stringArray') {
+        return 'String[]'
+      } else if (type === 'intArray') {
+        return 'int[]'
+      } else {
+        return type
+      }
     }
   }
 }
