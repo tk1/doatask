@@ -15,15 +15,19 @@ export class CodeRunnerCaller {
         urlSearchParams.append("functionCall", testCall)
 
         const instance = axios.create({
-            baseURL: 'http://localhost:' + this.codeRunnerPort,
+            baseURL: 'http://host.docker.internal:' + this.codeRunnerPort,
             timeout: 6000,
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
         })
-        const response = await instance.post('runCode?' + urlSearchParams.toString())
 
         let codeEvaluatorReturn = new CodeRunnerReturn()
-        Object.assign(codeEvaluatorReturn, response.data)
-        //console.log(codeEvaluatorReturn)
+        try {
+            const response = await instance.post('runCode?' + urlSearchParams.toString())
+            Object.assign(codeEvaluatorReturn, response.data)
+        } catch (error) {
+            codeEvaluatorReturn.errorOutput = 'Internal error, could not run code'
+            codeEvaluatorReturn.returnValue = undefined
+        }
         return codeEvaluatorReturn
     }
 }

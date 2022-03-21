@@ -16,6 +16,8 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - doatask-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -27,6 +29,8 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     restart: unless-stopped
+    networks:
+      - doatask-network
 
   server:
     build:
@@ -36,6 +40,8 @@ services:
       - postgres
     ports:
       - ${NEST_PORT}:${NEST_PORT}
+    networks:
+      - doatask-network
 
   javascript-code-runner-01:
     container_name: doatask_javascript_code_runner_01
@@ -47,6 +53,9 @@ services:
     restart: unless-stopped
     environment:
       language: JavaScript
+    networks:
+      - doatask-network
+
   javascript-code-runner-02:
     container_name: doatask_javascript_code_runner_02
     build:
@@ -57,6 +66,9 @@ services:
     restart: unless-stopped
     environment:
       language: JavaScript
+    networks:
+      - doatask-network
+
   python-code-runner-01:
     container_name: doatask_python_code_runner_01
     build:
@@ -67,6 +79,9 @@ services:
     restart: unless-stopped
     environment:
       language: Python
+    networks:
+      - doatask-network
+
   python-code-runner-02:
     container_name: doatask_python_code_runner_02
     build:
@@ -77,6 +92,9 @@ services:
     restart: unless-stopped
     environment:
       language: Python
+    networks:
+      - doatask-network
+
   java-code-runner-01:
     container_name: doatask_java_code_runner_01
     build:
@@ -87,6 +105,9 @@ services:
     restart: unless-stopped
     environment:
       language: Java
+    networks:
+      - doatask-network
+
   java-code-runner-02:
     container_name: doatask_java_code_runner_02
     build:
@@ -97,5 +118,9 @@ services:
     restart: unless-stopped
     environment:
       language: Java
+    networks:
+      - doatask-network
 volumes:
   pg-data:
+networks:
+  doatask-network:
