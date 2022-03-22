@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, BadRequestException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -7,12 +7,16 @@ import { Roles } from '../common/decorators/roles.decorators'
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AssignmentTask } from 'src/assignmenttasks/assignmenttask.entity';
 import { AssignmentTasksService } from 'src/assignmenttasks/assignmenttasks.service';
+import { BaseExceptionFilter } from '@nestjs/core';
+import { RatingsService } from 'src/ratings/ratings.service';
 
 
 @Controller('tasks')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class TasksController {
-  constructor(private readonly tasksService: TasksService, private readonly assignmentTasksService: AssignmentTasksService) { }
+  constructor(private readonly tasksService: TasksService,
+    private readonly assignmentTasksService: AssignmentTasksService,
+    private readonly ratingService: RatingsService) { }
 
   @Post()
   create(@Body() createTaskDto: CreateTaskDto) {
@@ -54,7 +58,16 @@ export class TasksController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
+  async remove(@Param('id') id: string) {
+    if ((await this.assignmentTasksService.findAll({ taskId: +id })).length === 0) {
+      this.tasksService.remove(+id)
+    } else {
+      throw new BadRequestException('The task cannot be deleted because it is currently in an assignment')
+    }
+  }
+
+  @Get('/isInAssignment/:id')
+  async isInAssignment(@Param('id') id: string): Promise<boolean> {
+    return (await this.assignmentTasksService.findAll({ taskId: +id })).length === 0
   }
 }
