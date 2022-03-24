@@ -56,19 +56,6 @@ services:
     networks:
       - doatask-network
 
-  javascript-code-runner-02:
-    container_name: doatask_javascript_code_runner_02
-    build:
-      context: ./
-      dockerfile: ./docker/code-plugin/Dockerfile-JavaScript
-    ports:
-      - "10002:10000"
-    restart: unless-stopped
-    environment:
-      language: JavaScript
-    networks:
-      - doatask-network
-
   python-code-runner-01:
     container_name: doatask_python_code_runner_01
     build:
@@ -76,19 +63,6 @@ services:
       dockerfile: ./docker/code-plugin/Dockerfile-Python
     ports:
       - "10001:10001"
-    restart: unless-stopped
-    environment:
-      language: Python
-    networks:
-      - doatask-network
-
-  python-code-runner-02:
-    container_name: doatask_python_code_runner_02
-    build:
-      context: ./
-      dockerfile: ./docker/code-plugin/Dockerfile-Python
-    ports:
-      - "10003:10001"
     restart: unless-stopped
     environment:
       language: Python
@@ -108,18 +82,6 @@ services:
     networks:
       - doatask-network
 
-  java-code-runner-02:
-    container_name: doatask_java_code_runner_02
-    build:
-      context: ./
-      dockerfile: ./docker/code-plugin/Dockerfile-Java
-    ports:
-      - "10005:10002"
-    restart: unless-stopped
-    environment:
-      language: Java
-    networks:
-      - doatask-network
 volumes:
   pg-data:
 networks:
