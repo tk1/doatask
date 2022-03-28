@@ -121,7 +121,7 @@
                 @change="saveTestsInTask"
               />
               <small
-                v-if="showParameterError === i"
+                v-if="showParamError.includes(i) && showParamErrorTestNumber.includes(index)"
                 id="testParameter-error"
                 class="p-error"
               >Please enter correct type</small>
@@ -137,7 +137,7 @@
               @change="saveTestsInTask"
             />
             <small
-              v-if="showOutputError === index"
+              v-if="showOutputError.includes(index)"
               id="expectedOutput-error"
               class="p-error"
             >Please enter correct type</small>
@@ -185,8 +185,9 @@ export default {
       currentReturnType: null,
       secTests: [],
       pubTests: [],
-      showParameterError: '',
-      showOutputError: ''
+      showParamError: [],
+      showOutputError: [],
+      showParamErrorTestNumber: []
     }
   },
   created () {
@@ -320,7 +321,7 @@ export default {
       this.pubTests = []
       let parameterArr = []
 
-      this.tests.map((v, index) => {
+      this.tests.map((v, ind) => {
         parameterArr = []
         v.testParameter.map((x, i) => {
           return this.parameters.map((p, index) => {
@@ -328,14 +329,13 @@ export default {
               if (p.type.type !== undefined && x.parameter === '') {
                 this.fillEmptyField(p.type.type, i)
               }
-              return parameterArr.push(this.setTestParameterType(p.type.type, x.parameter, i))
+              return parameterArr.push(this.setTestParameterType(p.type.type, x.parameter, i, ind))
             }
             return parameterArr
           })
         })
 
-        let expectedOutput = ''
-        expectedOutput = this.setExpectedOutputType(this.currentReturnType.returnType, v.expectedOutput, index)
+        const expectedOutput = this.setExpectedOutputType(this.currentReturnType.returnType, v.expectedOutput, ind)
 
         if (v.expectedOutput === '') {
           v.expectedOutput = this.setEmptyValue(this.currentReturnType.returnType, this.task.details.language)
@@ -353,29 +353,33 @@ export default {
           })
           return this.pubTests
         }
+        return this.pubTests
       })
 
       this.task.details.testSuite = { publicTests: this.pubTests, secretTests: this.secTests }
       console.log(this.task.details.testSuite)
     },
-    setTestParameterType (type, parameter, index) {
+    setTestParameterType (type, parameter, indexTestParameter, indexTest) {
+      // excludes duplicate entries
+      this.removeErrorIndex(indexTestParameter, indexTest)
       switch (type) {
         case 'boolean': {
           const bool = this.setBooleanType(parameter)
           if (bool === null) {
-            this.showParameterError = index
+            this.showParamError.push(indexTestParameter)
+            this.showParamErrorTestNumber.push(indexTest)
           } else {
-            this.showParameterError = ''
-            return bool
+            this.removeErrorIndex(indexTestParameter, indexTest)
           }
+          return bool
         }
-          break
         case 'string': {
           const str = this.splitEnteredString(parameter)
           if (str === null) {
-            this.showParameterError = index
+            this.showParamError.push(indexTestParameter)
+            this.showParamErrorTestNumber.push(indexTest)
           } else {
-            this.showParameterError = ''
+            this.removeErrorIndex(indexTestParameter, indexTest)
             return str
           }
         }
@@ -383,9 +387,10 @@ export default {
         case 'int': {
           const number = this.setIntType(parameter)
           if (number === null) {
-            this.showParameterError = index
+            this.showParamError.push(indexTestParameter)
+            this.showParamErrorTestNumber.push(indexTest)
           } else {
-            this.showParameterError = ''
+            this.removeErrorIndex(indexTestParameter, indexTest)
             return number
           }
         }
@@ -393,33 +398,37 @@ export default {
         case 'booleanArray': {
           const boolArr = []
           if (parameter === '[]') {
+            this.removeErrorIndex(indexTestParameter, indexTest)
             return boolArr
           } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showParameterError = ''
-              parameter = this.splitArrayToString(parameter, index)
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeErrorIndex(indexTestParameter, indexTest)
               if (parameter.includes(',')) {
                 const arr = parameter.split(',')
-                this.showParameterError = ''
+                this.removeErrorIndex(indexTestParameter, indexTest)
                 arr.map(v => {
                   if (this.setBooleanType(v) !== null) {
                     boolArr.push(this.setBooleanType(v))
                   } else {
-                    this.showParameterError = index
+                    this.showParamError.push(indexTestParameter)
+                    this.showParamErrorTestNumber.push(indexTest)
                   }
                   return boolArr
                 })
               } else {
                 if (this.setBooleanType(parameter) !== null) {
-                  this.showParameterError = ''
+                  this.removeErrorIndex(indexTestParameter, indexTest)
                   boolArr.push(this.setBooleanType(parameter))
                 } else {
-                  this.showParameterError = index
+                  this.showParamError.push(indexTestParameter)
+                  this.showParamErrorTestNumber.push(indexTest)
                 }
               }
               return boolArr
             } else {
-              this.showParameterError = index
+              this.showParamError.push(indexTestParameter)
+              this.showParamErrorTestNumber.push(indexTest)
             }
           }
         }
@@ -427,32 +436,36 @@ export default {
         case 'stringArray': {
           const strArr = []
           if (parameter === '[]') {
+            this.removeErrorIndex(indexTestParameter, indexTest)
             return strArr
           } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showParameterError = ''
-              parameter = this.splitArrayToString(parameter, index)
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeErrorIndex(indexTestParameter, indexTest)
               if (parameter.includes(',')) {
                 parameter = parameter.split(',')
-                this.showParameterError = ''
+                this.removeErrorIndex(indexTestParameter, indexTest)
                 parameter.map(v => {
                   if (this.splitEnteredString(v) !== null) {
                     return strArr.push(this.splitEnteredString(v))
                   } else {
-                    this.showParameterError = index
+                    this.showParamError.push(indexTestParameter)
+                    this.showParamErrorTestNumber.push(indexTest)
                   }
                 })
               } else {
                 if (this.splitEnteredString(parameter) !== null) {
-                  this.showParameterError = ''
+                  this.removeErrorIndex(indexTestParameter, indexTest)
                   strArr.push(this.splitEnteredString(parameter))
                 } else {
-                  this.showParameterError = index
+                  this.showParamError.push(indexTestParameter)
+                  this.showParamErrorTestNumber.push(indexTest)
                 }
               }
               return strArr
             } else {
-              this.showParameterError = index
+              this.showParamError.push(indexTestParameter)
+              this.showParamErrorTestNumber.push(indexTest)
             }
           }
         }
@@ -462,176 +475,190 @@ export default {
           if (parameter === '[]') {
             return iArr
           } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showParameterError = ''
-              parameter = this.splitArrayToString(parameter, index)
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeErrorIndex(indexTestParameter, indexTest)
               if (parameter.includes(',')) {
                 const arr = parameter.split(',')
-                this.showParameterError = ''
+                this.removeErrorIndex(indexTestParameter, indexTest)
                 arr.map(v => {
                   if (this.setIntType(v) !== null) {
                     return iArr.push(this.setIntType(v))
                   } else {
-                    this.showParameterError = index
+                    this.showParamError.push(indexTestParameter)
+                    this.showParamErrorTestNumber.push(indexTest)
                   }
                 })
               } else {
                 if (this.setIntType(parameter) !== null) {
-                  this.showParameterError = ''
+                  this.removeErrorIndex(indexTestParameter, indexTest)
                   iArr.push(this.setIntType(parameter))
                 } else {
-                  this.showParameterError = index
+                  this.showParamError.push(indexTestParameter)
+                  this.showParamErrorTestNumber.push(indexTest)
                 }
               }
               return iArr
             } else {
-              this.showParameterError = index
+              this.showParamError.push(indexTestParameter)
+              this.showParamErrorTestNumber.push(indexTest)
+            }
+          }
+          break
+        }
+      }
+    },
+    setExpectedOutputType (type, parameter, index) {
+      this.removeOutputErrorIndex(index)
+      switch (type) {
+        case 'boolean': {
+          const bool = this.setBooleanType(parameter)
+          if (bool === null) {
+            this.showOutputError.push(index)
+          } else {
+            this.removeOutputErrorIndex(index)
+          }
+          return bool
+        }
+        case 'string': {
+          const str = this.splitEnteredString(parameter)
+          if (str === null) {
+            this.showOutputError.push(index)
+          } else {
+            this.removeOutputErrorIndex(index)
+            return str
+          }
+        }
+          break
+        case 'int': {
+          const number = this.setIntType(parameter)
+          if (number === null) {
+            this.showOutputError.push(index)
+          } else {
+            this.removeOutputErrorIndex(index)
+            return number
+          }
+        }
+          break
+        case 'booleanArray': {
+          const boolArr = []
+          if (parameter === '[]') {
+            this.removeOutputErrorIndex(index)
+            return boolArr
+          } else {
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeOutputErrorIndex(index)
+              if (parameter.includes(',')) {
+                const arr = parameter.split(',')
+                this.removeOutputErrorIndex(index)
+                arr.map(v => {
+                  if (this.setBooleanType(v) !== null) {
+                    boolArr.push(this.setBooleanType(v))
+                  } else {
+                    this.showOutputError.push(index)
+                  }
+                  return boolArr
+                })
+              } else {
+                if (this.setBooleanType(parameter) !== null) {
+                  this.removeOutputErrorIndex(index)
+                  boolArr.push(this.setBooleanType(parameter))
+                } else {
+                  this.showOutputError.push(index)
+                }
+              }
+              return boolArr
+            } else {
+              this.showOutputError.push(index)
+            }
+          }
+        }
+          break
+        case 'stringArray': {
+          const strArr = []
+          if (parameter === '[]') {
+            this.removeOutputErrorIndex(index)
+            return strArr
+          } else {
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeOutputErrorIndex(index)
+              if (parameter.includes(',')) {
+                parameter = parameter.split(',')
+                this.removeOutputErrorIndex(index)
+                parameter.map(v => {
+                  if (this.splitEnteredString(v) !== null) {
+                    return strArr.push(this.splitEnteredString(v))
+                  } else {
+                    this.showOutputError.push(index)
+                  }
+                })
+              } else {
+                if (this.splitEnteredString(parameter) !== null) {
+                  this.removeOutputErrorIndex(index)
+                  strArr.push(this.splitEnteredString(parameter))
+                } else {
+                  this.showOutputError.push(index)
+                }
+              }
+              return strArr
+            } else {
+              this.showOutputError.push(index)
+            }
+          }
+        }
+          break
+        case 'intArray': {
+          const iArr = []
+          if (parameter === '[]') {
+            this.removeOutputErrorIndex(index)
+            return iArr
+          } else {
+            parameter = this.splitArrayToString(parameter)
+            if (parameter !== null) {
+              this.removeOutputErrorIndex(index)
+              if (parameter.includes(',')) {
+                const arr = parameter.split(',')
+                this.removeOutputErrorIndex(index)
+                arr.map(v => {
+                  if (this.setIntType(v) !== null) {
+                    return iArr.push(this.setIntType(v))
+                  } else {
+                    this.showOutputError.push(index)
+                  }
+                })
+              } else {
+                if (this.setIntType(parameter) !== null) {
+                  this.removeOutputErrorIndex(index)
+                  iArr.push(this.setIntType(parameter))
+                } else {
+                  this.showOutputError.push(index)
+                }
+              }
+              return iArr
+            } else {
+              this.showOutputError.push(index)
             }
           }
         }
           break
       }
     },
-    setExpectedOutputType (type, parameter, index) {
-      switch (type) {
-        case 'boolean': {
-          const bool = this.setBooleanType(parameter)
-          if (bool === null) {
-            this.showOutputError = index
-          } else {
-            this.showOutputError = ''
-            return bool
-          }
-        }
-          break
-        case 'string': {
-          const str = this.splitEnteredString(parameter)
-          if (str === null) {
-            this.showOutputError = index
-          } else {
-            this.showOutputError = ''
-            return str
-          }
-        }
-          break
-        case 'int': {
-          const number = this.setIntType(parameter)
-          if (number === null) {
-            this.showOutputError = index
-          } else {
-            this.showOutputError = ''
-            return number
-          }
-        }
-          break
-        case 'booleanArray': {
-          const boolArr = []
-          if (parameter === '[]') {
-            return boolArr
-          } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showOutputError = ''
-              parameter = this.splitArrayToString(parameter, index)
-              if (parameter.includes(',')) {
-                const arr = parameter.split(',')
-                this.showOutputError = ''
-                arr.map(v => {
-                  if (this.setBooleanType(v) !== null) {
-                    boolArr.push(this.setBooleanType(v))
-                  } else {
-                    this.showOutputError = index
-                  }
-                  return boolArr
-                })
-              } else {
-                if (this.setBooleanType(parameter) !== null) {
-                  this.showOutputError = ''
-                  boolArr.push(this.setBooleanType(parameter))
-                } else {
-                  this.showOutputError = index
-                }
-              }
-              return boolArr
-            } else {
-              this.showOutputError = index
-            }
-          }
-        }
-          break
-        case 'stringArray': {
-          const strArr = []
-          if (parameter === '[]') {
-            return strArr
-          } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showOutputError = ''
-              parameter = this.splitArrayToString(parameter, index)
-              if (parameter.includes(',')) {
-                parameter = parameter.split(',')
-                this.showOutputError = ''
-                parameter.map(v => {
-                  if (this.splitEnteredString(v) !== null) {
-                    return strArr.push(this.splitEnteredString(v))
-                  } else {
-                    this.showOutputError = index
-                  }
-                })
-              } else {
-                if (this.splitEnteredString(parameter) !== null) {
-                  this.showOutputError = ''
-                  strArr.push(this.splitEnteredString(parameter))
-                } else {
-                  this.showOutputError = index
-                }
-              }
-              return strArr
-            } else {
-              this.showOutputError = index
-            }
-          }
-        }
-          break
-        case 'intArray': {
-          const iArr = []
-          if (parameter === '[]') {
-            return iArr
-          } else {
-            if (parameter.includes('[') && parameter.includes(']')) {
-              this.showOutputError = ''
-              parameter = this.splitArrayToString(parameter, index)
-              if (parameter.includes(',')) {
-                const arr = parameter.split(',')
-                this.showOutputError = ''
-                arr.map(v => {
-                  if (this.setIntType(v) !== null) {
-                    return iArr.push(this.setIntType(v))
-                  } else {
-                    this.showOutputError = index
-                  }
-                })
-              } else {
-                if (this.setIntType(parameter) !== null) {
-                  this.showOutputError = ''
-                  iArr.push(this.setIntType(parameter))
-                } else {
-                  this.showOutputError = index
-                }
-              }
-              return iArr
-            } else {
-              this.showOutputError = index
-            }
-          }
-        }
-          break
+    removeErrorIndex (indexTestParameter, indexTest) {
+      if (this.showParamError.includes(indexTestParameter) && this.showParamErrorTestNumber.includes(indexTest)) {
+        this.showParamError.splice(this.showParamError.indexOf(indexTestParameter), 1)
+        this.showParamErrorTestNumber.splice(this.showParamErrorTestNumber.indexOf(indexTest), 1)
+      }
+    },
+    removeOutputErrorIndex (indexTest) {
+      if (this.showOutputError.includes(indexTest)) {
+        this.showOutputError.splice(this.showOutputError.indexOf(indexTest), 1)
       }
     },
     splitArrayToString (arr) {
       // eslint-disable-next-line
-      // const reg = '\[(.*)\]'
-      const reg = ''
-      const regex = new RegExp(reg, 'g')
-      if (!regex.test(arr)) {
+      if (!(/^\[[^\[|\]]*\]$/.test(arr))) {
         return null
       } else {
         arr = arr.split('[')
@@ -641,9 +668,7 @@ export default {
       }
     },
     splitEnteredString (str) {
-      const reg = '"(.*)"'
-      const regex = new RegExp(reg, 'g')
-      if (!regex.test(str)) {
+      if (!(/^"[^"]*"$/.test(str))) {
         return null
       } else {
         str = str.split('"')
@@ -660,7 +685,9 @@ export default {
       }
     },
     setIntType (para) {
-      if (isNaN(parseInt(para))) {
+      if (isNaN(para)) {
+        return null
+      } else if (para.toString().includes(',') || para.toString().includes('.')) {
         return null
       } else {
         return parseInt(para)
@@ -668,10 +695,9 @@ export default {
     },
     setDefaultTestParameter (type, index) {
       this.tests.map((v) => {
-        return v.testParameter.map((k, i) => {
+        v.testParameter.map((k, i) => {
           if (i === index) {
             k.parameter = this.setDefaultValue(type, this.task.details.language)
-            this.saveTestsInTask()
           }
         })
       })
@@ -683,7 +709,7 @@ export default {
         this.saveTestsInTask()
       })
     },
-    setDefaultValue (type, language) {
+    setDefaultValue (type) {
       if (type === 'boolean') {
         return false
       } else if (type === 'string') {
@@ -703,7 +729,6 @@ export default {
         return v.testParameter.map((k, i) => {
           if (i === index) {
             k.parameter = this.setEmptyValue(type, this.task.details.language)
-            this.saveTestsInTask()
           }
         })
       })
@@ -763,6 +788,7 @@ export default {
         array = '[' + array + ']'
       } else if (type === 'string') {
         array = '"' + array + '"'
+        return array
       } else {
         return array
       }
