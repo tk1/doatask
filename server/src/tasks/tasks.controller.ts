@@ -68,6 +68,6 @@ export class TasksController {
 
   @Get('/isInAssignment/:id')
   async isInAssignment(@Param('id') id: string): Promise<boolean> {
-    return (await this.assignmentTasksService.findAll({ taskId: +id })).length === 0
+    return (await this.assignmentTasksService.findAll({ taskId: +id })).length > 0
   }
 }
