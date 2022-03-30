@@ -170,7 +170,7 @@
             />
           </Button>
           <Button
-            :disabled="!isOwner(slotProps.data)"
+            :disabled="!isOwner(slotProps.data) || slotProps.data.isInAssignment"
             class="p-button-warning"
             @click="confirmDelete(slotProps.data)"
           >

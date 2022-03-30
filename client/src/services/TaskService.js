@@ -30,4 +30,8 @@ function remove (task) {
   return del(`${base}/${task.id}`)
 }
 
-export { getAll, getAllForUser, getAllForStudent, save, update, remove, getTasksForAssignment }
+function isInAssignment (id) {
+  return get(`${base}/isInAssignment/${id}`)
+}
+
+export { getAll, getAllForUser, getAllForStudent, save, update, remove, getTasksForAssignment, isInAssignment }
