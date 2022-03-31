@@ -32,13 +32,13 @@ export class TasksController {
   @Get('user/:id')
   @Roles('teacher')
   findUserAll(@Param('id') id: string) {
-    return this.tasksService.findAll([{ owner: Number(id) }, { public: true }, { isActive: true }]);
+    return this.tasksService.findAll({ owner: Number(id), public: true, isActive: true });
   }
 
   @Get('student/:id')
   @Roles('student')
   findStudentAll(@Param('id') id: string) {
-    return this.tasksService.findAll({}, false);
+    return this.tasksService.findAll({ isActive: true }, false);
   }
 
   @Get(':id')
