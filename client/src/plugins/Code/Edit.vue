@@ -163,6 +163,8 @@
 </template>
 
 <script>
+import { task } from '../../store/task.js'
+
 export default {
   props: {
     modelValue: {
@@ -356,8 +358,12 @@ export default {
         return this.pubTests
       })
 
+      if (this.showParamError.length === 0 && this.showOutputError.length === 0) {
+        task.value.setDisableButton(false)
+      } else {
+        task.value.setDisableButton(true)
+      }
       this.task.details.testSuite = { publicTests: this.pubTests, secretTests: this.secTests }
-      console.log(this.task.details.testSuite)
     },
     setTestParameterType (type, parameter, indexTestParameter, indexTest) {
       // excludes duplicate entries

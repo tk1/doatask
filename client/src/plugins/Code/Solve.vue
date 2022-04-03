@@ -242,7 +242,7 @@ export default {
           'function ' +
         task.details.methodStub.functionName +
         ' (' +
-        task.details.methodStub.parameter.map((x) => x.name) +
+        this.getParameterFormat(task) +
         ')' +
         ' {\n\n' +
         '}')
@@ -251,7 +251,7 @@ export default {
           'def ' +
         task.details.methodStub.functionName +
         ' (' +
-        task.details.methodStub.parameter.map((x) => x.name) +
+        this.getParameterFormat(task) +
         ') :' +
         '\n\n' +
         '')
@@ -260,7 +260,7 @@ export default {
           'public ' + this.getCorrectJavaType(task.details.methodStub.returnType) + ' ' +
           task.details.methodStub.functionName +
           ' (' +
-        task.details.methodStub.parameter.map((x) => this.getCorrectJavaType(x.type) + ' ' + x.name) +
+        this.getParameterFormat(task) +
         ')') +
         ' {\n\n' +
         '}'
@@ -299,6 +299,29 @@ export default {
       } else {
         return type
       }
+    },
+    getParameterFormat (task) {
+      let para = ''
+      if (task.details.language === 'Java') {
+        task.details.methodStub.parameter.map((x, v) => {
+          if (v === task.details.methodStub.parameter.length - 1) {
+            para = para + this.getCorrectJavaType(x.type) + ' ' + x.name
+          } else {
+            para = para + this.getCorrectJavaType(x.type) + ' ' + x.name + ', '
+          }
+          return para
+        })
+      } else {
+        task.details.methodStub.parameter.map((x, v) => {
+          if (v === task.details.methodStub.parameter.length - 1) {
+            para = para + x.name
+          } else {
+            para = para + x.name + ', '
+          }
+          return para
+        })
+      }
+      return para
     }
   }
 }

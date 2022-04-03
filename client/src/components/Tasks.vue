@@ -37,6 +37,7 @@
           label="Save"
           icon="pi pi-check"
           class="p-button-text"
+          :disabled="disableSaveButton()"
           @click="save"
         />
       </template>
@@ -48,6 +49,7 @@
 <script>
 import TasksList from './TasksList.vue'
 import TaskEdit from './TaskEdit.vue'
+import { task } from '../store/task.js'
 
 export default {
   components: {
@@ -92,6 +94,9 @@ export default {
     async save () {
       await this.$store.dispatch('saveTask', this.record)
       this.hideCreateDialog()
+    },
+    disableSaveButton () {
+      return task.value.disableButton
     }
   }
 }
