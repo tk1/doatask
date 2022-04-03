@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import { task } from '../../store/task.js'
+import task from '../../store/task.js'
 
 export default {
   props: {
@@ -341,6 +341,7 @@ export default {
 
         if (v.expectedOutput === '') {
           v.expectedOutput = this.setEmptyValue(this.currentReturnType.returnType, this.task.details.language)
+          this.removeOutputErrorIndex(ind)
         }
         if (v.isSecretTest === true) {
           this.secTests.push({

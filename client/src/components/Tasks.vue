@@ -49,7 +49,7 @@
 <script>
 import TasksList from './TasksList.vue'
 import TaskEdit from './TaskEdit.vue'
-import { task } from '../store/task.js'
+import task from '../store/task.js'
 
 export default {
   components: {

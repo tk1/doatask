@@ -266,7 +266,7 @@ import TaskEdit from './TaskEdit.vue'
 import { FilterMatchMode } from 'primevue/api'
 import { importTasks } from '../helpers/import.js'
 import { exportTasks } from '../helpers/export.js'
-import { task } from '../store/task.js'
+import task from '../store/task.js'
 
 export default {
   components: {

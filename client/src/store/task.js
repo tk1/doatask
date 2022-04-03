@@ -1,8 +1,10 @@
 import { ref } from 'vue'
 
-export const saveButton = ref({
+const task = ref({
   disableButton: false,
   setDisableButton (value) {
     this.disableButton = value
   }
 })
+
+export default task
