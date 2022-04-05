@@ -96,8 +96,8 @@ export class DockerContainerManager {
         let response: any
 
         const instance = axios.create({
-            baseURL: 'http://localhost:' + containerInformation.port,
-            timeout: 500,
+            baseURL: 'http://host.docker.internal:' + containerInformation.port,
+            timeout: 1500,
             headers: { 'Content-Type': 'text/html; charset=UTF-8' },
         })
         try {
@@ -109,14 +109,19 @@ export class DockerContainerManager {
     }
 
     private static restartContainer(containerInformation: DockerContainerInformation): void {
-        if (this.dockerContainerRestartMap.has(containerInformation.containerName)) {
-            const lastRestart = this.dockerContainerRestartMap.get(containerInformation.containerName)
-            if (this.isOlderThanXSeconds(lastRestart, 3)) {
-                spawn('docker', ['restart', containerInformation.containerName])
+        try {
+            if (this.dockerContainerRestartMap.has(containerInformation.containerName)) {
+                const lastRestart = this.dockerContainerRestartMap.get(containerInformation.containerName)
+                if (this.isOlderThanXSeconds(lastRestart, 3)) {
+                    spawn('docker', ['restart', containerInformation.containerName])
+                }
+            } else {
+                spawn('docker', ['restart', containerInformation.containerName]);
+                this.dockerContainerRestartMap.set(containerInformation.containerName, Date.now())
             }
-        } else {
-            spawn('docker', ['restart', containerInformation.containerName]);
-            this.dockerContainerRestartMap.set(containerInformation.containerName, Date.now())
+        } catch (error) {
+            console.log(`Docker container ${containerInformation.containerName} could not be restarted. Check if the container still exists.
+             Hint: the container restart functionality does NOT work when also running the nest server in a container (Quickstart)!`)
         }
     }
 

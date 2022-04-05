@@ -33,15 +33,25 @@
           @input="changed"
         />
       </div>
-      <div class="p-field-checkbox p-col-4 p-md-1">
-        <Checkbox
-          id="public"
-          v-model="task.public"
-          :binary="true"
-        />
-        <label for="public">public</label>
+      <div class="row checkboxRow">
+        <div class="p-field-checkbox">
+          <Checkbox
+            id="public"
+            v-model="task.public"
+            :binary="true"
+          />
+          <label for="public">public</label>
+        </div>
+        <div class="p-field-checkbox">
+          <Checkbox
+            id="isActive"
+            v-model="task.isActive"
+            :binary="true"
+          />
+          <label for="public">active</label>
+        </div>
       </div>
-      <div class="p-field-checkbox p-col-4 p-md-1 p-ml-3">
+      <div class="p-field-checkbox p-col-4 p-md-1 active">
         <Checkbox
           id="savable"
           v-model="task.savable"
@@ -118,4 +128,12 @@ export default {
 .main {
   margin: 0px;
 }
+.active {
+  margin-left: 6px;
+  margin-top: -15px;
+}
+.checkboxRow {
+  margin-top: 20px;
+}
+
 </style>

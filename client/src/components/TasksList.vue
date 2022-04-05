@@ -155,6 +155,23 @@
         </template>
       </Column>
       <Column
+        field="isActive"
+        header="active"
+      >
+        <template #body="{data}">
+          <i
+            class="pi"
+            :class="{'true-icon pi-check-circle': data.isActive, 'false-icon pi-times-circle': !data.isActive}"
+          />
+        </template>
+        <template #filter="{filterModel,filterCallback}">
+          <TriStateCheckbox
+            v-model="filterModel.value"
+            @change="filterCallback()"
+          />
+        </template>
+      </Column>
+      <Column
         headerStyle="width: 10rem; text-align: center"
         bodyStyle="text-align: center; overflow: visible"
         header="Edit"
@@ -170,7 +187,7 @@
             />
           </Button>
           <Button
-            :disabled="!isOwner(slotProps.data)"
+            :disabled="!isOwner(slotProps.data) || slotProps.data.isInAssignment"
             class="p-button-warning"
             @click="confirmDelete(slotProps.data)"
           >
@@ -204,6 +221,7 @@
           label="Save"
           icon="pi pi-check"
           class="p-button-text"
+          :disabled="disableSaveButton()"
           @click="saveRecord"
         />
       </template>
@@ -248,6 +266,7 @@ import TaskEdit from './TaskEdit.vue'
 import { FilterMatchMode } from 'primevue/api'
 import { importTasks } from '../helpers/import.js'
 import { exportTasks } from '../helpers/export.js'
+import task from '../store/task.js'
 
 export default {
   components: {
@@ -278,7 +297,8 @@ export default {
         'owner.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
         'domain.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
         public: { value: null, matchMode: FilterMatchMode.EQUALS },
-        savable: { value: null, matchMode: FilterMatchMode.EQUALS }
+        savable: { value: null, matchMode: FilterMatchMode.EQUALS },
+        isActive: { value: null, matchMode: FilterMatchMode.EQUALS }
       }
     }
   },
@@ -346,6 +366,9 @@ export default {
     },
     setPreselected () {
       this.selectedRows = this.tasks.filter(t => this.preselected.includes(t.id))
+    },
+    disableSaveButton () {
+      return task.value.disableButton
     }
   }
 }

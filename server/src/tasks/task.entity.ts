@@ -38,6 +38,9 @@ export class Task {
   @Column({ nullable: false, default: false })
   savable: boolean;
 
+  @Column({ nullable: false, default: false })
+  isActive: boolean;
+
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 

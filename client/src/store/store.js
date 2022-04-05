@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import router from '../router.js'
 import { login, register, ltilogin, getProfile } from '../services/AuthService'
-import { getAll, getAllForUser, getAllForStudent, save, update, remove } from '../services/TaskService'
+import { getAll, getAllForUser, getAllForStudent, save, update, remove, isInAssignment } from '../services/TaskService'
 import { setToken as setApiToken } from '../services/ApiService'
 
 import moduleAssignment from './assignment'
@@ -12,6 +12,11 @@ import jwt_decode from 'jwt-decode'
 const noUser = {
   id: -1,
   name: 'noUser'
+}
+
+async function setIsInAssignmentFlag (task) {
+  const result = await isInAssignment(task.id)
+  task.isInAssignment = result
 }
 
 const store = createStore({
@@ -32,7 +37,7 @@ const store = createStore({
     }
   },
   mutations: {
-    setLoading(state,payload) {
+    setLoading (state, payload) {
       state.isLoading = payload
     },
     setTasks (state, payload) {
@@ -76,6 +81,9 @@ const store = createStore({
   actions: {
     async getAllTasks ({ commit }) {
       const tasks = await getAll()
+      tasks.forEach(task => {
+        setIsInAssignmentFlag(task)
+      })
       commit('setTasks', tasks)
     },
     async saveTask ({ commit, state }, task) {
@@ -96,10 +104,17 @@ const store = createStore({
       commit('setLoading', true)
       dispatch('domains/getAll')
       if (user.role === 'student') {
-        commit('setTasks', await getAllForStudent(user.id))
+        const tasks = await getAllForStudent(user.id)
+        tasks.forEach(task => {
+          setIsInAssignmentFlag(task)
+        })
+        commit('setTasks', tasks)
         dispatch('assignments/getAll')
       } else {
         const tasks = await getAllForUser(user.id)
+        tasks.forEach(task => {
+          setIsInAssignmentFlag(task)
+        })
         commit('setTasks', tasks)
         dispatch('assignments/getAllForUser', user.id)
       }
