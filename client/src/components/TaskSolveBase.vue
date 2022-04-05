@@ -203,6 +203,8 @@ export default {
         return saveCurrentSolution({
           userId: Number(that.user.id),
           assignmentTaskId: Number(that.assignmentTaskId),
+          taskId: Number(that.taskId),
+          assignmentId: Number(that.assignmentId),
           solution: solution
         })
       }

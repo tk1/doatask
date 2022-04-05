@@ -4,13 +4,16 @@ function getAll () {
   return get('solutions')
 }
 
+async function getSolutionByAssignmentAndTask (assignmentId, taskId) {
+  return await get(`solutions?assignmentId=${assignmentId}&taskId=${taskId}`)
+}
+
 function getCurrentSolutionQuery (assignmentId, userId) {
   return get(`solutions/${userId}/${assignmentId}`)
 }
 
 function saveCurrentSolution (solution) {
-  console.log(solution)
   return post('solutions', solution)
 }
 
-export { getAll, getCurrentSolutionQuery, saveCurrentSolution }
+export { getAll, getCurrentSolutionQuery, saveCurrentSolution, getSolutionByAssignmentAndTask }

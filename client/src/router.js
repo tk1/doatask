@@ -9,7 +9,7 @@ import TaskSolve from './components/TaskSolve.vue'
 import Admin from './components/Admin.vue'
 import Ratings from './components/Ratings.vue'
 import Practice from './components/Practice.vue'
-import Solutions from './components/Solutions.vue'
+import Solutions from './components/AssignmentSolution.vue'
 
 import { canUserAccess } from './auth/access.js'
 import store from './store/store'
@@ -34,6 +34,16 @@ const router = createRouter({
   {
     path: '/solutions',
     component: Solutions
+  },
+  {
+    path: '/solutions/:assignmentId',
+    component: Solutions,
+    children: [
+      {
+        path: 'task/:taskId',
+        component: Solutions
+      }
+    ]
   },
   {
     path: '/assignments',

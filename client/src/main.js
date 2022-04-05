@@ -51,6 +51,7 @@ import MarkDown from './components/MarkDown.vue'
 import TaskEditBase from './components/TaskEditBase.vue'
 import TaskSolveBase from './components/TaskSolveBase.vue'
 import MonacoEditor from './components/MonacoEditor.vue'
+import AssignmentSolution from './components/AssignmentSolution.vue'
 
 const app = createApp(App)
 
@@ -99,6 +100,7 @@ app.component('MarkDown', MarkDown)
 app.component('TaskEditBase', TaskEditBase)
 app.component('TaskSolveBase', TaskSolveBase)
 app.component('MonacoEditor', MonacoEditor)
+app.component('AssignmentSolution', AssignmentSolution)
 
 app.directive('tooltip', Tooltip)
 

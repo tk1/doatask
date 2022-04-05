@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Put, Post } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Put, Post, Query } from '@nestjs/common';
 import { AssignmentTasksService } from 'src/assignmenttasks/assignmenttasks.service';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { SolutionDto } from './dto/solution.dto';
@@ -14,6 +14,11 @@ export class SolutionsController {
     @Roles('student')
     findOne(@Param('userId') userId: number, @Param('assignmentTaskId') assignmentTaskId: number): Promise<Solution> {
         return this.solutionsService.findOne(userId, assignmentTaskId);
+    }
+
+    @Get()
+    async findAll(@Query() query) {
+        return await this.solutionsService.findAll(query);
     }
 
     @Post()

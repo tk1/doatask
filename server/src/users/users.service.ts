@@ -5,13 +5,15 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs'
+import { SubmissionsService } from '../submissions/submissions.service'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private configService: ConfigService
+    private configService: ConfigService,
+    // private SubmissionsService: SubmissionsService,
   ) {
     this.init()
   }
@@ -90,4 +92,8 @@ export class UsersService {
     });
   }
 
+  async findUsersByAssignmentAndTask(assignmentId: Number, taskId: Number) {
+    // const submissions = await this.SubmissionsService.findAll(`submissions?assignment=${assignmentId
+    //   }& user=${taskId}`)
+  }
 }

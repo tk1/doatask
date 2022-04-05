@@ -71,7 +71,7 @@ export class SubmissionsService {
   }
 
   findAll(query: any) {
-    return this.submissionsRepository.find({ where: query, relations: ["assignmentTask"] })
+    return this.submissionsRepository.find({ where: query, relations: ["assignmentTask", "user"] })
   }
 
   findOne(id: number) {
