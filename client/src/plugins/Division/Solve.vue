@@ -82,7 +82,6 @@ export default {
     },
     getSolution: async function (slotProps) {
       if (slotProps.alreadySubmitted) {
-        console.log(slotProps.solution?.text.text)
         this.solution.text = slotProps.solution?.text.text
       }
     },

@@ -172,7 +172,7 @@ export default {
   },
   watch: {
     task (newValue) {
-      console.log(`task ${newValue.id}`)
+      // console.log(`task ${newValue.id}`)
       this.data.code = this.generateFunction(newValue)
       this.data.language = newValue.details.language
       this.solution = null

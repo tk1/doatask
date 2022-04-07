@@ -175,7 +175,6 @@ export default {
       if (!this.alreadySubmitted) {
         await this.getSolutions()
       }
-      console.log('taskChanged')
       if (this.isTimed && !this.alreadySubmitted) {
         this.restartTimer()
       }

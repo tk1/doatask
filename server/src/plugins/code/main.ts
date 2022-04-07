@@ -13,7 +13,6 @@ async function evaluate(submission: Submission, task: Task): Promise<any> {
   const codeEvaluator: CodeEvaluator = new CodeEvaluator(solution, details)
   await codeEvaluator.runAllTests()
   const testResults: CodeTestResult[] = codeEvaluator.getTestResults()
-  //console.log(testResults)
 
   let numberOfPassedTests = testResults.filter(testResult => testResult.testPassed).length
   let grade = numberOfPassedTests / testResults.length

@@ -39,7 +39,6 @@ export default {
     }
   },
   created () {
-    console.log(this.modelValue)
     this.data = this.modelValue
 
     this.language = this.data.language
@@ -80,6 +79,9 @@ export default {
       this.$emit('getCode', editor.getValue())
     })
   },
+  unmounted () {
+    editor.dispose()
+  },
   methods: {
     updateTheme (isDark) {
       if (isDark === true) {
@@ -89,6 +91,7 @@ export default {
       }
     },
     updateCode (code) {
+      monaco.editor.setModelLanguage(editor.getModel(), this.data.language.toLowerCase())
       editor.getModel().setValue(code)
     },
     setReadOnly (readOnly) {

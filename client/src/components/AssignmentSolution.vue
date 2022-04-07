@@ -297,7 +297,6 @@ export default {
   },
   methods: {
     closeDialog () {
-      console.log('Close')
       this.showStudents = false
     },
     getSolution: async function () {
@@ -383,24 +382,69 @@ export default {
       this.solutionDialog = true
     },
     generateFunction (task) {
-      if (this.selectedTask.details.language === 'JavaScript') {
+      if (task.details.language === 'JavaScript') {
         return (
           'function ' +
-        this.selectedTask.details.methodStub.functionName +
+        task.details.methodStub.functionName +
         ' (' +
-        this.selectedTask.details.methodStub.parameter.map((x) => x.name) +
+        this.getParameterFormat(task) +
         ')' +
         ' {\n\n' +
         '}')
-      } else if (this.selectedTask.details.language === 'Python') {
+      } else if (task.details.language === 'Python') {
         return (
           'def ' +
-        this.selectedTask.details.methodStub.functionName +
+        task.details.methodStub.functionName +
         ' (' +
-        this.selectedTask.details.methodStub.parameter.map((x) => x.name) +
+        this.getParameterFormat(task) +
         ') :' +
         '\n\n' +
         '')
+      } else if (task.details.language === 'Java') {
+        return (
+          'public ' + this.getCorrectJavaType(task.details.methodStub.returnType) + ' ' +
+          task.details.methodStub.functionName +
+          ' (' +
+        this.getParameterFormat(task) +
+        ')') +
+        ' {\n\n' +
+        '}'
+      }
+    },
+    getParameterFormat (task) {
+      let para = ''
+      if (task.details.language === 'Java') {
+        task.details.methodStub.parameter.map((x, v) => {
+          if (v === task.details.methodStub.parameter.length - 1) {
+            para = para + this.getCorrectJavaType(x.type) + ' ' + x.name
+          } else {
+            para = para + this.getCorrectJavaType(x.type) + ' ' + x.name + ', '
+          }
+          return para
+        })
+      } else {
+        task.details.methodStub.parameter.map((x, v) => {
+          if (v === task.details.methodStub.parameter.length - 1) {
+            para = para + x.name
+          } else {
+            para = para + x.name + ', '
+          }
+          return para
+        })
+      }
+      return para
+    },
+    getCorrectJavaType (type) {
+      if (type === 'string') {
+        return 'String'
+      } else if (type === 'booleanArray') {
+        return 'boolean[]'
+      } else if (type === 'stringArray') {
+        return 'String[]'
+      } else if (type === 'intArray') {
+        return 'int[]'
+      } else {
+        return type
       }
     },
     pluginComponent () {
@@ -418,9 +462,7 @@ export default {
         task: this.selectedTask.id,
         details: this.mySolution.solution.value
       }
-      console.log(testsDto)
       this.publicTests = await runPublicTests(testsDto)
-      console.log(this.publicTests)
       if (this.isJustFailedTests) {
         this.publicTests = this.publicTests.filter(test => !test.testPassed)
       }

@@ -120,7 +120,7 @@ export class DockerContainerManager {
                 this.dockerContainerRestartMap.set(containerInformation.containerName, Date.now())
             }
         } catch (error) {
-            console.log(`Docker container ${containerInformation.containerName} could not be restarted. Check if the container still exists.
+            console.error(`Docker container ${containerInformation.containerName} could not be restarted. Check if the container still exists.
              Hint: the container restart functionality does NOT work when also running the nest server in a container (Quickstart)!`)
         }
     }
