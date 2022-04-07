@@ -33,7 +33,7 @@
           @input="changed"
         />
       </div>
-      <div class="row checkboxRow">
+      <div class="row">
         <div class="p-field-checkbox">
           <Checkbox
             id="public"
@@ -51,7 +51,7 @@
           <label for="public">active</label>
         </div>
       </div>
-      <div class="p-field-checkbox p-col-4 p-md-1 active">
+      <div class="p-field-checkbox p-col-4 p-md-1 savable">
         <Checkbox
           id="savable"
           v-model="task.savable"
@@ -128,12 +128,8 @@ export default {
 .main {
   margin: 0px;
 }
-.active {
-  margin-left: 6px;
-  margin-top: -15px;
-}
-.checkboxRow {
-  margin-top: 20px;
+.savable {
+ align-items: flex-start;
 }
 
 </style>

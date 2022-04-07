@@ -124,7 +124,7 @@
                 v-if="showParamError.includes(i) && showParamErrorTestNumber.includes(index)"
                 id="testParameter-error"
                 class="p-error"
-              >Please enter correct type</small>
+              >Please enter correct type</small><br>
             </template>
           </div>
           <div class="p-field p-col-12 p-md-4">
@@ -312,7 +312,7 @@ export default {
     },
     saveParameterInTask (index) {
       this.task.details.methodStub.parameter = this.parameters.map(v => ({ name: v.name, type: v.type.type }))
-      this.parameters.map((v, i) => {
+      this.parameters.forEach((v, i) => {
         if (i === index) {
           this.setDefaultTestParameter(v.type.type, index)
         }
@@ -452,7 +452,7 @@ export default {
               if (parameter.includes(',')) {
                 parameter = parameter.split(',')
                 this.removeErrorIndex(indexTestParameter, indexTest)
-                parameter.map(v => {
+                parameter.forEach(v => {
                   if (this.splitEnteredString(v) !== null) {
                     return strArr.push(this.splitEnteredString(v))
                   } else {
@@ -488,7 +488,7 @@ export default {
               if (parameter.includes(',')) {
                 const arr = parameter.split(',')
                 this.removeErrorIndex(indexTestParameter, indexTest)
-                arr.map(v => {
+                arr.forEach(v => {
                   if (this.setIntType(v) !== null) {
                     return iArr.push(this.setIntType(v))
                   } else {
@@ -594,7 +594,7 @@ export default {
               if (parameter.includes(',')) {
                 parameter = parameter.split(',')
                 this.removeOutputErrorIndex(index)
-                parameter.map(v => {
+                parameter.forEach(v => {
                   if (this.splitEnteredString(v) !== null) {
                     return strArr.push(this.splitEnteredString(v))
                   } else {
@@ -628,7 +628,7 @@ export default {
               if (parameter.includes(',')) {
                 const arr = parameter.split(',')
                 this.removeOutputErrorIndex(index)
-                arr.map(v => {
+                arr.forEach(v => {
                   if (this.setIntType(v) !== null) {
                     return iArr.push(this.setIntType(v))
                   } else {
@@ -701,8 +701,8 @@ export default {
       }
     },
     setDefaultTestParameter (type, index) {
-      this.tests.map((v) => {
-        v.testParameter.map((k, i) => {
+      this.tests.forEach((v) => {
+        v.testParameter.forEach((k, i) => {
           if (i === index) {
             k.parameter = this.setDefaultValue(type, this.task.details.language)
           }
@@ -711,7 +711,7 @@ export default {
     },
     setDefaultExpectedOutput () {
       const type = this.task.details.methodStub.returnType
-      this.tests.map(k => {
+      this.tests.forEach(k => {
         k.expectedOutput = this.setDefaultValue(type, this.task.details.language)
         this.saveTestsInTask()
       })
@@ -733,7 +733,7 @@ export default {
     },
     fillEmptyField (type, index) {
       this.tests.map((v) => {
-        return v.testParameter.map((k, i) => {
+        return v.testParameter.forEach((k, i) => {
           if (i === index) {
             k.parameter = this.setEmptyValue(type, this.task.details.language)
           }
