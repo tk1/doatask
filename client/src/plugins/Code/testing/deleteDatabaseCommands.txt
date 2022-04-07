@@ -5,3 +5,4 @@ DELETE FROM public."comment";
 DELETE FROM public.assignment_task;
 DELETE FROM public."assignment";
 DELETE FROM public.task;
+DELETE FROM public.solution;
