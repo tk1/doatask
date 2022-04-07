@@ -22,4 +22,10 @@ export class Solution {
 
     @UpdateDateColumn({ type: "timestamp" })
     updatedAt: Date;
+
+    @Column({ nullable: false })
+    taskId: number;
+
+    @Column({ nullable: false })
+    assignmentId: number;
 }

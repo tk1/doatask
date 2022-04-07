@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Submission } from '../submissions/submission.entity'
+import { Solution } from 'src/solutions/solution.entity';
 
 
 @Entity()
