@@ -49,7 +49,7 @@
         </div>
         <div class="p-field p-col-12 p-md-2">
           <Button
-            :disabled="!submitPossible(slotProps)"
+            :disabled="!submitPossible(slotProps) || !slotProps.task.savable"
             @click="saveSolution(slotProps)"
           >
             <i
