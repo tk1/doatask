@@ -356,7 +356,11 @@ export default {
       this.$emit('unselected', event.data)
     },
     isOwner (data) {
-      return data.owner.id === this.user.id
+      if (data.owner) {
+        return data.owner.id === this.user.id
+      } else {
+        return false
+      }
     },
     download () {
       exportTasks(this.selectedRows)

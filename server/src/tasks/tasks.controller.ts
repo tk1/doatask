@@ -32,7 +32,7 @@ export class TasksController {
   @Get('user/:id')
   @Roles('teacher')
   findUserAll(@Param('id') id: string) {
-    return this.tasksService.findAll({ owner: Number(id), public: true });
+    return this.tasksService.findAll({ owner: Number(id), public: false });
   }
 
   @Get('student/:id')

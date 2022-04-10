@@ -23,6 +23,8 @@ export class TasksService {
 
   async findAll(query: any, privateDetails = true): Promise<Task[]> {
     const tasks = await this.tasksRepository.find({ where: query, relations: ["domain", "owner"] });
+    const publicTasks = await this.tasksRepository.find({ where: { public: true }, relations: ["domain", "owner"] })
+    publicTasks.forEach(task => tasks.push(task))
     if (!privateDetails) {
       for (const task of tasks) {
         const details: any = task.details
