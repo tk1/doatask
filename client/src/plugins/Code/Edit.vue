@@ -337,12 +337,13 @@ export default {
           })
         })
 
-        const expectedOutput = this.setExpectedOutputType(this.currentReturnType.returnType, v.expectedOutput, ind)
-
         if (v.expectedOutput === '') {
           v.expectedOutput = this.setEmptyValue(this.currentReturnType.returnType, this.task.details.language)
           this.removeOutputErrorIndex(ind)
         }
+
+        const expectedOutput = this.setExpectedOutputType(this.currentReturnType.returnType, v.expectedOutput, ind)
+
         if (v.isSecretTest === true) {
           this.secTests.push({
             testParameter: parameterArr,
@@ -404,7 +405,7 @@ export default {
           break
         case 'booleanArray': {
           const boolArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             this.removeErrorIndex(indexTestParameter, indexTest)
             return boolArr
           } else {
@@ -442,7 +443,7 @@ export default {
           break
         case 'stringArray': {
           const strArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             this.removeErrorIndex(indexTestParameter, indexTest)
             return strArr
           } else {
@@ -479,7 +480,7 @@ export default {
           break
         case 'intArray': {
           const iArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             return iArr
           } else {
             parameter = this.splitArrayToString(parameter)
@@ -549,7 +550,7 @@ export default {
           break
         case 'booleanArray': {
           const boolArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             this.removeOutputErrorIndex(index)
             return boolArr
           } else {
@@ -584,7 +585,7 @@ export default {
           break
         case 'stringArray': {
           const strArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             this.removeOutputErrorIndex(index)
             return strArr
           } else {
@@ -618,7 +619,7 @@ export default {
           break
         case 'intArray': {
           const iArr = []
-          if (parameter === '[]') {
+          if (parameter === '[]' || parameter[0] === '[]') {
             this.removeOutputErrorIndex(index)
             return iArr
           } else {
@@ -664,6 +665,9 @@ export default {
       }
     },
     splitArrayToString (arr) {
+      if (Array.isArray(arr)) {
+        arr = arr[0]
+      }
       // eslint-disable-next-line
       if (!(/^\[[^\[|\]]*\]$/.test(arr))) {
         return null
@@ -694,7 +698,7 @@ export default {
     setIntType (para) {
       if (isNaN(para)) {
         return null
-      } else if (para.toString().includes(',') || para.toString().includes('.')) {
+      } else if (para.toString().includes(',') || para.toString().includes('.') || para === '') {
         return null
       } else {
         return parseInt(para)
@@ -708,6 +712,7 @@ export default {
           }
         })
       })
+      this.saveTestsInTask()
     },
     setDefaultExpectedOutput () {
       const type = this.task.details.methodStub.returnType
