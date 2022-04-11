@@ -329,7 +329,7 @@ export default {
           return this.parameters.map((p, index) => {
             if (i === index) {
               if (p.type.type !== undefined && x.parameter === '') {
-                this.fillEmptyField(p.type.type, i)
+                this.fillEmptyField(p.type.type, i, ind)
               }
               return parameterArr.push(this.setTestParameterType(p.type.type, x.parameter, i, ind))
             }
@@ -736,13 +736,15 @@ export default {
         return '[0, 1, 2, 3]'
       }
     },
-    fillEmptyField (type, index) {
-      this.tests.map((v) => {
-        return v.testParameter.forEach((k, i) => {
-          if (i === index) {
-            k.parameter = this.setEmptyValue(type, this.task.details.language)
-          }
-        })
+    fillEmptyField (type, indexParameter, indexTest) {
+      this.tests.forEach((v, index) => {
+        if (index === indexTest) {
+          return v.testParameter.forEach((k, i) => {
+            if (i === indexParameter) {
+              k.parameter = this.setEmptyValue(type, this.task.details.language)
+            }
+          })
+        }
       })
     },
     setEmptyValue (type) {
